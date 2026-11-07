@@ -1,0 +1,35 @@
+{
+  "courses": [
+    "course-1821013405232",
+    "course-sec2-chemistry",
+    "course-sec3-mastery",
+    "course-integrated-physics",
+    "course-exams-chemistry",
+    "course_1791637428298",
+    "course-1791414787637",
+    "course-1790932500118",
+    "course-1792304762232"
+  ],
+  "users": [
+    "teacher-ahmed-chemistry",
+    "teacher-default",
+    "teacher-hosam-supervisor",
+    "teacher-supervisor",
+    "teacher-1822115595240",
+    "teacher-4879",
+    "SfE3LtThTFfDbYBAQuTsdLaRXVs1",
+    "4879"
+  ],
+  "videos": [
+    "vid_2140724479781",
+    "vid_2140758918509",
+    "vid_2140809562516",
+    "vid_1793690038614",
+    "vid_1793690207150",
+    "vid_1793690477269"
+  ],
+  "exams": [],
+  "lessons": [],
+  "notifications": [],
+  "coupons": []
+}

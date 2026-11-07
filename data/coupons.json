@@ -1,0 +1,35 @@
+[
+  {
+    "id": "coupon_welcome2027",
+    "code": "QALB2027",
+    "discountType": "percentage",
+    "discountValue": 25,
+    "maxUses": 100,
+    "usedCount": 0,
+    "isActive": true,
+    "createdAt": "2027-10-18T00:00:00.000Z",
+    "note": "كوبون ترحيبي لدفعة 2027 خصم 25%"
+  },
+  {
+    "id": "coupon_top_students",
+    "code": "TOP10",
+    "discountType": "percentage",
+    "discountValue": 50,
+    "maxUses": 20,
+    "usedCount": 0,
+    "isActive": true,
+    "createdAt": "2027-10-18T00:00:00.000Z",
+    "note": "كود خاص لأوائل الامتحانات التجريبية"
+  },
+  {
+    "id": "coupon_free",
+    "code": "FREEPASS",
+    "discountType": "percentage",
+    "discountValue": 100,
+    "maxUses": 50,
+    "usedCount": 0,
+    "isActive": true,
+    "createdAt": "2027-10-18T00:00:00.000Z",
+    "note": "منحة دراسية مجانية 100% للطلاب المتفوقين"
+  }
+]
