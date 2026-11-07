@@ -1,0 +1,56 @@
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs && find node_modules dist -name '*.map' -type f -delete && rm -rf node_modules/.vite node_modules/@firebase/firestore/dist/intermediate node_modules/@firebase/firestore/dist/lite node_modules/@firebase/database* node_modules/@firebase/ai node_modules/@firebase/data-connect node_modules/@firebase/messaging* node_modules/@firebase/storage* node_modules/@firebase/remote-config* node_modules/firebase/compat node_modules/lucide-react/dist/umd node_modules/lucide-react/dist/cjs node_modules/@img node_modules/sharp node_modules/lightningcss-linux-x64-musl node_modules/hls.js/src node_modules/hls.js/dist/hls.light* node_modules/hls.js/dist/hls-demo.js node_modules/typescript/lib/tsserver.js node_modules/typescript/lib/cs node_modules/typescript/lib/de node_modules/typescript/lib/es node_modules/typescript/lib/fr node_modules/typescript/lib/it node_modules/typescript/lib/ja node_modules/typescript/lib/ko node_modules/typescript/lib/pl node_modules/typescript/lib/pt-br node_modules/typescript/lib/ru node_modules/typescript/lib/tr node_modules/typescript/lib/zh-*",
+    "start": "node --import tsx server.ts",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/nodemailer": "^8.0.2",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-react": "^5.0.4",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "axios": "^1.20.0",
+    "canvas-confetti": "^1.9.4",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "ffmpeg-static": "^5.3.0",
+    "firebase": "^12.18.0",
+    "firebase-admin": "^14.3.0",
+    "form-data": "^4.0.6",
+    "hls.js": "^1.7.3",
+    "lucide-react": "^0.546.0",
+    "nodemailer": "^10.3.1",
+    "pino": "^10.3.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "react-markdown": "^10.1.0",
+    "tsx": "^4.21.0",
+    "vite": "^6.2.3"
+  },
+  "overrides": {
+    "qs": "^6.16.0",
+    "uuid": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/express": "^4.17.21",
+    "@types/form-data": "^2.5.2",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2"
+  }
+}

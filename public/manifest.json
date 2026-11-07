@@ -1,0 +1,80 @@
+{
+  "id": "/",
+  "name": "منصة قلب العلم - منصة تعليمية حديثة",
+  "short_name": "قلب العلم",
+  "description": "أهلاً في قلب العلم - المنصة التعليمية الحديثة للكورسات والامتحانات والمسابقات الرسمية لدفعة 2027",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0726",
+  "theme_color": "#31107a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png?v=2027.2",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png?v=2027.2",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-48x48.png?v=2027.2",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-96x96.png?v=2027.2",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-192x192.png?v=2027.2",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png?v=2027.2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png?v=2027.2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo.png?v=2027.2",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png?v=2027.2",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-banner.jpg?v=2027.2",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "أهلاً في قلب العلم - منصة تعليمية حديثة"
+    },
+    {
+      "src": "/og-banner.jpg?v=2027.2",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "أهلاً في قلب العلم - منصة تعليمية حديثة"
+    }
+  ]
+}

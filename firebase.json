@@ -1,0 +1,37 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "server.cjs",
+      "**/assets/aistudio/**",
+      "**/*.apk",
+      "**/*.zip",
+      "**/*.tar.gz",
+      "**/*.exe"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/platform-data",
+        "destination": "/initial_platform_data.json"
+      },
+      {
+        "source": "/api/**",
+        "destination": "/api_fallback.json"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

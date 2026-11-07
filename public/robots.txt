@@ -1,0 +1,6 @@
+# Robots.txt for منصة قلب العلم التعليمية
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://qalbalelm.web.app/sitemap.xml

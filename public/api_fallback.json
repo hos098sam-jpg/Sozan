@@ -1,0 +1,6 @@
+{
+  "status": 404,
+  "ok": false,
+  "error": "Handled on client via Firestore",
+  "success": false
+}
