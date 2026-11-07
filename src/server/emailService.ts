@@ -2,7 +2,8 @@ import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
 
-export const OFFICIAL_RECOVERY_EMAIL = "qalbalelm@gmail.com";
+// البريد الرسمي الجديد والمسؤول عن استعادة الحسابات لمنصة المتفلسفة
+export const OFFICIAL_RECOVERY_EMAIL = "hos098sam@gmail.com";
 export const DAILY_GMAIL_LIMIT = 500;
 
 export interface EmailConfigData {
@@ -34,7 +35,7 @@ export function loadEmailConfig(): EmailConfigData {
   const defaultCfg: EmailConfigData = {
     senderEmail: OFFICIAL_RECOVERY_EMAIL,
     appPassword: (process.env.GMAIL_APP_PASSWORD || process.env.EMAIL_APP_PASSWORD || "").replace(/\s+/g, ""),
-    senderName: "منصة قلب العلم التعليمية",
+    senderName: "منصة المتفلسفة التعليمية", // تحديث الاسم الافتراضي
     updatedAt: new Date().toISOString(),
     dailyDate: today,
     sentCountToday: 0,
@@ -54,7 +55,7 @@ export function loadEmailConfig(): EmailConfigData {
       return {
         senderEmail: OFFICIAL_RECOVERY_EMAIL,
         appPassword: appPass,
-        senderName: raw.senderName || "منصة قلب العلم التعليمية",
+        senderName: raw.senderName || "منصة المتفلسفة التعليمية",
         updatedAt: raw.updatedAt || defaultCfg.updatedAt,
         dailyDate: today,
         sentCountToday: isSameDay ? Number(raw.sentCountToday || 0) : 0,
@@ -72,7 +73,7 @@ export function saveEmailConfig(partial: Partial<EmailConfigData>): EmailConfigD
   const updated: EmailConfigData = {
     ...current,
     ...partial,
-    senderEmail: OFFICIAL_RECOVERY_EMAIL, // Strictly locked to qalbalelm@gmail.com for Qalb El-Elm
+    senderEmail: OFFICIAL_RECOVERY_EMAIL, // قفل برمي صارم لمنع التداخل مع قلب العلم
     appPassword:
       partial.appPassword !== undefined
         ? String(partial.appPassword).replace(/\s+/g, "")
@@ -116,7 +117,7 @@ export async function sendPasswordRecoveryEmail(params: {
 }> {
   const cfg = loadEmailConfig();
   const recipient = String(params.toEmail || "").trim().toLowerCase();
-  const studentName = params.studentName || "طالب منصة قلب العلم";
+  const studentName = params.studentName || "طالب منصة المتفلسفة"; // التحديث لطلاب المتفلسفة
 
   if (!recipient || !recipient.includes("@")) {
     return {
@@ -138,8 +139,7 @@ export async function sendPasswordRecoveryEmail(params: {
       recipientEmail: recipient,
       maskedEmail: maskEmailAddress(recipient),
       remainingToday: Math.max(0, DAILY_GMAIL_LIMIT - cfg.sentCountToday),
-      error:
-        "لم يتم تفعيل كلمة مرور التطبيقات (App Password) للبريد الرسمي qalbalelm@gmail.com بعد في لوحة الإدارة.",
+      error: `لم يتم تفعيل كلمة مرور التطبيقات (App Password) للبريد الرسمي ${OFFICIAL_RECOVERY_EMAIL} بعد في لوحة الإدارة.`,
     };
   }
 
@@ -167,35 +167,36 @@ export async function sendPasswordRecoveryEmail(params: {
       },
     });
 
+    // القالب البصري والـ HTML معدل بالكامل بألوان النيلي الملكي الفخم (#0f172a) والذهبي للأزرار الحركية (#d97706)
     const htmlBody = `
-      <div dir="rtl" style="font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; max-width: 560px; margin: 0 auto; background-color: #f8fafc; padding: 24px; border-radius: 20px; border: 1px solid #e2e8f0;">
-        <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: #ffffff; padding: 24px; border-radius: 16px; text-align: center;">
-          <h1 style="margin: 0; font-size: 22px; font-weight: 800;">منصة قلب العلم التعليمية 🎓</h1>
-          <p style="margin: 8px 0 0; font-size: 13px; color: #c7d2fe;">استرداد كلمة المرور عبر البريد الإلكتروني الرسمي</p>
+      <div dir="rtl" style="font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; max-width: 560px; margin: 0 auto; background-color: #fafafa; padding: 24px; border-radius: 20px; border: 1px solid #e5e7eb;">
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; padding: 24px; border-radius: 16px; text-align: center; border-bottom: 4px solid #d97706;">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #ffffff;">منصة المتفلسفة التعليمية 🎓</h1>
+          <p style="margin: 8px 0 0; font-size: 13px; color: #94a3b8;">للأستاذة: سوزان كريم الخولى</p>
         </div>
 
-        <div style="background-color: #ffffff; padding: 24px; border-radius: 16px; margin-top: 16px; border: 1px solid #e2e8f0; color: #1e293b;">
-          <p style="font-size: 15px; font-weight: 700; margin-top: 0;">مرحباً بك يا <span style="color: #4f46e5;">${studentName}</span>،</p>
-          <p style="font-size: 13px; line-height: 1.7; color: #475569;">
-            تلقينا طلباً لاستعادة وتغيير كلمة المرور الخاصة بحسابك في <strong>منصة قلب العلم</strong>${params.studentPhone ? ` (المرتبط برقم: <span dir="ltr">${params.studentPhone}</span>)` : ""}.
+        <div style="background-color: #ffffff; padding: 24px; border-radius: 16px; margin-top: 16px; border: 1px solid #e5e7eb; color: #1e293b;">
+          <p style="font-size: 15px; font-weight: 700; margin-top: 0;">مرحباً بك يا <span style="color: #d97706;">${studentName}</span>،</p>
+          <p style="font-size: 13px; line-height: 1.7; color: #4b5563;">
+            تلقينا طلباً لاستعادة وتغيير كلمة المرور الخاصة بحسابك في <strong>منصة المتفلسفة</strong>${params.studentPhone ? ` (المرتبط برقم: <span dir="ltr">${params.studentPhone}</span>)` : ""}.
             استخدم رمز الاسترداد المكون من 6 أرقام التالي لإتمام العملية:
           </p>
 
           <div style="margin: 24px 0; text-align: center;">
-            <div style="display: inline-block; background-color: #eef2ff; border: 2px dashed #4f46e5; border-radius: 16px; padding: 16px 32px;">
-              <span style="font-family: monospace; font-size: 32px; font-weight: 900; letter-spacing: 8px; color: #312e81;">
+            <div style="display: inline-block; background-color: #f8fafc; border: 2px dashed #d97706; border-radius: 16px; padding: 16px 32px;">
+              <span style="font-family: monospace; font-size: 32px; font-weight: 900; letter-spacing: 8px; color: #0f172a;">
                 ${params.otpCode}
               </span>
             </div>
           </div>
 
-          <p style="font-size: 12px; color: #64748b; text-align: center; margin-bottom: 0;">
+          <p style="font-size: 12px; color: #6b7280; text-align: center; margin-bottom: 0;">
             ⏳ هذا الرمز صالح لمدة <strong>10 دقائق</strong> فقط. لا تشارك هذا الرمز مع أي شخص حفاظاً على أمان حسابك.
           </p>
         </div>
 
-        <div style="text-align: center; margin-top: 16px; font-size: 11px; color: #94a3b8;">
-          تم الإرسال تلقائياً من البريد الرسمي لمنصة قلب العلم (${OFFICIAL_RECOVERY_EMAIL})
+        <div style="text-align: center; margin-top: 16px; font-size: 11px; color: #9ca3af;">
+          تم الإرسال تلقائياً من البريد الرسمي لمنصة المتفلسفة (${OFFICIAL_RECOVERY_EMAIL})
         </div>
       </div>
     `;
@@ -203,8 +204,8 @@ export async function sendPasswordRecoveryEmail(params: {
     await transporter.sendMail({
       from: `"${cfg.senderName}" <${OFFICIAL_RECOVERY_EMAIL}>`,
       to: recipient,
-      subject: `رمز استرداد كلمة المرور: [${params.otpCode}] - منصة قلب العلم`,
-      text: `مرحباً ${studentName}، رمز استرداد كلمة المرور لحسابك في منصة قلب العلم هو: ${params.otpCode} (صالح لمدة 10 دقائق).`,
+      subject: `رمز استرداد كلمة المرور: [${params.otpCode}] - منصة المتفلسفة`,
+      text: `مرحباً ${studentName}، رمز استرداد كلمة المرور لحسابك في منصة المتفلسفة هو: ${params.otpCode} (صالح لمدة 10 دقائق).`,
       html: htmlBody,
     });
 
@@ -235,20 +236,19 @@ export async function sendPasswordRecoveryEmail(params: {
       remainingToday: Math.max(0, DAILY_GMAIL_LIMIT - newCount),
     };
   } catch (err: any) {
-    console.error("Nodemailer send error:", err?.message || err);
-    const newLogs = [
+    const failedLogs = [
       {
         id: `mail_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         timestamp: new Date().toISOString(),
         toEmail: recipient,
         studentName,
         status: "failed" as const,
-        error: err?.message || "SMTP Error",
+        error: err?.message || String(err),
       },
       ...cfg.recentLogs,
     ].slice(0, 40);
 
-    saveEmailConfig({ recentLogs: newLogs });
+    saveEmailConfig({ recentLogs: failedLogs });
 
     return {
       success: false,
@@ -257,8 +257,7 @@ export async function sendPasswordRecoveryEmail(params: {
       recipientEmail: recipient,
       maskedEmail: maskEmailAddress(recipient),
       remainingToday: Math.max(0, DAILY_GMAIL_LIMIT - cfg.sentCountToday),
-      error:
-        "تعذر إرسال البريد الإلكتروني. يرجى التأكد من صحة كلمة مرور التطبيقات (App Password) المكونة من 16 حرفاً الخاصة بحساب qalbalelm@gmail.com في لوحة الإدارة.",
+      error: err?.message || String(err),
     };
   }
 }
