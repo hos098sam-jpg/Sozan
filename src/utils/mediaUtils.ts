@@ -412,7 +412,7 @@ export function convertToPlatformSecureUrl(rawUrl: any, videoId?: string, studen
       streamUrl: trimmed,
       embedUrl: trimmed,
       isDirectStream: true,
-      providerBadge: 'مشغل منصة قلب العلم الآمن (HLS AES-128)',
+      providerBadge: 'مشغل منصة المتفلسفة  الآمن (HLS AES-128)',
     };
   }
   const ticket = createClientVideoTicket(videoId || 'v_sec_' + Math.random().toString(36).slice(2, 8), trimmed, studentId);
@@ -426,7 +426,7 @@ export function convertToPlatformSecureUrl(rawUrl: any, videoId?: string, studen
     streamUrl,
     embedUrl,
     isDirectStream: isDirect,
-    providerBadge: 'مشغل منصة قلب العلم الآمن',
+    providerBadge: 'مشغل منصة المتفلسفة  الآمن',
   };
 }
 

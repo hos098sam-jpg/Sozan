@@ -63,7 +63,7 @@ async function startServer() {
   }
 
   const server = app.listen(PORT, HOST, () => {
-    console.log(`🚀 منصة قلب العلم التعليمية Server running on http://${HOST}:${PORT}`);
+    console.log(`🚀 منصة المتفلسفة  التعليمية Server running on http://${HOST}:${PORT}`);
   });
 
   server.on("error", (err: any) => {

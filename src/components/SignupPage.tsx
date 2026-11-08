@@ -231,13 +231,13 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
             <div className="relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-blue-500/30 group">
               <img
                 src={registerIllustration}
-                alt="إنشاء حساب جديد - منصة قلب العلم"
+                alt="إنشاء حساب جديد - منصة المتفلسفة "
                 className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
               />
 
               <div className="absolute top-4 right-4 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-2xl border border-blue-400/40 text-blue-300 text-xs font-black flex items-center gap-2 shadow-xl">
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>انضم لأسرة قلب العلم 🌟</span>
+                <span>انضم لأسرة المتفلسفة  🌟</span>
               </div>
 
               <div className="absolute bottom-4 inset-x-4 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4 rounded-2xl text-right">
@@ -258,14 +258,14 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                   <div className="w-12 h-12 rounded-full bg-white border border-blue-400/50 flex items-center justify-center shadow-md overflow-hidden shrink-0">
                     <img
                       src={qalbAlElmLogo}
-                      alt="شعار منصة قلب العلم"
+                      alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
                     <h2 className="text-xl sm:text-2xl font-black text-white">إنشاء حساب طالب جديد</h2>
-                    <p className="text-xs text-blue-300 font-medium">منصة قلب العلم التعليمية 2027</p>
+                    <p className="text-xs text-blue-300 font-medium">منصة المتفلسفة  التعليمية 2027</p>
                   </div>
                 </div>
 
@@ -652,7 +652,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                       className="w-4 h-4 rounded border-blue-500/50 bg-[#0d1b3e] accent-blue-600"
                     />
                     <span>
-                      أوافق على <b>شروط الاستخدام</b> وسياسة حماية المحتوى والامتحانات بمنصة قلب العلم.
+                      أوافق على <b>شروط الاستخدام</b> وسياسة حماية المحتوى والامتحانات بمنصة المتفلسفة .
                     </span>
                   </label>
 
@@ -693,7 +693,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
 
       {/* Footer */}
       <footer className="relative z-10 py-4 text-center text-xs text-slate-500 border-t border-white/5">
-        <p>جميع الحقوق محفوظة © لمنصة قلب العلم التعليمية 2027</p>
+        <p>جميع الحقوق محفوظة © لمنصة المتفلسفة  التعليمية 2027</p>
       </footer>
     </div>
   );

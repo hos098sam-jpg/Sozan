@@ -810,7 +810,7 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
     baseUrl: string;
   }>({
     isConfigured: true,
-    domain: 'qalbalelm.web.app',
+    domain: 'motafalsifa.vercel.app',
     baseUrl: 'https://cdn.vcdn.me',
   });
   const [vcdnApiKeyInput, setVcdnApiKeyInput] = useState('vcdn_sk_2a3f5149b12d89f8c4a6e5b0e330f2e203188db3ff80219c');
@@ -848,7 +848,7 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
         if (data && data.success) {
           setVcdnConfigInfo({
             isConfigured: Boolean(data.isConfigured),
-            domain: data.domain || 'qalbalelm.web.app',
+            domain: data.domain || 'motafalsifa.vercel.app',
             baseUrl: data.baseUrl || 'https://cdn.vcdn.me',
           });
           if (data.baseUrl) setVcdnBaseUrlInput(data.baseUrl);

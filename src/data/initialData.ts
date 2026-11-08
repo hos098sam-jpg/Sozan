@@ -39,8 +39,8 @@ import {
 import { DEFAULT_COURSES } from './defaultCourses';
 
 export const INITIAL_PLATFORM_SETTINGS: PlatformSettings = {
-  platformName: 'قلب العلم',
-  heroTitle: 'منصة قلب العلم لدفعة 2027',
+  platformName: 'المتفلسفة ',
+  heroTitle: 'منصة المتفلسفة  لدفعة 2027',
   heroSubtitle: 'المنصة المتكاملة لتقديم الكورسات، الامتحانات الإلكترونية، والمسابقات الرسمية لدفعة 2027 تحت إشراف إدارة المنصة.',
   supervisorName: 'إدارة المنصة',
   supervisorTitle: 'المشرف العام وإدارة المنصة',
@@ -79,7 +79,7 @@ export const INITIAL_SUBMISSIONS: StudentExamSubmission[] = [];
 export const INITIAL_NOTIFICATIONS: PlatformNotification[] = [
   {
     id: 'notif-welcome-2027',
-    title: 'مرحباً بكم في منصة قلب العلم لدفعة 2027 🎓',
+    title: 'مرحباً بكم في منصة المتفلسفة  لدفعة 2027 🎓',
     message: 'نرحب بجميع الطلاب وأولياء الأمور في انطلاق المنصة التعليمية لدفعة 2027 تحت إشراف إدارة المنصة. تابعوا جدول الكورسات والامتحانات الدورية والمسابقات.',
     senderName: 'إدارة المنصة',
     timestamp: new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -1151,7 +1151,7 @@ export function mergeUsers(existingUsers: User[], incomingUsers: User[]): User[]
       userMap.set(inc.id, {
         ...inc,
         ...base,
-        name: base.name && base.name !== 'طالب منصة قلب العلم' && base.name !== 'مستخدم منصة قلب العلم' ? base.name : inc.name,
+        name: base.name && base.name !== 'طالب منصة المتفلسفة ' && base.name !== 'مستخدم منصة المتفلسفة ' ? base.name : inc.name,
         enrolledCourseIds: mergedEnrolled,
         examResults: mergedExamResults,
         completedVideos: mergedCompletedVideos,

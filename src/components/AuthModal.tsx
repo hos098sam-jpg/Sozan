@@ -295,7 +295,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           console.warn('Could not sync WhatsApp user to Firestore:', syncErr);
         }
 
-        setSuccessMsg('تم تسجيل الدخول بنجاح! مرحباً بك في منصة قلب العلم...');
+        setSuccessMsg('تم تسجيل الدخول بنجاح! مرحباً بك في منصة المتفلسفة ...');
         setTimeout(() => {
           onAuthSuccess(authenticatedUser);
           onClose();
@@ -311,7 +311,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  // 3. Request Forgot Password OTP via Email (qalbalelm@gmail.com)
+  // 3. Request Forgot Password OTP via Email (hos098sam@gmail.com)
   const handleRequestForgotOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -326,7 +326,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     if (!cleanRecoveryEmail || !cleanRecoveryEmail.includes('@')) {
-      setError('يرجى إدخال بريدك الإلكتروني الصحيح (Gmail) لإرسال رمز الاسترداد إليه من بريد المنصة qalbalelm@gmail.com.');
+      setError('يرجى إدخال بريدك الإلكتروني الصحيح (Gmail) لإرسال رمز الاسترداد إليه من بريد المنصة hos098sam@gmail.com.');
       return;
     }
 
@@ -341,7 +341,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setOtpStep('forgot_otp');
       setSuccessMsg(
         res.message ||
-          `تم إرسال رمز الاسترداد (6 أرقام) من البريد الرسمي (qalbalelm@gmail.com) إلى بريدك الإلكتروني بنجاح.`
+          `تم إرسال رمز الاسترداد (6 أرقام) من البريد الرسمي (hos098sam@gmail.com) إلى بريدك الإلكتروني بنجاح.`
       );
     } catch (err: any) {
       console.warn('Request Forgot Email OTP error:', err);
@@ -778,7 +778,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (!userProfile && !isSupervisor) {
         userProfile = {
           id: fbUser.uid,
-          name: fbUser.displayName || 'طالب منصة قلب العلم',
+          name: fbUser.displayName || 'طالب منصة المتفلسفة ',
           email: fbUser.email || targetEmail,
           phone: cleanInput.includes('@') ? '' : cleanInput,
           parentPhone: '',
@@ -955,7 +955,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
       const authenticatedParent: User = {
         id: `parent-${cleanDigits}`,
-        name: `ولي أمر الطالب (${stNames || mainStudent?.name || 'طالب قلب العلم'})`,
+        name: `ولي أمر الطالب (${stNames || mainStudent?.name || 'طالب المتفلسفة '})`,
         phone: cleanPhone,
         parentPhone: cleanPhone,
         schoolYear: mainStudent?.schoolYear || 'الصف الثالث الثانوي',
@@ -1161,7 +1161,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     if (!termsAgreed) {
-      setError('الرجاء الموافقة على الشروط والأحكام واتفاقية شراء الكورس في منصة قلب العلم.');
+      setError('الرجاء الموافقة على الشروط والأحكام واتفاقية شراء الكورس في منصة المتفلسفة .');
       return;
     }
 
@@ -1403,7 +1403,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <div className="w-10 h-10 rounded-full bg-white border border-indigo-200 flex items-center justify-center shadow-xs overflow-hidden shrink-0">
                     <img
                       src={qalbAlElmLogo}
-                      alt="شعار منصة قلب العلم"
+                      alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
@@ -2031,7 +2031,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4"
                       />
                       <span className="text-slate-700 font-medium leading-relaxed">
-                        أوافق على الشروط والأحكام واتفاقية شراء الكورس في منصة قلب العلم.
+                        أوافق على الشروط والأحكام واتفاقية شراء الكورس في منصة المتفلسفة .
                       </span>
                     </label>
                   </div>
@@ -2091,7 +2091,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* RESET PASSWORD / FORGOT PASSWORD FLOW */}
           {/* ======================================================== */}
           {/* ======================================================== */}
-          {/* RESET PASSWORD / FORGOT PASSWORD FLOW (EMAIL RECOVERY via qalbalelm@gmail.com) */}
+          {/* RESET PASSWORD / FORGOT PASSWORD FLOW (EMAIL RECOVERY via hos098sam@gmail.com) */}
           {/* ======================================================== */}
           {mode === 'login' && isResetPasswordMode && (
             <div className="space-y-4">
@@ -2108,7 +2108,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <p className="text-xs text-indigo-900/80 dark:text-indigo-300/80 leading-relaxed font-medium">
                       أدخل رقم هاتفك المسجل على المنصة وبريدك الإلكتروني ليتم إرسال رمز الاسترداد (6 أرقام) إليك فوراً من البريد الرسمي للمنصة{' '}
                       <strong className="font-mono text-indigo-700 dark:text-indigo-300" dir="ltr">
-                        qalbalelm@gmail.com
+                        hos098sam@gmail.com
                       </strong>
                       .
                     </p>
@@ -2159,7 +2159,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <span>جاري إرسال رمز الاسترداد للبريد...</span>
                     ) : (
                       <>
-                        <span>إرسال رمز الاسترداد من qalbalelm@gmail.com 📧</span>
+                        <span>إرسال رمز الاسترداد من hos098sam@gmail.com 📧</span>
                         <ArrowLeft className="w-4 h-4" />
                       </>
                     )}
@@ -2195,7 +2195,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <p className="text-xs text-indigo-900/80 dark:text-indigo-300/80 leading-relaxed font-medium">
                       تم الإرسال من البريد الرسمي{' '}
                       <strong className="font-mono text-indigo-700 dark:text-indigo-300" dir="ltr">
-                        qalbalelm@gmail.com
+                        hos098sam@gmail.com
                       </strong>{' '}
                       إلى:{' '}
                       <strong className="font-mono text-indigo-700 dark:text-indigo-400 text-sm dir-ltr inline-block">
@@ -2582,7 +2582,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <div className="flex items-center justify-between font-bold">
                       <span className="text-slate-500 dark:text-slate-400">الطالب المرتبط:</span>
                       <span className="text-indigo-700 dark:text-indigo-300 font-black text-sm">
-                        {parentStudentNames || 'طالب منصة قلب العلم'}
+                        {parentStudentNames || 'طالب منصة المتفلسفة '}
                       </span>
                     </div>
                     {parentMatchedStudents[0] && (

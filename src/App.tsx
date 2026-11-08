@@ -151,8 +151,8 @@ export const ensureUserPrivileges = (u: User): User => {
   const rawName = (u.name || '').trim();
   const isPlaceholderName =
     !rawName ||
-    rawName === 'مستخدم منصة قلب العلم' ||
-    rawName === 'طالب منصة قلب العلم' ||
+    rawName === 'مستخدم منصة المتفلسفة ' ||
+    rawName === 'طالب منصة المتفلسفة ' ||
     rawName === 'مستخدم المنصة';
 
   let resolvedPhone = (u.phone || '').trim();
@@ -171,13 +171,13 @@ export const ensureUserPrivileges = (u: User): User => {
       ? combinedPartsName
       : resolvedPhone
       ? `طالب (${resolvedPhone})`
-      : 'مستخدم منصة قلب العلم';
+      : 'مستخدم منصة المتفلسفة ';
 
   const resolvedName = !isPlaceholderName ? rawName : fallbackName;
 
   const rawSchoolYear = (u.schoolYear || '').trim();
   const resolvedSchoolYear =
-    !rawSchoolYear || rawSchoolYear === 'طالب منصة قلب العلم'
+    !rawSchoolYear || rawSchoolYear === 'طالب منصة المتفلسفة '
       ? u.role === 'admin' || u.email === 'hos098sam@gmail.com'
         ? 'إدارة المنصة'
         : 'الصف الثالث الثانوي'
@@ -197,7 +197,7 @@ export const ensureUserPrivileges = (u: User): User => {
       ...updatedUser,
       role: 'admin',
       status: 'active',
-      name: updatedUser.name && updatedUser.name !== 'مستخدم منصة قلب العلم' ? updatedUser.name : 'إدارة المنصة',
+      name: updatedUser.name && updatedUser.name !== 'مستخدم منصة المتفلسفة ' ? updatedUser.name : 'إدارة المنصة',
     };
   }
   return updatedUser;
@@ -379,13 +379,13 @@ export default function App() {
               ...localCandidate,
               ...profile,
               name:
-                profile.name && profile.name !== 'مستخدم منصة قلب العلم'
+                profile.name && profile.name !== 'مستخدم منصة المتفلسفة '
                   ? profile.name
                   : localCandidate?.name || fbUser.displayName || profile.name,
               phone: profile.phone || localCandidate?.phone || '',
               parentPhone: profile.parentPhone || localCandidate?.parentPhone || '',
               schoolYear:
-                profile.schoolYear && profile.schoolYear !== 'طالب منصة قلب العلم'
+                profile.schoolYear && profile.schoolYear !== 'طالب منصة المتفلسفة '
                   ? profile.schoolYear
                   : localCandidate?.schoolYear || profile.schoolYear || 'الصف الثالث الثانوي',
               activeSessionId: localSessionId || profile.activeSessionId,
@@ -407,7 +407,7 @@ export default function App() {
             // New or minimal user
             const fallbackUser: User = ensureUserPrivileges({
               id: fbUser.uid,
-              name: fbUser.displayName || 'مستخدم منصة قلب العلم',
+              name: fbUser.displayName || 'مستخدم منصة المتفلسفة ',
               email: fbUser.email || '',
               phone: '',
               parentPhone: '',
@@ -470,9 +470,9 @@ export default function App() {
         (snap) => {
           if (!snap.exists()) {
             // Document does not exist yet in Firestore.
-            // Only write user data if it is a complete profile (never overwrite with placeholder 'مستخدم منصة قلب العلم')
+            // Only write user data if it is a complete profile (never overwrite with placeholder 'مستخدم منصة المتفلسفة ')
             const me = currentUserRef.current;
-            if (me?.id && me.name && me.name !== 'مستخدم منصة قلب العلم') {
+            if (me?.id && me.name && me.name !== 'مستخدم منصة المتفلسفة ') {
               try {
                 const { password, ...safeMe } = me as any;
                 setDoc(
@@ -526,17 +526,17 @@ export default function App() {
             ...currentMe,
             ...freshData,
             name:
-              freshData.name && freshData.name !== 'مستخدم منصة قلب العلم'
+              freshData.name && freshData.name !== 'مستخدم منصة المتفلسفة '
                 ? freshData.name
-                : currentMe?.name && currentMe.name !== 'مستخدم منصة قلب العلم'
+                : currentMe?.name && currentMe.name !== 'مستخدم منصة المتفلسفة '
                 ? currentMe.name
                 : freshData.name,
             phone: freshData.phone || currentMe?.phone || '',
             parentPhone: freshData.parentPhone || currentMe?.parentPhone || '',
             schoolYear:
-              freshData.schoolYear && freshData.schoolYear !== 'طالب منصة قلب العلم'
+              freshData.schoolYear && freshData.schoolYear !== 'طالب منصة المتفلسفة '
                 ? freshData.schoolYear
-                : currentMe?.schoolYear && currentMe.schoolYear !== 'طالب منصة قلب العلم'
+                : currentMe?.schoolYear && currentMe.schoolYear !== 'طالب منصة المتفلسفة '
                 ? currentMe.schoolYear
                 : freshData.schoolYear,
             id: currentMe?.id || freshData.id || snap.id,
@@ -547,9 +547,9 @@ export default function App() {
 
           // Self-heal Firestore document if it had placeholder values that were repaired from 4-part name / email
           if (
-            (freshData.name === 'مستخدم منصة قلب العلم' && freshUser.name !== 'مستخدم منصة قلب العلم') ||
+            (freshData.name === 'مستخدم منصة المتفلسفة ' && freshUser.name !== 'مستخدم منصة المتفلسفة ') ||
             (!freshData.phone && freshUser.phone) ||
-            (freshData.schoolYear === 'طالب منصة قلب العلم' && freshUser.schoolYear !== 'طالب منصة قلب العلم')
+            (freshData.schoolYear === 'طالب منصة المتفلسفة ' && freshUser.schoolYear !== 'طالب منصة المتفلسفة ')
           ) {
             setDoc(
               userDocRef,
@@ -1721,12 +1721,12 @@ export default function App() {
             }}
             className="cursor-pointer transition-opacity hover:opacity-90"
           >
-            <Logo size="md" subtitle={platformSettings.platformName !== 'منصة قلب العلم التعليمية' && platformSettings.platformName !== 'منصة قلب العلم' ? platformSettings.platformName : 'المنصة التعليمية الحديثة • إشراف إدارة المنصة'} />
+            <Logo size="md" subtitle={platformSettings.platformName !== 'منصة المتفلسفة  التعليمية' && platformSettings.platformName !== 'منصة المتفلسفة ' ? platformSettings.platformName : 'المنصة التعليمية الحديثة • إشراف إدارة المنصة'} />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            <a href="https://www.facebook.com/profile.php?id=61594492453139" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-colors shadow-xs" title="صفحة فيسبوك قلب العلم"><Facebook className="w-3.5 h-3.5 fill-current" /><span>فيسبوك: قلب العلم</span></a>
-            <a href="https://www.facebook.com/share/g/1KcP6KBSRC/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition-colors shadow-xs" title="جروب طلاب قلب العلم"><Facebook className="w-3.5 h-3.5 fill-current" /><span>جروب طلاب قلب العلم</span></a>
-            <a href="https://www.tiktok.com/@qalbalelm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك قلب العلم"><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: قلب العلم</span></a>
+            <a href="https://www.facebook.com/profile.php?id=61594492453139" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-colors shadow-xs" title="صفحة فيسبوك المتفلسفة "><Facebook className="w-3.5 h-3.5 fill-current" /><span>فيسبوك: المتفلسفة </span></a>
+            <a href="https://www.facebook.com/share/g/1KcP6KBSRC/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition-colors shadow-xs" title="جروب طلاب المتفلسفة "><Facebook className="w-3.5 h-3.5 fill-current" /><span>جروب طلاب المتفلسفة </span></a>
+            <a href="https://www.tiktok.com/@qalbalelm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك المتفلسفة "><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: المتفلسفة </span></a>
             <a href="https://wa.me/201040672314" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-colors shadow-xs" title="الدعم الفني للمنصة"><MessageCircle className="w-3.5 h-3.5" /><span>الدعم الفني للمنصة</span></a>
             <button onClick={() => { if (currentUser?.role === 'admin') setCurrentView('admin'); else handleOpenAuth('login'); }} className="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors" title="دخول المشرف / لوحة الكنترول"><ShieldCheck className="w-4 h-4" /></button>
           </div>

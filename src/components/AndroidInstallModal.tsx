@@ -77,14 +77,14 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-white overflow-hidden flex items-center justify-center border border-white/20 shrink-0 shadow-md">
-              <img src={qalbAlElmLogo} alt="شعار منصة قلب العلم التعليمية" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+              <img src={qalbAlElmLogo} alt="شعار منصة المتفلسفة  التعليمية" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900">
                 تطبيق الهاتف والكمبيوتر (PWA)
               </span>
               <h3 className="text-xl sm:text-2xl font-black mt-1">
-                تثبيت تطبيق منصة قلب العلم على هاتفك أو جهازك
+                تثبيت تطبيق منصة المتفلسفة  على هاتفك أو جهازك
               </h3>
             </div>
           </div>
@@ -98,7 +98,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
               <div className="relative w-full max-w-[260px] rounded-[28px] overflow-hidden border-4 border-indigo-900/80 shadow-2xl bg-[#0b0726]">
                 <img
                   src="/hero-banner-qalbalelm.jpg"
-                  alt="أهلاً في قلب العلم - شاشة تشغيل التطبيق"
+                  alt="أهلاً في المتفلسفة  - شاشة تشغيل التطبيق"
                   className="w-full h-auto block object-cover"
                 />
               </div>
@@ -117,14 +117,14 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                     <span>تثبيت مباشر بضغطة واحدة على جهازك الآن!</span>
                   </div>
                   <p className="text-xs text-indigo-100 leading-relaxed">
-                    اضغط على الزر بالأسفل ليتم تثبيت تطبيق <strong>قلب العلم</strong> مباشرة على شاشتك الرئيسية ويفتح بهذه الواجهة الترحيبية بكامل الشاشة.
+                    اضغط على الزر بالأسفل ليتم تثبيت تطبيق <strong>المتفلسفة </strong> مباشرة على شاشتك الرئيسية ويفتح بهذه الواجهة الترحيبية بكامل الشاشة.
                   </p>
                   <button
                     onClick={handleDirectInstall}
                     className="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                   >
                     <Download className="w-4 h-4" />
-                    <span>تثبيت تطبيق قلب العلم الآن 📲</span>
+                    <span>تثبيت تطبيق المتفلسفة  الآن 📲</span>
                   </button>
                 </div>
               )}
@@ -144,7 +144,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                  التطبيق مجهز كـ <strong>تطبيق ويب تقدمي (PWA)</strong>، وعند تثبيته يظهر بأيقونة وشاشة ترحيب <strong>"أهلاً في قلب العلم"</strong> بكامل الشاشة:
+                  التطبيق مجهز كـ <strong>تطبيق ويب تقدمي (PWA)</strong>، وعند تثبيته يظهر بأيقونة وشاشة ترحيب <strong>"أهلاً في المتفلسفة "</strong> بكامل الشاشة:
                 </p>
 
                 <ul className="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium">
@@ -158,7 +158,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>ستظهر أيقونة <strong>"قلب العلم"</strong> على شاشة جهازك ويفتح التطبيق بشاشة الترحيب الخاصة بالمنصة.</span>
+                    <span>ستظهر أيقونة <strong>"المتفلسفة "</strong> على شاشة جهازك ويفتح التطبيق بشاشة الترحيب الخاصة بالمنصة.</span>
                   </li>
                 </ul>
               </div>
@@ -239,7 +239,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
               <div className="flex items-center justify-between p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs font-bold text-amber-900 dark:text-amber-200">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-amber-600" />
-                  <span>منصة قلب العلم - منصة تعليمية حديثة</span>
+                  <span>منصة المتفلسفة  - منصة تعليمية حديثة</span>
                 </div>
                 <span className="text-amber-700 dark:text-amber-300">دعم متواصل للطلاب</span>
               </div>

@@ -80,7 +80,7 @@ export const TeacherEssayGradingPage: React.FC<TeacherEssayGradingPageProps> = (
   const getStudentName = (sub: StudentExamSubmission) =>
     sub.studentName ||
     allStudents.find((s) => s.id === sub.studentId)?.name ||
-    'طالب منصة قلب العلم';
+    'طالب منصة المتفلسفة ';
 
   const getCourseTitle = (sub: StudentExamSubmission) =>
     myCourses.find((c) => c.id === sub.courseId)?.title || 'كورس تعليمي';

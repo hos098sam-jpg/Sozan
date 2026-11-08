@@ -725,7 +725,7 @@ export const LuckyWheelModal: React.FC<LuckyWheelModalProps> = ({
               <div className="text-center space-y-1.5">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400 text-slate-950 font-black text-xs shadow-sm">
                   <Sparkles className="w-4 h-4" />
-                  <span>🎉 كسبت معانا في منصة قلب العلم! 🎉</span>
+                  <span>🎉 كسبت معانا في منصة المتفلسفة ! 🎉</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white">
                   {winner.user.name}
@@ -819,7 +819,7 @@ export const LuckyWheelModal: React.FC<LuckyWheelModalProps> = ({
 
         {/* Modal Footer */}
         <div className="p-4 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-          <div>منصة قلب العلم • برنامج السحوبات والمسابقات الرسمية</div>
+          <div>منصة المتفلسفة  • برنامج السحوبات والمسابقات الرسمية</div>
           <button
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold hover:bg-slate-300 transition-colors"

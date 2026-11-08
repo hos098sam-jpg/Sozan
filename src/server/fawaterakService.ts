@@ -115,7 +115,7 @@ export function getAppBaseUrl(req?: any): string {
       return `${proto}://${host}`;
     }
   }
-  return "https://qalbalelm.web.app";
+  return "https://motafalsifa.vercel.app";
 }
 
 export function updateFawaterakConfig(newHashKey?: string, newProviderKey?: string) {
@@ -336,9 +336,9 @@ export async function createFawaterakInvoice(params: CreateInvoiceParams) {
   }
 
   const cleanPhone = (studentPhone || "").replace(/\D/g, "");
-  const nameParts = (studentName || "طالب منصة قلب العلم").trim().split(" ");
+  const nameParts = (studentName || "طالب منصة المتفلسفة ").trim().split(" ");
   const firstName = nameParts[0] || "طالب";
-  const lastName = nameParts.slice(1).join(" ") || "منصة قلب العلم";
+  const lastName = nameParts.slice(1).join(" ") || "منصة المتفلسفة ";
   const cleanEmail = studentEmail || `${cleanPhone || "student"}@qalbalelm.edu`;
 
   // Payload for Fawaterak V2 createInvoiceLink
@@ -472,11 +472,11 @@ export async function createFawaterakInvoice(params: CreateInvoiceParams) {
     couponApplied: !!appliedCoupon,
     couponCode: appliedCoupon?.code,
     activationUrls: {
-      domain: "https://qalbalelm.web.app",
-      webhook: "https://qalbalelm.web.app/api/fawaterak/webhook",
-      successCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=paid",
-      failedCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=failed",
-      pendingCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=pending",
+      domain: "https://motafalsifa.vercel.app",
+      webhook: "https://motafalsifa.vercel.app/api/fawaterak/webhook",
+      successCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=paid",
+      failedCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=failed",
+      pendingCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=pending",
     },
   };
 }

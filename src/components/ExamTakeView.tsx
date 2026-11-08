@@ -359,7 +359,7 @@ export const ExamTakeView: React.FC<ExamTakeViewProps> = ({
       const formattedDuration = formatDetailedExamDuration(exactElapsedSecs);
 
       const studentId = currentUser?.id || `student_${Date.now()}`;
-      const studentName = currentUser?.name || 'طالب منصة قلب العلم';
+      const studentName = currentUser?.name || 'طالب منصة المتفلسفة ';
       const studentPhone = currentUser?.phone || '';
       const parentPhone = currentUser?.parentPhone || currentUser?.fatherPhone || currentUser?.motherPhone || '';
       const studentSchoolYear = currentUser?.schoolYear || 'الصف الثالث الثانوي';

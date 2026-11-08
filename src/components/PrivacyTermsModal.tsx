@@ -47,7 +47,7 @@ export const PrivacyTermsModal: React.FC<PrivacyTermsModalProps> = ({
                 السياسات والأحكام القانونية
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                منصة قلب العلم التعليمية • إشراف إدارة المنصة
+                منصة المتفلسفة  التعليمية • إشراف إدارة المنصة
               </p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export const PrivacyTermsModal: React.FC<PrivacyTermsModalProps> = ({
               <div className="p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 text-indigo-900 dark:text-indigo-200 flex items-start gap-3">
                 <ShieldCheck className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
                 <p className="text-xs sm:text-sm leading-relaxed font-medium">
-                  نحن في <strong>منصة قلب العلم التعليمية</strong> نضع خصوصية وأمان بيانات الطلاب وأولياء الأمور والمعلمين في مقدمة أولوياتنا. توضح هذه الوثيقة كيف نقوم بجمع، واستخدام، وحماية بياناتكم وفقاً لأعلى معايير الأمن السيبراني.
+                  نحن في <strong>منصة المتفلسفة  التعليمية</strong> نضع خصوصية وأمان بيانات الطلاب وأولياء الأمور والمعلمين في مقدمة أولوياتنا. توضح هذه الوثيقة كيف نقوم بجمع، واستخدام، وحماية بياناتكم وفقاً لأعلى معايير الأمن السيبراني.
                 </p>
               </div>
 
@@ -141,7 +141,7 @@ export const PrivacyTermsModal: React.FC<PrivacyTermsModalProps> = ({
                 </h3>
                 <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 text-emerald-900 dark:text-emerald-200">
                   <p className="font-bold">
-                    تتعهد منصة قلب العلم التعليمية بعدم بيع، أو تأجير، أو مشاركة أي بيانات شخصية تخص الطلاب أو أولياء أمورهم لأي جهة إعلانية أو تجارية أو أطراف ثالثة إطلاقاً.
+                    تتعهد منصة المتفلسفة  التعليمية بعدم بيع، أو تأجير، أو مشاركة أي بيانات شخصية تخص الطلاب أو أولياء أمورهم لأي جهة إعلانية أو تجارية أو أطراف ثالثة إطلاقاً.
                   </p>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400">
@@ -168,7 +168,7 @@ export const PrivacyTermsModal: React.FC<PrivacyTermsModalProps> = ({
               <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/40 text-amber-900 dark:text-amber-200 flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-xs sm:text-sm leading-relaxed font-medium">
-                  استخدامك لمنصة قلب العلم التعليمية يعني موافقتك الكاملة وغير المشروطة على هذه الشروط والأحكام. يرجى قراءتها بعناية لضمان حقوقك وحقوق المنصة.
+                  استخدامك لمنصة المتفلسفة  التعليمية يعني موافقتك الكاملة وغير المشروطة على هذه الشروط والأحكام. يرجى قراءتها بعناية لضمان حقوقك وحقوق المنصة.
                 </p>
               </div>
 
@@ -179,7 +179,7 @@ export const PrivacyTermsModal: React.FC<PrivacyTermsModalProps> = ({
                   الملكية الفكرية وحماية المحتوى التعليمي
                 </h3>
                 <ul className="list-disc list-inside space-y-1.5 pr-2 text-slate-600 dark:text-slate-400">
-                  <li>جميع المحتويات التعليمية المعروضة على المنصة — بما في ذلك فيديوهات الشرح، مذكرات الشرح والتدريبات (PDF)، بنوك الأسئلة، والامتحانات التفاعلية — هي <strong>ملكية فكرية حصرية ومحمية</strong> لمنصة قلب العلم وإدارة المنصة.</li>
+                  <li>جميع المحتويات التعليمية المعروضة على المنصة — بما في ذلك فيديوهات الشرح، مذكرات الشرح والتدريبات (PDF)، بنوك الأسئلة، والامتحانات التفاعلية — هي <strong>ملكية فكرية حصرية ومحمية</strong> لمنصة المتفلسفة  وإدارة المنصة.</li>
                   <li><strong>يحظر تماماً:</strong> تصوير الشاشة (Screen Recording / Screenshot)، أو إعادة بث الفيديوهات، أو تنزيل المحتوى، أو توزيعه على مجموعات تليجرام أو منصات التواصل الاجتماعي.</li>
                   <li>أي انتهاك لحقوق الملكية الفكرية يعرض صاحبه <strong>للحظر النهائي الفوري</strong> للحساب وإلغاء الاشتراك دون استرداد الرسوم، مع احتفاظ المنصة بحقها في اتخاذ كافة الإجراءات القانونية والملاحقة الجنائية والمدنية.</li>
                 </ul>

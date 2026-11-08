@@ -73,7 +73,7 @@ export function saveEmailConfig(partial: Partial<EmailConfigData>): EmailConfigD
   const updated: EmailConfigData = {
     ...current,
     ...partial,
-    senderEmail: OFFICIAL_RECOVERY_EMAIL, // قفل برمي صارم لمنع التداخل مع قلب العلم
+    senderEmail: OFFICIAL_RECOVERY_EMAIL, // قفل برمي صارم لمنع التداخل مع المتفلسفة 
     appPassword:
       partial.appPassword !== undefined
         ? String(partial.appPassword).replace(/\s+/g, "")

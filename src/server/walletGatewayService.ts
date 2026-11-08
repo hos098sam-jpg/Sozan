@@ -11,7 +11,7 @@ import type { WalletOrder } from "../types";
 export const WALLET_CONFIG = {
   // Official Vodafone Cash Receiving Number
   receivingWalletNumber: process.env.VODAFONE_CASH_NUMBER || "01040672314",
-  receivingWalletName: "فودافون كاش - منصة قلب العلم التعليمية",
+  receivingWalletName: "فودافون كاش - منصة المتفلسفة  التعليمية",
   webhookSecret: process.env.SMS_GATEWAY_SECRET || "alelm_sms_secure_2027",
   autoApproveOnSmsMatch: true,
 };

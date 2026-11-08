@@ -277,7 +277,7 @@ export const TeacherStudentsPage: React.FC<TeacherStudentsPageProps> = ({
                       </div>
                       <div>
                         <h4 className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">
-                          {student.name || 'طالب منصة قلب العلم'}
+                          {student.name || 'طالب منصة المتفلسفة '}
                         </h4>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <span

@@ -30,7 +30,7 @@ const STORAGE_SUPPORT_USER_KEY = 'qalb_alam_support_guest_info';
 
 export const FloatingSupportChat: React.FC<FloatingSupportChatProps> = ({
   currentUser,
-  platformName = 'منصة قلب العلم',
+  platformName = 'منصة المتفلسفة ',
   onOpenAdminSupport,
 }) => {
   const [isOpen, setIsOpen] = useState(false);

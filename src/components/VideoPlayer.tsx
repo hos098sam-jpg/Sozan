@@ -484,7 +484,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const studentWatermarkText = currentUser
     ? `${currentUser.name} • ${currentUser.phone || currentUser.id?.slice(0, 8)}`
-    : 'منصة قلب العلم (جلسة دراسية مشفرة)';
+    : 'منصة المتفلسفة  (جلسة دراسية مشفرة)';
 
   return (
     <motion.div
@@ -546,7 +546,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   <Lock className="w-3.5 h-3.5 text-amber-400" />
                 </h4>
                 <p className="text-slate-300 text-xs mt-1 leading-relaxed font-medium">
-                  تحميل الفيديو أو نسخ الرابط المباشر محظور لحماية المحتوى التعليمي وحقوق الملكية الفكرية لمنصة قلب العلم.
+                  تحميل الفيديو أو نسخ الرابط المباشر محظور لحماية المحتوى التعليمي وحقوق الملكية الفكرية لمنصة المتفلسفة .
                 </p>
               </div>
             </div>
@@ -806,7 +806,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1 px-1 text-[11px] text-slate-400 font-medium">
           <div className="flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>بث محمي لمنصة قلب العلم التعليمية لدفعة 2027 • علامة مائية مضمنة تلقائياً.</span>
+            <span>بث محمي لمنصة المتفلسفة  التعليمية لدفعة 2027 • علامة مائية مضمنة تلقائياً.</span>
           </div>
           <div className="flex items-center gap-2 text-slate-500 font-mono text-[10px]">
             <Lock className="w-3 h-3 text-indigo-400" />

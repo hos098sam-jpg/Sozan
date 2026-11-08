@@ -44,7 +44,7 @@ export interface WhatsAppDeliveryLog {
 /**
  * Automated WhatsApp Bot has been permanently disabled and removed
  * to protect phone numbers from WhatsApp bans.
- * Password recovery now operates exclusively via Email (qalbalelm@gmail.com).
+ * Password recovery now operates exclusively via Email (hos098sam@gmail.com).
  */
 class WhatsAppBaileysManager {
   constructor() {

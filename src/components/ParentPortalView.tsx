@@ -136,7 +136,7 @@ export const ParentPortalView: React.FC<ParentPortalViewProps> = ({
   // Handle Share WhatsApp with Supervisor
   const handleShareWithSupervisor = () => {
     if (!selectedStudent) return;
-    const msg = `السلام عليكم أستاذ ${platformSettings.supervisorName}،\nأنا ولي أمر الطالب (${selectedStudent.name}) المسجل في منصة قلب العلم.\n` +
+    const msg = `السلام عليكم أستاذ ${platformSettings.supervisorName}،\nأنا ولي أمر الطالب (${selectedStudent.name}) المسجل في منصة المتفلسفة .\n` +
       `الصف: ${selectedStudent.schoolYear}\n` +
       `الكورسات المشترك بها: ${totalEnrolledCount} كورس\n` +
       `عدد الامتحانات المكتملة: ${totalCompletedExamsCount}\n` +
@@ -152,7 +152,7 @@ export const ParentPortalView: React.FC<ParentPortalViewProps> = ({
     if (!selectedStudent) return;
     const cleanDigits = parentPhone.replace(/\D/g, '');
     const cleanEgyptNum = cleanDigits.replace(/^20/, '').replace(/^0/, '');
-    const msg = `🎓 *تقرير الطالب الأكاديمي - منصة قلب العلم التعليمية*\n` +
+    const msg = `🎓 *تقرير الطالب الأكاديمي - منصة المتفلسفة  التعليمية*\n` +
       `👤 اسم الطالب: *${selectedStudent.name}*\n` +
       `🏫 المرحلة: ${selectedStudent.schoolYear}\n` +
       `📚 الكورسات المشترك بها: ${totalEnrolledCount} كورس\n` +

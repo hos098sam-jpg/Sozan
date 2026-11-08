@@ -36,7 +36,7 @@ interface EmailConfigStatus {
 export const AdminWhatsAppManager: React.FC = () => {
   const [config, setConfig] = useState<EmailConfigStatus | null>(null);
   const [appPassword, setAppPassword] = useState("");
-  const [senderName, setSenderName] = useState("منصة قلب العلم التعليمية");
+  const [senderName, setSenderName] = useState("منصة المتفلسفة  التعليمية");
   const [testEmail, setTestEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -86,7 +86,7 @@ export const AdminWhatsAppManager: React.FC = () => {
 
     const cleanPass = appPassword.replace(/\s+/g, "");
     if (!cleanPass || cleanPass.length < 8) {
-      setErrorMsg("يرجى إدخال كلمة مرور التطبيقات (App Password) المكونة من 16 حرفاً الخاصة بحساب qalbalelm@gmail.com.");
+      setErrorMsg("يرجى إدخال كلمة مرور التطبيقات (App Password) المكونة من 16 حرفاً الخاصة بحساب hos098sam@gmail.com.");
       return;
     }
 
@@ -98,12 +98,12 @@ export const AdminWhatsAppManager: React.FC = () => {
         headers,
         body: JSON.stringify({
           appPassword: cleanPass,
-          senderName: senderName.trim() || "منصة قلب العلم التعليمية",
+          senderName: senderName.trim() || "منصة المتفلسفة  التعليمية",
         }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setSuccessMsg(data.message || "تم حفظ وتفعيل كلمة مرور التطبيقات للبريد الرسمي qalbalelm@gmail.com بنجاح!");
+        setSuccessMsg(data.message || "تم حفظ وتفعيل كلمة مرور التطبيقات للبريد الرسمي hos098sam@gmail.com بنجاح!");
         setAppPassword("");
         await fetchEmailConfig();
       } else {
@@ -163,12 +163,12 @@ export const AdminWhatsAppManager: React.FC = () => {
                 <span>تم إزالة الواتساب التلقائي نهائياً لحماية الأرقام من الحظر ✅</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white">
-                نظام استرداد كلمة السر عبر البريد الرسمي (qalbalelm@gmail.com)
+                نظام استرداد كلمة السر عبر البريد الرسمي (hos098sam@gmail.com)
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                يتم إرسال رمز الاسترداد (6 أرقام) للطلاب عند نسيان كلمة السر من البريد الحصري لمنصة قلب العلم{" "}
+                يتم إرسال رمز الاسترداد (6 أرقام) للطلاب عند نسيان كلمة السر من البريد الحصري لمنصة المتفلسفة {" "}
                 <span className="font-mono font-bold text-amber-300" dir="ltr">
-                  qalbalelm@gmail.com
+                  hos098sam@gmail.com
                 </span>
                 .
               </p>
@@ -218,7 +218,7 @@ export const AdminWhatsAppManager: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <Key className="w-5 h-5 text-indigo-600" />
                 <h3 className="text-base font-black text-slate-900 dark:text-white">
-                  تفعيل الإرسال من بريد qalbalelm@gmail.com
+                  تفعيل الإرسال من بريد hos098sam@gmail.com
                 </h3>
               </div>
               <span
@@ -235,12 +235,12 @@ export const AdminWhatsAppManager: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                  البريد الإلكتروني الرسمي للمنصة (خاص بقلب العلم فقط):
+                  البريد الإلكتروني الرسمي للمنصة (خاص بالمتفلسفة  فقط):
                 </label>
                 <input
                   type="email"
                   disabled
-                  value="qalbalelm@gmail.com"
+                  value="hos098sam@gmail.com"
                   className="w-full px-4 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono font-black text-indigo-700 dark:text-indigo-300 text-left"
                   dir="ltr"
                 />
@@ -325,20 +325,20 @@ export const AdminWhatsAppManager: React.FC = () => {
           <div className="bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-[28px] p-6 space-y-4">
             <div className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200 font-black text-sm">
               <HelpCircle className="w-5 h-5 text-indigo-600" />
-              <span>المطلوب لتفعيل الإرسال من qalbalelm@gmail.com:</span>
+              <span>المطلوب لتفعيل الإرسال من hos098sam@gmail.com:</span>
             </div>
 
             <ol className="space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed list-decimal list-inside font-medium">
               <li>
                 افتح حساب جوجل الخاص ببريد المنصة{" "}
-                <b className="font-mono text-indigo-700 dark:text-indigo-300">qalbalelm@gmail.com</b> ثم ادخل إلى{" "}
+                <b className="font-mono text-indigo-700 dark:text-indigo-300">hos098sam@gmail.com</b> ثم ادخل إلى{" "}
                 <b>إدارة حسابك على Google (Manage your Google Account)</b> ثم قسم <b>الأمان (Security)</b>.
               </li>
               <li>
                 فعّل ميزة <b>التحقق بخطوتين (2-Step Verification)</b> على الحساب.
               </li>
               <li>
-                من داخل صفحة الأمان (أو بالبحث في أعلى إعدادات الحساب عن <b>App passwords / كلمات مرور التطبيقات</b>)، أنشئ كلمة مرور تطبيق جديدة باسم <b>منصة قلب العلم</b>.
+                من داخل صفحة الأمان (أو بالبحث في أعلى إعدادات الحساب عن <b>App passwords / كلمات مرور التطبيقات</b>)، أنشئ كلمة مرور تطبيق جديدة باسم <b>منصة المتفلسفة </b>.
               </li>
               <li>
                 سيعطيك جوجل كود مكون من <b>16 حرفاً</b>، انسخه والصقه في الخانة المجاورة واضغط <b>حفظ وتفعيل</b>.
@@ -361,7 +361,7 @@ export const AdminWhatsAppManager: React.FC = () => {
                 <span>عدد الرسائل المسموح بإرسالها يومياً:</span>
               </div>
               <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                يتيح حساب Gmail المجاني (<span className="font-mono">qalbalelm@gmail.com</span>) إرسال حتى{" "}
+                يتيح حساب Gmail المجاني (<span className="font-mono">hos098sam@gmail.com</span>) إرسال حتى{" "}
                 <b className="text-emerald-700 dark:text-emerald-400">500 رسالة بريد إلكتروني يومياً</b> مجاناً بالكامل، ويتجدد العداد تلقائياً كل 24 ساعة دون أي رسوم أو حظر.
               </p>
             </div>

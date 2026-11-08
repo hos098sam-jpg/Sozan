@@ -36,7 +36,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({ isOpen, onClose })
           <div className="w-20 h-20 rounded-full bg-white border-2 border-indigo-400/40 flex items-center justify-center shadow-lg shadow-indigo-200 mb-4 overflow-hidden">
             <img
               src={qalbAlElmLogo}
-              alt="شعار منصة قلب العلم"
+              alt="شعار منصة المتفلسفة "
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
             />
@@ -110,7 +110,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({ isOpen, onClose })
             className="py-2 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors text-center"
           >
             <Facebook className="w-3.5 h-3.5 fill-current shrink-0" />
-            <span>فيسبوك: قلب العلم</span>
+            <span>فيسبوك: المتفلسفة </span>
           </a>
           <a
             href="https://www.facebook.com/share/g/1KcP6KBSRC/"
@@ -119,7 +119,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({ isOpen, onClose })
             className="py-2 px-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors text-center"
           >
             <Facebook className="w-3.5 h-3.5 fill-current shrink-0" />
-            <span>جروب طلاب قلب العلم</span>
+            <span>جروب طلاب المتفلسفة </span>
           </a>
           <a
             href="https://www.tiktok.com/@qalbalelm"
@@ -128,7 +128,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({ isOpen, onClose })
             className="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors text-center"
           >
             <TikTokIcon className="w-3.5 h-3.5 shrink-0" />
-            <span>تيك توك: قلب العلم</span>
+            <span>تيك توك: المتفلسفة </span>
           </a>
           <a
             href="https://wa.me/201040672314"

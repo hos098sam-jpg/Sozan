@@ -224,7 +224,7 @@ export function getVcdnConfig(): VcdnConfig {
   return {
     apiKey,
     baseUrl,
-    domain: 'qalbalelm.web.app',
+    domain: 'motafalsifa.vercel.app',
     ladderProfile: 'standard',
     defaultVisibility: 'private',
   };
@@ -830,7 +830,7 @@ export async function createPlaybackToken(params: {
   const cleanId = params.videoId.replace(/^vcdn:/, '').trim();
   const ttl = params.ttlSeconds || 3600;
   const student = {
-    name: params.studentName || 'طالب منصة قلب العلم',
+    name: params.studentName || 'طالب منصة المتفلسفة ',
     id: params.studentId || 'std_guest',
     phone: params.studentPhone || '',
   };

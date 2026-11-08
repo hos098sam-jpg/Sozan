@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md shadow-indigo-200 overflow-hidden border border-indigo-400/30 group-hover:scale-105 transition-transform">
                 <img
                   src={qalbAlElmLogo}
-                  alt="شعار منصة قلب العلم التعليمية"
+                  alt="شعار منصة المتفلسفة  التعليمية"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />

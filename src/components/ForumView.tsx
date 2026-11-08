@@ -607,7 +607,7 @@ export const ForumView: React.FC<ForumViewProps> = ({ currentUser, onOpenAuth })
                 </div>
                 <div>
                   <h3 className="text-sm font-black text-slate-900 dark:text-white">طرح سؤال أو موضوع جديد</h3>
-                  <p className="text-[11px] text-slate-500">منتدى منصة قلب العلم التعليمية</p>
+                  <p className="text-[11px] text-slate-500">منتدى منصة المتفلسفة  التعليمية</p>
                 </div>
               </div>
               <button

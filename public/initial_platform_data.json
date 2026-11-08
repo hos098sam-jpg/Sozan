@@ -459,11 +459,11 @@
         "nanoseconds": 838000000,
         "seconds": 1791086487
       },
-      "name": "مستخدم منصة قلب العلم",
+      "name": "مستخدم منصة المتفلسفة ",
       "lastLoginAt": "2037-10-01T19:02:42.859Z",
       "status": "active",
       "emailVerified": false,
-      "schoolYear": "طالب منصة قلب العلم",
+      "schoolYear": "طالب منصة المتفلسفة ",
       "activeSessionId": "dev_sess_2138036562858_srgl13uj",
       "phone": "",
       "enrolledCourseIds": [
@@ -497,7 +497,7 @@
       "phone": "01022222222222",
       "secondName": "منصة",
       "thirdName": "قلب",
-      "name": "مالك منصة قلب العلم",
+      "name": "مالك منصة المتفلسفة ",
       "updatedAt": {
         "type": "firestore/timestamp/1.0",
         "seconds": 1791016245,
@@ -557,7 +557,7 @@
     "heroExtraItems": [],
     "heroTitle": "",
     "announcementText": "",
-    "platformName": " قلب العلم ",
+    "platformName": " المتفلسفة  ",
     "contactPhone": "+201040672314",
     "supervisorTitle": "",
     "customHomeBlocks": []
@@ -565,7 +565,7 @@
   "notifications": [
     {
       "id": "notif-welcome-2027",
-      "title": "مرحباً بكم في منصة قلب العلم لدفعة 2027 🎓",
+      "title": "مرحباً بكم في منصة المتفلسفة  لدفعة 2027 🎓",
       "message": "نرحب بجميع الطلاب وأولياء الأمور في انطلاق المنصة التعليمية لدفعة 2027 تحت إشراف إدارة المنصة. تابعوا جدول الكورسات والامتحانات الدورية والمسابقات.",
       "senderName": "إدارة المنصة",
       "timestamp": "2027-10-18",

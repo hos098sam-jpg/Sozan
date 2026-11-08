@@ -1,6 +1,6 @@
 /**
  * VCDN Client Uploader & Ultra-Fast Parallel Binary Chunked Engine
- * Domain: qalbalelm.web.app
+ * Domain: motafalsifa.vercel.app
  * Features:
  * - Zero-copy Raw Binary Blob Upload (eliminates Base64 33% bloat & JSON serialization overhead)
  * - Dual-Engine High-Throughput Upload: Races direct CDN edge & local server with 6 concurrent channels

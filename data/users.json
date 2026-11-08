@@ -172,7 +172,7 @@
     "motherPhone": "",
     "governorate": "السويس",
     "uid": "xwyUnwRqGnNXkkH0OQQUJy9oQ2w2",
-    "schoolYear": "طالب منصة قلب العلم",
+    "schoolYear": "طالب منصة المتفلسفة ",
     "secondName": "تجريبي",
     "schoolName": "تجريبي",
     "enrolledCourseIds": [],
@@ -196,7 +196,7 @@
     "parentPhone": "",
     "firstName": "حساب",
     "emailVerified": false,
-    "name": "مستخدم منصة قلب العلم",
+    "name": "مستخدم منصة المتفلسفة ",
     "completedVideos": {},
     "walletBalance": 0,
     "walletTransactions": []
@@ -210,11 +210,11 @@
       "nanoseconds": 838000000,
       "seconds": 1791086487
     },
-    "name": "مستخدم منصة قلب العلم",
+    "name": "مستخدم منصة المتفلسفة ",
     "lastLoginAt": "2037-10-01T19:02:42.859Z",
     "status": "active",
     "emailVerified": false,
-    "schoolYear": "طالب منصة قلب العلم",
+    "schoolYear": "طالب منصة المتفلسفة ",
     "activeSessionId": "dev_sess_2138036562858_srgl13uj",
     "phone": "",
     "enrolledCourseIds": [
@@ -252,7 +252,7 @@
     "phone": "01022222222222",
     "secondName": "منصة",
     "thirdName": "قلب",
-    "name": "مالك منصة قلب العلم",
+    "name": "مالك منصة المتفلسفة ",
     "updatedAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1791016245,

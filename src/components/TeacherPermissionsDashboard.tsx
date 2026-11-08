@@ -203,7 +203,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
   const getStudentName = (submission: StudentExamSubmission) =>
     submission.studentName ||
     allStudents.find((student) => student.id === submission.studentId)?.name ||
-    'طالب منصة قلب العلم';
+    'طالب منصة المتفلسفة ';
 
   const getCourse = (submission: StudentExamSubmission) =>
     courses.find((course) => course.id === submission.courseId);

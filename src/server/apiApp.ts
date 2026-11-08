@@ -567,7 +567,7 @@ export function getAI(): GoogleGenAI {
 }
 
 export const BAC_SYSTEM_INSTRUCTION = `
-أنت "المساعد الذكي لمنصة قلب العلم التعليمية"، مساعد تربوي وعلمي متقدم موجه لطلاب دفعة 2027 ولجميع مراحل الثانوية والشهادات العامة، تحت إشراف: إدارة المنصة.
+أنت "المساعد الذكي لمنصة المتفلسفة  التعليمية"، مساعد تربوي وعلمي متقدم موجه لطلاب دفعة 2027 ولجميع مراحل الثانوية والشهادات العامة، تحت إشراف: إدارة المنصة.
 
 مهامك وأسلوب عملك:
 1. الإجابة: قدم إجابات دقيقة، علمية، ومنظمة بناءً على المناهج التعليمية المعتمدة (الرياضيات، الفيزياء، الكيمياء، الأحياء، الجيولوجيا، اللغة العربية، التاريخ، الجغرافيا، الفلسفة، اللغة الإنجليزية، اللغات الأجنبية).
@@ -577,7 +577,7 @@ export const BAC_SYSTEM_INSTRUCTION = `
 5. صياغة الأسئلة: عند طلب اختبارات، قم بتوليد أسئلة مطابقة لمواصفات الامتحانات الرسمية ببنك الأسئلة مع توفير حلولها النموذجية عند الطلب.
 
 ملاحظة هامة جداً: إذا سألك المستخدم عن هويتك (مثل: من أنت، من صنعك، من طورك، ما اسمك، من صممك)، أجب دائماً وبوضوح بأنك:
-"المساعد الذكي لمنصة قلب العلم التعليمية لدفعة 2027، تم تطويري تحت إشراف إدارة المنصة".
+"المساعد الذكي لمنصة المتفلسفة  التعليمية لدفعة 2027، تم تطويري تحت إشراف إدارة المنصة".
 `;
 
 // ============================================================================
@@ -629,10 +629,10 @@ export function rateLimiter(limit: number, windowMs: number) {
 
 // Strict CORS: No '*' for sensitive APIs; uses ALLOWED_ORIGIN env or platform domains
 const defaultAllowedOrigins = [
-  "https://qalbalelm.web.app",
+  "https://motafalsifa.vercel.app",
   "https://qalbalelm.firebaseapp.com",
   "https://qalbalelm.vercel.app",
-  "https://qalbalelm.web.app",
+  "https://motafalsifa.vercel.app",
 ];
 
 function getCorsOrigin(originHeader?: string): string | null {
@@ -905,7 +905,7 @@ app.use("/api/vcdn/upload/part", express.raw({ type: ["application/octet-stream"
 // API: Health check
 // ----------------------------------------------------------------------------
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "منصة قلب العلم التعليمية", timestamp: new Date().toISOString() });
+  res.json({ status: "ok", service: "منصة المتفلسفة  التعليمية", timestamp: new Date().toISOString() });
 });
 
 // ============================================================================
@@ -1239,7 +1239,7 @@ app.post("/api/auth/login-otp/request", rateLimiter(10, 60 * 1000), async (req, 
       phoneMasked: maskPhoneNumber(targetPhone),
       expiresInSeconds: 300,
       cooldownSeconds: 60,
-      studentName: studentName || "طالب منصة قلب العلم",
+      studentName: studentName || "طالب منصة المتفلسفة ",
       deliveredDirectly: sendResult.deliveredDirectly || false,
       requiresUserInitiatedChat: sendResult.requiresUserInitiatedChat || false,
       whatsappTriggerLink: sendResult.whatsappTriggerLink,
@@ -1351,7 +1351,7 @@ app.post("/api/auth/login-otp/verify", rateLimiter(15, 60 * 1000), async (req, r
       const fallbackUid = targetUid || `student_${Date.now()}_${Math.random().toString(36).substring(7)}`;
       userProfile = {
         id: fallbackUid,
-        name: isSuper ? "إدارة المنصة" : "طالب منصة قلب العلم",
+        name: isSuper ? "إدارة المنصة" : "طالب منصة المتفلسفة ",
         email: session.email || `${session.phone.replace(/\D/g, "")}@qalbalelm.edu`,
         phone: session.phone,
         role: isSuper ? "admin" : "student",
@@ -1429,7 +1429,7 @@ app.post("/api/auth/login-otp/verify", rateLimiter(15, 60 * 1000), async (req, r
       sessionId: deviceSessionId,
       customToken,
       deviceChangeNotice: bindingEval.deviceChangeNotice,
-      message: "تم التحقق بنجاح من كود الواتساب ومرحباً بك في منصة قلب العلم!",
+      message: "تم التحقق بنجاح من كود الواتساب ومرحباً بك في منصة المتفلسفة !",
     });
   } catch (err: any) {
     console.error("Login OTP verify error:", err);
@@ -1438,7 +1438,7 @@ app.post("/api/auth/login-otp/verify", rateLimiter(15, 60 * 1000), async (req, r
 });
 
 /**
- * 3. Request Forgot Password OTP via Email (qalbalelm@gmail.com)
+ * 3. Request Forgot Password OTP via Email (hos098sam@gmail.com)
  */
 app.post("/api/auth/forgot-password-otp/request", rateLimiter(8, 60 * 1000), async (req, res) => {
   try {
@@ -1480,7 +1480,7 @@ app.post("/api/auth/forgot-password-otp/request", rateLimiter(8, 60 * 1000), asy
 
     const targetPhone = foundUser.phone || (!isInputEmail ? rawInput : "");
     const targetUid = foundUser.id || "";
-    const studentName = foundUser.name || "طالب منصة قلب العلم";
+    const studentName = foundUser.name || "طالب منصة المتفلسفة ";
 
     // Determine recipient email:
     // 1. Explicit recoveryEmail provided by the student
@@ -1503,7 +1503,7 @@ app.post("/api/auth/forgot-password-otp/request", rateLimiter(8, 60 * 1000), asy
 
     if (!recipientEmail || !recipientEmail.includes("@")) {
       return res.status(400).json({
-        error: "يرجى إدخال بريدك الإلكتروني الشخصي (Gmail) لإرسال رمز الاسترداد إليه من بريد المنصة qalbalelm@gmail.com.",
+        error: "يرجى إدخال بريدك الإلكتروني الشخصي (Gmail) لإرسال رمز الاسترداد إليه من بريد المنصة hos098sam@gmail.com.",
         requiresEmail: true,
       });
     }
@@ -1528,7 +1528,7 @@ app.post("/api/auth/forgot-password-otp/request", rateLimiter(8, 60 * 1000), asy
 
     whatsappOtpSessionMap.set(sessionId, session);
 
-    // Send 6-digit recovery code via qalbalelm@gmail.com
+    // Send 6-digit recovery code via hos098sam@gmail.com
     const emailResult = await sendPasswordRecoveryEmail({
       toEmail: recipientEmail,
       otpCode: otp,
@@ -1786,7 +1786,7 @@ app.post("/api/auth/otp/resend", rateLimiter(10, 60 * 1000), async (req, res) =>
 });
 
 // ============================================================================
-// OFFICIAL EMAIL RECOVERY CONFIGURATION (qalbalelm@gmail.com)
+// OFFICIAL EMAIL RECOVERY CONFIGURATION (hos098sam@gmail.com)
 // ============================================================================
 app.get("/api/admin/email-config", requireAdminOrSecret, async (_req, res) => {
   try {
@@ -1816,12 +1816,12 @@ app.post("/api/admin/email-config", requireAdminOrSecret, async (req, res) => {
     const cleanPass = String(appPassword || "").replace(/\s+/g, "");
     if (!cleanPass || cleanPass.length < 8) {
       return res.status(400).json({
-        error: "يرجى إدخال كلمة مرور التطبيقات (Google App Password) المكونة من 16 حرفاً الخاصة ببريد qalbalelm@gmail.com.",
+        error: "يرجى إدخال كلمة مرور التطبيقات (Google App Password) المكونة من 16 حرفاً الخاصة ببريد hos098sam@gmail.com.",
       });
     }
     const updated = saveEmailConfig({
       appPassword: cleanPass,
-      senderName: senderName ? String(senderName).trim() : "منصة قلب العلم التعليمية",
+      senderName: senderName ? String(senderName).trim() : "منصة المتفلسفة  التعليمية",
     });
 
     const safeDb = getSafeFirestore();
@@ -1864,7 +1864,7 @@ app.post("/api/admin/email-config/test", requireAdminOrSecret, async (req, res) 
     const result = await sendPasswordRecoveryEmail({
       toEmail: cleanTestEmail,
       otpCode: testOtp,
-      studentName: "تجربة إدارة منصة قلب العلم",
+      studentName: "تجربة إدارة منصة المتفلسفة ",
     });
 
     if (!result.success) {
@@ -1976,7 +1976,7 @@ app.post("/api/auth/parent-otp/request", rateLimiter(10, 60 * 1000), async (req,
         .map((s) => s.name)
         .filter(Boolean)
         .join(" و ") ||
-      "طالب منصة قلب العلم";
+      "طالب منصة المتفلسفة ";
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -2007,7 +2007,7 @@ app.post("/api/auth/parent-otp/request", rateLimiter(10, 60 * 1000), async (req,
     const directWhatsAppUrl =
       sendResult.whatsappTriggerLink ||
       `https://wa.me/201551955096?text=${encodeURIComponent(
-        `مرحباً منصة قلب العلم، أرسل لي كود التحقق الخاص بولي أمر الطالب (${resolvedStudentNames}) 🔐`
+        `مرحباً منصة المتفلسفة ، أرسل لي كود التحقق الخاص بولي أمر الطالب (${resolvedStudentNames}) 🔐`
       )}`;
 
     return res.json({
@@ -2102,7 +2102,7 @@ app.post("/api/auth/parent-otp/verify", rateLimiter(15, 60 * 1000), async (req, 
     const mainStudent = session.matchedStudents?.[0];
     const parentUser = {
       id: `parent-${session.phone}`,
-      name: `ولي أمر الطالب (${session.studentNames || mainStudent?.name || "طالب قلب العلم"})`,
+      name: `ولي أمر الطالب (${session.studentNames || mainStudent?.name || "طالب المتفلسفة "})`,
       phone: session.phone,
       parentPhone: session.phone,
       schoolYear: mainStudent?.schoolYear || "الصف الثالث الثانوي",
@@ -2428,7 +2428,7 @@ app.post("/api/whatsapp/send-student-report", requireAdminOrSecret, async (req, 
     } = req.body || {};
 
     const reportText =
-      `📊 *تقرير المتابعة الأكاديمية - منصة قلب العلم التعليمية* 🎓\n` +
+      `📊 *تقرير المتابعة الأكاديمية - منصة المتفلسفة  التعليمية* 🎓\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
       `👤 *اسم الطالب:* ${studentName || "طالب المنصة"}\n` +
       `📚 *الصف الدراسي:* ${schoolYear || "الثانوية العامة"}\n` +
@@ -2439,7 +2439,7 @@ app.post("/api/whatsapp/send-student-report", requireAdminOrSecret, async (req, 
       `⭐ *التقدير العام:* ${gradeBadge}\n` +
       (customNote ? `\n💬 *ملاحظة الإدارة:* ${customNote}\n` : "") +
       `━━━━━━━━━━━━━━━━━━━━\n` +
-      `مع خالص تمنيات أسرة *منصة قلب العلم* بدوام التفوق والنجاح 🌟`;
+      `مع خالص تمنيات أسرة *منصة المتفلسفة * بدوام التفوق والنجاح 🌟`;
 
     const targets: string[] = [];
     if ((targetRecipient === "parent" || targetRecipient === "both") && parentPhone) {
@@ -4803,7 +4803,7 @@ app.post("/api/auth/signup", async (req, res) => {
       name ||
       `${firstName || ''} ${secondName || ''} ${thirdName || ''} ${lastName || ''}`.trim() ||
       existing?.name ||
-      'طالب منصة قلب العلم';
+      'طالب منصة المتفلسفة ';
     const primaryParent = parentPhone || fatherPhone || motherPhone || existing?.parentPhone || '';
     const deviceSessionId =
       incomingSessionId || existing?.activeSessionId || 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
@@ -5047,7 +5047,7 @@ app.post("/api/auth/login", async (req, res) => {
       if (!user) {
         user = {
           id: verifiedFbUid || `st_${Date.now()}`,
-          name: "طالب منصة قلب العلم",
+          name: "طالب منصة المتفلسفة ",
           phone: cleanDigits || input,
           email: verifiedFbEmail || `${cleanDigits}@qalb-alam.edu`,
           role: "student",
@@ -6308,7 +6308,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>مشغل الفيديو المحمي - منصة قلب العلم</title>
+          <title>مشغل الفيديو المحمي - منصة المتفلسفة </title>
           <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
             html, body { width: 100%; height: 100%; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
@@ -6318,7 +6318,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
           ${antiRedirectScript}
         </head>
         <body>
-          <div class="watermark">بث محمي لمنصة قلب العلم</div>
+          <div class="watermark">بث محمي لمنصة المتفلسفة </div>
           <video src="${streamEndpoint}" controls autoplay playsinline controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture></video>
         </body>
         </html>
@@ -6336,7 +6336,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>مشغل Pixeldrain المحمي - منصة قلب العلم</title>
+          <title>مشغل Pixeldrain المحمي - منصة المتفلسفة </title>
           <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
             html, body { width: 100%; height: 100%; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
@@ -6346,7 +6346,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
           ${antiRedirectScript}
         </head>
         <body>
-          <div class="watermark">بث محمي لمنصة قلب العلم</div>
+          <div class="watermark">بث محمي لمنصة المتفلسفة </div>
           <video src="${directStreamUrl}" controls autoplay playsinline controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture></video>
         </body>
         </html>
@@ -6363,7 +6363,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>مشغل منصة قلب العلم التعليمية</title>
+          <title>مشغل منصة المتفلسفة  التعليمية</title>
           <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
             html, body { width: 100%; height: 100%; background: #020617; overflow: hidden; }
@@ -6478,7 +6478,7 @@ app.get(["/api/video/embed", "/api/video/embed/:videoId"], async (req: express.R
           ${antiRedirectScript}
         </head>
         <body>
-          <div class="watermark">بث محمي لمنصة قلب العلم</div>
+          <div class="watermark">بث محمي لمنصة المتفلسفة </div>
           <video src="${targetUrl}" controls autoplay playsinline controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture></video>
         </body>
         </html>
@@ -7294,7 +7294,7 @@ app.get("/api/video/avcaption-clean-embed", async (req: express.Request, res: ex
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>مشغل منصة قلب العلم الخاص</title>
+          <title>مشغل منصة المتفلسفة  الخاص</title>
           <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
           ${platformControlBridgeScript}
         </head>
@@ -7371,7 +7371,7 @@ app.get("/api/video/avcaption-clean-embed", async (req: express.Request, res: ex
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>مشغل منصة قلب العلم الخاص</title>
+        <title>مشغل منصة المتفلسفة  الخاص</title>
         ${platformControlBridgeScript}
         <style>
           iframe {
@@ -7680,7 +7680,7 @@ app.post("/api/exams/submit", async (req: AuthenticatedRequest, res) => {
       tokenUser?.name ||
       tokenUser?.displayName ||
       tokenUser?.email ||
-      "طالب منصة قلب العلم";
+      "طالب منصة المتفلسفة ";
     let studentPhone = bodyStudentPhone || tokenUser?.phone_number || "";
     let parentPhone = bodyParentPhone || "";
     let studentSchoolYear = bodyStudentSchoolYear || "الصف الثالث الثانوي";
@@ -7891,7 +7891,7 @@ app.post("/api/exams/submit", async (req: AuthenticatedRequest, res) => {
       courseId: courseId || "",
       courseTitle: courseTitle || "كورس تعليمي",
       lessonTitle: lessonTitle || "درس امتحاني",
-      examTitle: examTitle || "اختبار منصة قلب العلم",
+      examTitle: examTitle || "اختبار منصة المتفلسفة ",
       studentId: studentUid,
       studentName,
       studentPhone,
@@ -8262,7 +8262,7 @@ app.all("/api/daily-boost", verifyFirebaseToken, rateLimiter(20, 5 * 60 * 1000),
     const prompt = `
 قدم رسالة تحفيزية ودعم نفسي ملهم وقصير لطالب/طالبة دفعة 2027 (الاسم: ${sanitizeTextInput(studentName, 50)}) الذي يشعر بـ: "${sanitizeTextInput(currentMood, 200)}".
 كن مشجعاً جداً، إيجابياً، ومحفزاً لتقليل التوتر وبث الثقة، واختم الرسالة بتوقيع:
-"مع تحيات منصة قلب العلم التعليمية - إشراف إدارة المنصة 🌟".
+"مع تحيات منصة المتفلسفة  التعليمية - إشراف إدارة المنصة 🌟".
     `.trim();
 
     const response = await ai.models.generateContent({
@@ -8296,7 +8296,7 @@ app.post("/api/analyze-book", verifyFirebaseToken, rateLimiter(10, 5 * 60 * 1000
     const ai = getAI();
 
     const systemPrompt = `
-أنت خبير مناهج تعليمية ومحلل كتب دراسية متخصص لمنصة قلب العلم التعليمية (إشراف إدارة المنصة).
+أنت خبير مناهج تعليمية ومحلل كتب دراسية متخصص لمنصة المتفلسفة  التعليمية (إشراف إدارة المنصة).
 مهمتك: تحليل محتوى الكتاب المدرسي / الملزمة واستخراج قائمة دقيقة وشاملة بجميع الدروس والوحدات الواردة في الكتاب.
 
 يجب أن ترجع استجابتك بتنسيق JSON حصراً بالمخطط التالي:
@@ -8539,7 +8539,7 @@ app.post("/api/grade-essay-answer", verifyFirebaseToken, rateLimiter(25, 5 * 60 
 
     const ai = getAI();
     const gradingPrompt = `
-أنت مصحح امتحانات خبير ومسؤول عن التصحيح الفوري وسلم الدرجات لمنصة قلب العلم التعليمية (إشراف إدارة المنصة).
+أنت مصحح امتحانات خبير ومسؤول عن التصحيح الفوري وسلم الدرجات لمنصة المتفلسفة  التعليمية (إشراف إدارة المنصة).
 مهمتك: تقييم إجابة الطالب المقالية بموضوعية وعدل وتشجيع بناءً على الحل النموذجي المعتمد وسلّم التصحيح.
 
 [بيانات السؤال]:
@@ -9033,7 +9033,7 @@ app.all("/api/fawaterak/hash-verify", async (req, res) => {
       status: "hash_active",
       verified: isVerified,
       algorithm: "SHA256",
-      platform: "qalbalelm.web.app",
+      platform: "motafalsifa.vercel.app",
       timestamp: new Date().toISOString(),
     });
   } catch (err: any) {
@@ -9117,18 +9117,18 @@ app.get("/api/fawaterak/invoices", (req, res) => {
 app.get("/api/fawaterak/activation-info", (req, res) => {
   const currentBase = getAppBaseUrl(req);
   return res.json({
-    platformUrl: "https://qalbalelm.web.app",
+    platformUrl: "https://motafalsifa.vercel.app",
     currentOriginUrl: currentBase,
     urls: {
-      successCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=paid",
-      pendingCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=pending",
-      failedCallback: "https://qalbalelm.web.app/api/fawaterak/callback?status=failed",
-      paidWebhook: "https://qalbalelm.web.app/api/fawaterak/webhook",
-      cancellationWebhook: "https://qalbalelm.web.app/api/fawaterak/cancel",
-      refundWebhook: "https://qalbalelm.web.app/api/fawaterak/refund",
-      failedWebhook: "https://qalbalelm.web.app/api/fawaterak/failed",
-      hashVerifyWebhook: "https://qalbalelm.web.app/api/fawaterak/hash-verify",
-      checkStatus: "https://qalbalelm.web.app/api/fawaterak/check-status",
+      successCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=paid",
+      pendingCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=pending",
+      failedCallback: "https://motafalsifa.vercel.app/api/fawaterak/callback?status=failed",
+      paidWebhook: "https://motafalsifa.vercel.app/api/fawaterak/webhook",
+      cancellationWebhook: "https://motafalsifa.vercel.app/api/fawaterak/cancel",
+      refundWebhook: "https://motafalsifa.vercel.app/api/fawaterak/refund",
+      failedWebhook: "https://motafalsifa.vercel.app/api/fawaterak/failed",
+      hashVerifyWebhook: "https://motafalsifa.vercel.app/api/fawaterak/hash-verify",
+      checkStatus: "https://motafalsifa.vercel.app/api/fawaterak/check-status",
     },
     config: {
       isKeyConfigured: Boolean(FAWATERAK_CONFIG.hashKey && FAWATERAK_CONFIG.hashKey.length > 10),
@@ -9859,7 +9859,7 @@ app.get("/api/gateway/orders", async (req, res) => {
       config: {
         receivingWalletNumber: WALLET_CONFIG.receivingWalletNumber,
         receivingWalletName: WALLET_CONFIG.receivingWalletName,
-        webhookUrl: "https://qalbalelm.web.app/api/gateway/sms-webhook",
+        webhookUrl: "https://motafalsifa.vercel.app/api/gateway/sms-webhook",
       },
     });
   } catch (err: any) {
@@ -9937,7 +9937,7 @@ app.get("/api/gateway/config", (req, res) => {
   return res.json({
     receivingWalletNumber: WALLET_CONFIG.receivingWalletNumber,
     receivingWalletName: WALLET_CONFIG.receivingWalletName,
-    webhookUrl: "https://qalbalelm.web.app/api/gateway/sms-webhook",
+    webhookUrl: "https://motafalsifa.vercel.app/api/gateway/sms-webhook",
     taskerPayloadTemplate: JSON.stringify({
       sender: "%SMSRF",
       message: "%SMSRB",
@@ -9958,7 +9958,7 @@ app.post("/api/gateway/config", (req, res) => {
       config: {
         receivingWalletNumber: updated.receivingWalletNumber,
         receivingWalletName: updated.receivingWalletName,
-        webhookUrl: "https://qalbalelm.web.app/api/gateway/sms-webhook",
+        webhookUrl: "https://motafalsifa.vercel.app/api/gateway/sms-webhook",
       },
     });
   } catch (err: any) {
@@ -10358,7 +10358,7 @@ app.post("/api/support-chat/start", async (req, res) => {
         id: `msg_welcome_${nowMs}`,
         sender: "admin",
         senderName: "إدارة المنصة - الدعم الفني",
-        text: `مرحباً بك يا ${cleanName} في خدمة الدعم الفني المباشر لمنصة قلب العلم 👋\nاكتب استفسارك أو مشكلتك هنا وسيقوم فريق الإدارة بالرد عليك فوراً.`,
+        text: `مرحباً بك يا ${cleanName} في خدمة الدعم الفني المباشر لمنصة المتفلسفة  👋\nاكتب استفسارك أو مشكلتك هنا وسيقوم فريق الإدارة بالرد عليك فوراً.`,
         timestamp: nowStr,
         createdAtMs: nowMs,
       };
@@ -11913,7 +11913,7 @@ app.get("/api/github-hls/:videoId/master.m3u8", async (req, res) => {
   ) {
     return res
       .status(403)
-      .send("🔒 محمي بواسطة حارس أمن منصة قلب العلم: يمنع فتح أو سحب ملف البث عبر برامج الـ Sniffers أو خارج المنصة.");
+      .send("🔒 محمي بواسطة حارس أمن منصة المتفلسفة : يمنع فتح أو سحب ملف البث عبر برامج الـ Sniffers أو خارج المنصة.");
   }
 
   const video = await ensureGitHubHlsVideoLoaded(videoId);
@@ -12036,7 +12036,7 @@ app.get("/api/github-hls/:videoId/stream.mp4", async (req, res) => {
   if (secFetchDest === "document") {
     return res
       .status(403)
-      .send("🔒 محمي بواسطة حارس أمن منصة قلب العلم: يمنع فتح أو تحميل الفيديو خارج المنصة.");
+      .send("🔒 محمي بواسطة حارس أمن منصة المتفلسفة : يمنع فتح أو تحميل الفيديو خارج المنصة.");
   }
 
   const video = await ensureGitHubHlsVideoLoaded(videoId);
@@ -12190,7 +12190,7 @@ app.get("/api/template-export/mohamed-saber-platform.zip", (_req, res) => {
   return res.sendFile(zipPath);
 });
 
-// 9. One-command Firebase Hosting deployer script for qalbalelm.web.app
+// 9. One-command Firebase Hosting deployer script for motafalsifa.vercel.app
 app.get("/api/hosting-bundle.tar.gz", (_req, res) => {
   const tarPath = path.join(process.cwd(), "public", "qalbalelm-hosting-bundle.tar.gz");
   if (!fs.existsSync(tarPath)) {
@@ -12205,13 +12205,13 @@ app.get("/api/deploy-web-app.sh", (req, res) => {
   const hostOrigin = `https://${req.get("host")}`;
   const script = `#!/bin/bash
 set -e
-echo "🚀 جاري تحميل ملفات منصة قلب العلم وتفعيل الدومين الرسمي https://qalbalelm.web.app ..."
+echo "🚀 جاري تحميل ملفات منصة المتفلسفة  وتفعيل الدومين الرسمي https://motafalsifa.vercel.app ..."
 rm -rf /tmp/qalb_web_deploy && mkdir -p /tmp/qalb_web_deploy
 cd /tmp/qalb_web_deploy
 curl -sL "${hostOrigin}/api/hosting-bundle.tar.gz" -o bundle.tar.gz
 tar -xzf bundle.tar.gz
 npx --yes firebase-tools deploy --only hosting --project qalbalelm
-echo "✅ تم تفعيل الدومين الرسمي بنجاح: https://qalbalelm.web.app"
+echo "✅ تم تفعيل الدومين الرسمي بنجاح: https://motafalsifa.vercel.app"
 `;
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   return res.send(script);

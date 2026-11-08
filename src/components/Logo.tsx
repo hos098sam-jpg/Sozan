@@ -32,7 +32,7 @@ export const Logo: React.FC<LogoProps> = ({
       >
         <img
           src={qalbAlElmLogo}
-          alt="شعار منصة قلب العلم التعليمية"
+          alt="شعار منصة المتفلسفة  التعليمية"
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
@@ -51,7 +51,7 @@ export const Logo: React.FC<LogoProps> = ({
         <div className="text-right min-w-0">
           <div className="flex items-center gap-1 sm:gap-1.5">
             <h1 className={`${currentSize.title} font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate`}>
-              منصة قلب العلم
+              منصة المتفلسفة 
             </h1>
             <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-rose-500 to-indigo-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
               2027

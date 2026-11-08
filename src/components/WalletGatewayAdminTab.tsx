@@ -71,8 +71,8 @@ export const WalletGatewayAdminTab: React.FC<WalletGatewayAdminTabProps> = ({
   // Gateway Config State
   const [config, setConfig] = useState<GatewayConfig>({
     receivingWalletNumber: '01040672314',
-    receivingWalletName: 'فودافون كاش - منصة قلب العلم التعليمية',
-    webhookUrl: 'https://qalbalelm.web.app/api/gateway/sms-webhook',
+    receivingWalletName: 'فودافون كاش - منصة المتفلسفة  التعليمية',
+    webhookUrl: 'https://motafalsifa.vercel.app/api/gateway/sms-webhook',
     webhookSecret: 'alelm_sms_secure_2027',
   });
   const [walletInput, setWalletInput] = useState('01040672314');
@@ -1065,12 +1065,12 @@ export const WalletGatewayAdminTab: React.FC<WalletGatewayAdminTabProps> = ({
                 </span>
                 <div className="flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-950 border border-slate-800">
                   <span className="font-mono text-xs text-emerald-400 truncate select-all" dir="ltr">
-                    https://qalbalelm.web.app/api/gateway/sms-webhook
+                    https://motafalsifa.vercel.app/api/gateway/sms-webhook
                   </span>
                   <button
                     type="button"
                     onClick={() =>
-                      copyToClipboard('https://qalbalelm.web.app/api/gateway/sms-webhook', 'webhook')
+                      copyToClipboard('https://motafalsifa.vercel.app/api/gateway/sms-webhook', 'webhook')
                     }
                     className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shrink-0 transition-all flex items-center gap-1 cursor-pointer"
                   >

@@ -1,6 +1,6 @@
-# Robots.txt for منصة قلب العلم التعليمية
+# Robots.txt for منصة المتفلسفة  التعليمية
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://qalbalelm.web.app/sitemap.xml
+Sitemap: https://motafalsifa.vercel.app/sitemap.xml

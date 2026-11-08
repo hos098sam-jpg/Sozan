@@ -142,7 +142,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       ctx.fillStyle = '#0f172a';
       ctx.font = '900 46px "Cairo", "Tajawal", "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('كارت اشتراك - قلب العلم', 800, 240);
+      ctx.fillText('كارت اشتراك - المتفلسفة ', 800, 240);
 
       // 5. Course Pill (اسم الكورس)
       const pillW = 900;
@@ -197,7 +197,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
 
       ctx.font = '700 28px "Cairo", "Tajawal", "Segoe UI", sans-serif';
       ctx.fillStyle = '#334155';
-      const teacherNameText = accessCode.teacherName || 'إدارة منصة قلب العلم';
+      const teacherNameText = accessCode.teacherName || 'إدارة منصة المتفلسفة ';
       ctx.fillText(teacherNameText, pillX + pillW - 250, pill2Y + 47);
 
       // 7. Gold Dashed Subscription Box
@@ -273,7 +273,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       ctx.textAlign = 'center';
       ctx.font = '700 24px "Cairo", "Tajawal", "Segoe UI", sans-serif';
       ctx.fillStyle = '#1e293b';
-      ctx.fillText('🌐 qalbalelm.web.app • ادخل الكود في المنصة لتفعيل اشتراكك فوراً', 800, footerY + 15);
+      ctx.fillText('🌐 motafalsifa.vercel.app • ادخل الكود في المنصة لتفعيل اشتراكك فوراً', 800, footerY + 15);
 
       // Convert canvas to downloadable PNG
       const dataUrl = canvas.toDataURL('image/png', 1.0);
@@ -331,7 +331,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
 
           {/* Card Title */}
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 text-center tracking-tight">
-            كارت اشتراك - قلب العلم
+            كارت اشتراك - المتفلسفة 
           </h2>
 
           {/* Fields Stack */}
@@ -354,7 +354,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
                 <span>اسم المدرس:</span>
               </div>
               <div className="font-bold text-slate-700 truncate text-left" dir="rtl">
-                {accessCode.teacherName || 'إدارة منصة قلب العلم'}
+                {accessCode.teacherName || 'إدارة منصة المتفلسفة '}
               </div>
             </div>
           </div>
@@ -391,7 +391,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
           <div className="w-full pt-3 border-t border-amber-200/80 flex flex-col sm:flex-row items-center justify-center gap-1.5 text-xs text-slate-600 font-bold text-center">
             <div className="flex items-center gap-1.5 text-indigo-900">
               <Globe className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="font-sans">qalbalelm.web.app</span>
+              <span className="font-sans">motafalsifa.vercel.app</span>
             </div>
             <span className="hidden sm:inline text-amber-500">•</span>
             <span className="text-slate-700">ادخل الكود في المنصة لتفعيل اشتراكك فوراً</span>

@@ -132,7 +132,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
     if (result === 'granted') {
       playNotificationSound();
       try {
-        new Notification('منصة قلب العلم التعليمية', {
+        new Notification('منصة المتفلسفة  التعليمية', {
           body: 'تم تفعيل إشعارات جهازك بنجاح! ستصلك التنبيهات الرسمية من المشرف العام فور صدورها.',
           icon: '/logo.png',
           dir: 'rtl',
@@ -142,7 +142,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
   };
 
   const handleCopyNotification = (item: PlatformNotification) => {
-    const textToCopy = `📢 [${item.title}]\n${item.message}\n\nبواسطة: ${item.senderName} (${item.timestamp}) - منصة قلب العلم`;
+    const textToCopy = `📢 [${item.title}]\n${item.message}\n\nبواسطة: ${item.senderName} (${item.timestamp}) - منصة المتفلسفة `;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(textToCopy).then(() => {
         setCopiedId(item.id);
@@ -155,7 +155,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
     if (navigator.share) {
       navigator.share({
         title: item.title,
-        text: `${item.title}\n\n${item.message}\n\nمنصة قلب العلم التعليمية 2027`,
+        text: `${item.title}\n\n${item.message}\n\nمنصة المتفلسفة  التعليمية 2027`,
         url: window.location.href,
       }).catch(() => {});
     } else {
@@ -580,7 +580,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({
 
         {/* Bottom Banner */}
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
-          منصة قلب العلم التعليمية • إشراف عام: {platformSettings?.supervisorName || 'إدارة المنصة'}
+          منصة المتفلسفة  التعليمية • إشراف عام: {platformSettings?.supervisorName || 'إدارة المنصة'}
         </div>
       </div>
     </div>

@@ -219,7 +219,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
             fbRes.serverUser ||
             localUsers.find((u) => u.email?.toLowerCase() === targetFbEmail.toLowerCase()) || {
               id: fbRes.uid,
-              name: targetFbEmail === 'hos098sam@gmail.com' ? 'إدارة المنصة' : (fbRes.displayName || 'طالب منصة قلب العلم'),
+              name: targetFbEmail === 'hos098sam@gmail.com' ? 'إدارة المنصة' : (fbRes.displayName || 'طالب منصة المتفلسفة '),
               email: targetFbEmail,
               phone: cleanDigits || '',
               parentPhone: '',
@@ -337,7 +337,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
         setOtpCooldown(res.cooldownSeconds || 60);
         setOtpTriggerLink(
           res.whatsappTriggerLink ||
-            `https://wa.me/201551955096?text=${encodeURIComponent('مرحباً منصة قلب العلم، أرسل لي كود التحقق الخاص بي 🔐')}`
+            `https://wa.me/201551955096?text=${encodeURIComponent('مرحباً منصة المتفلسفة ، أرسل لي كود التحقق الخاص بي 🔐')}`
         );
         setOtpStep('login_otp');
         setSuccessMsg(
@@ -457,7 +457,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
 
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-black">
           <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-          <span>منصة قلب العلم التعليمية 2027</span>
+          <span>منصة المتفلسفة  التعليمية 2027</span>
         </div>
       </header>
 
@@ -469,7 +469,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
             <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-blue-500/30 group">
               <img
                 src={loginIllustration}
-                alt="شخصية قلب العلم الكرتونية الذكية"
+                alt="شخصية المتفلسفة  الكرتونية الذكية"
                 className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
               />
 
@@ -480,7 +480,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
               </div>
 
               <div className="absolute bottom-4 inset-x-4 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4 rounded-2xl text-right">
-                <p className="text-sm font-black text-white">منصة قلب العلم التعليمية المعتمدة</p>
+                <p className="text-sm font-black text-white">منصة المتفلسفة  التعليمية المعتمدة</p>
                 <p className="text-xs text-blue-200/80 mt-0.5">
                   بيئة تعليمية شاملة ومحمية لدراسة الرياضيات، الفيزياء، الكيمياء، واللغة العربية
                 </p>
@@ -497,13 +497,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-2 border-blue-400/60 flex items-center justify-center shadow-xl shadow-blue-500/30 mb-2.5 overflow-hidden">
                   <img
                     src={qalbAlElmLogo}
-                    alt="شعار منصة قلب العلم"
+                    alt="شعار منصة المتفلسفة "
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-black text-white tracking-wide">
-                  قلب العلم
+                  المتفلسفة 
                 </h1>
                 <div className="flex items-center justify-center gap-2 mt-1">
                   <div className="w-8 h-0.5 bg-blue-400/50" />
@@ -522,7 +522,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                 <p className="text-xs sm:text-sm text-blue-200/80 mt-1 font-medium">
                   {isForgotMode
                     ? 'أدخل بياناتك لاستعادة حسابك فوراً'
-                    : 'مرحباً بك مجدداً .. نورت قلب العلم 💙'}
+                    : 'مرحباً بك مجدداً .. نورت المتفلسفة  💙'}
                 </p>
               </div>
 
@@ -754,7 +754,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                 <div className="space-y-4 animate-fadeIn">
                   <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-400/30 text-xs text-blue-200 space-y-1.5">
                     <div>
-                      تم إرسال رمز الاسترداد من البريد الرسمي <b className="font-mono">qalbalelm@gmail.com</b>
+                      تم إرسال رمز الاسترداد من البريد الرسمي <b className="font-mono">hos098sam@gmail.com</b>
                     </div>
                     <div>
                       إلى البريد الإلكتروني: <b className="font-mono">{otpMaskedPhone || recoveryEmail}</b>
@@ -832,12 +832,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                 </div>
               )}
 
-              {/* Forgot Password Mode via Email (qalbalelm@gmail.com) */}
+              {/* Forgot Password Mode via Email (hos098sam@gmail.com) */}
               {isForgotMode && otpStep === 'idle' && (
                 <div className="space-y-4 animate-fadeIn">
                   <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-400/30 text-xs text-blue-200 leading-relaxed">
                     سيتم إرسال رمز الاسترداد (6 أرقام) إلى بريدك الإلكتروني من البريد الرسمي للمنصة{' '}
-                    <b className="font-mono text-amber-300">qalbalelm@gmail.com</b>.
+                    <b className="font-mono text-amber-300">hos098sam@gmail.com</b>.
                   </div>
 
                   <div className="space-y-1.5">
@@ -892,7 +892,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                           setOtpStep('forgot_otp');
                           setSuccessMsg(
                             res.message ||
-                              'تم إرسال رمز الاسترداد (6 أرقام) من qalbalelm@gmail.com إلى بريدك الإلكتروني بنجاح 📧'
+                              'تم إرسال رمز الاسترداد (6 أرقام) من hos098sam@gmail.com إلى بريدك الإلكتروني بنجاح 📧'
                           );
                         } else {
                           throw new Error(res.message || 'تعذر إرسال رمز الاسترداد.');
@@ -928,7 +928,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
 
       {/* Footer */}
       <footer className="relative z-10 py-4 text-center text-xs text-slate-500 border-t border-white/5">
-        <p>جميع الحقوق محفوظة © لمنصة قلب العلم التعليمية 2027</p>
+        <p>جميع الحقوق محفوظة © لمنصة المتفلسفة  التعليمية 2027</p>
       </footer>
     </div>
   );

@@ -1010,7 +1010,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({
               غير مصرح للمعلم بفتح أو تعديل كورسات معلم آخر
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg mx-auto">
-              وفقاً لسياسة منصة قلب العلم وصلاحيات المدرسين، يمكنك فقط فتح وتعديل ومتابعة الكورسات الخاصة بك، وإضافة الدروس ومتابعة طلابك المشتركين وتصحيح الأسئلة المقالية لكورساتك فقط.
+              وفقاً لسياسة منصة المتفلسفة  وصلاحيات المدرسين، يمكنك فقط فتح وتعديل ومتابعة الكورسات الخاصة بك، وإضافة الدروس ومتابعة طلابك المشتركين وتصحيح الأسئلة المقالية لكورساتك فقط.
             </p>
           </div>
 
@@ -1957,7 +1957,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 pt-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>نظام دفع واشتراك مؤمّن بالكامل عبر قاعدة بيانات منصة قلب العلم (حماية ضد التلاعب بالأسعار)</span>
+                <span>نظام دفع واشتراك مؤمّن بالكامل عبر قاعدة بيانات منصة المتفلسفة  (حماية ضد التلاعب بالأسعار)</span>
               </div>
             </div>
           )}

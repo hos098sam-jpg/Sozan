@@ -43,7 +43,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const shareText = encodeURIComponent(
     `🎓 الحمد لله! حصلت على شهادة تقدير وتفوق بنسبة ${scorePercentage}% في "${
       examTitle || courseTitle
-    }" على منصة قلب العلم التعليمية 🏆✨`
+    }" على منصة المتفلسفة  التعليمية 🏆✨`
   );
   const whatsappShareUrl = `https://wa.me/?text=${shareText}`;
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
@@ -132,7 +132,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   <GraduationCap className="w-7 h-7" />
                 </div>
                 <div className="text-right">
-                  <h3 className="font-black text-base sm:text-lg text-emerald-900">منصة قلب العلم التعليمية</h3>
+                  <h3 className="font-black text-base sm:text-lg text-emerald-900">منصة المتفلسفة  التعليمية</h3>
                   <p className="text-xs font-bold text-slate-500">صرح التفوق العلمي والتميز الأكاديمي</p>
                 </div>
               </div>
@@ -152,7 +152,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 شهادة تقدير وتفوق علمي
               </h1>
               <p className="text-sm sm:text-base font-bold text-slate-600">
-                تتشرف إدارة <span className="text-emerald-800 font-black">منصة قلب العلم التعليمية</span> بمنح هذه الشهادة إلى الطالب/ـة المتفوق/ـة:
+                تتشرف إدارة <span className="text-emerald-800 font-black">منصة المتفلسفة  التعليمية</span> بمنح هذه الشهادة إلى الطالب/ـة المتفوق/ـة:
               </p>
             </div>
 
@@ -213,7 +213,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <div className="text-center sm:text-left">
                 <p className="text-xs font-bold text-slate-500 mb-1">المشرف الأكاديمي ومؤسس المنصة</p>
                 <p className="font-black text-base text-emerald-900">{instructorName}</p>
-                <p className="text-[11px] font-bold text-amber-700">منصة قلب العلم التعليمية</p>
+                <p className="text-[11px] font-bold text-amber-700">منصة المتفلسفة  التعليمية</p>
               </div>
             </div>
           </div>

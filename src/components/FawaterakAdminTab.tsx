@@ -48,7 +48,7 @@ export const FawaterakAdminTab: React.FC<FawaterakAdminTabProps> = ({ courses, s
   const [searchInvoice, setSearchInvoice] = useState('');
 
   // Official Production Platform Domain & Activation URLs
-  const primaryPlatformUrl = 'https://qalbalelm.web.app';
+  const primaryPlatformUrl = 'https://motafalsifa.vercel.app';
   const webhookUrl = `${primaryPlatformUrl}/api/fawaterak/webhook`;
   const successUrl = `${primaryPlatformUrl}/api/fawaterak/callback?status=paid`;
   const pendingUrl = `${primaryPlatformUrl}/api/fawaterak/callback?status=pending`;

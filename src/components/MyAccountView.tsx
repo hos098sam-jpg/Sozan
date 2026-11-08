@@ -652,7 +652,7 @@ export const MyAccountView: React.FC<MyAccountViewProps> = ({
                 <Users className="w-10 h-10 text-amber-300" />
               ) : (
                 (
-                  (currentUser.name && currentUser.name !== 'مستخدم منصة قلب العلم'
+                  (currentUser.name && currentUser.name !== 'مستخدم منصة المتفلسفة '
                     ? currentUser.name
                     : [currentUser.firstName, currentUser.secondName, currentUser.thirdName, currentUser.lastName]
                         .filter(Boolean)
@@ -664,7 +664,7 @@ export const MyAccountView: React.FC<MyAccountViewProps> = ({
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl sm:text-2xl font-black text-white">
-                  {(currentUser.name && currentUser.name !== 'مستخدم منصة قلب العلم'
+                  {(currentUser.name && currentUser.name !== 'مستخدم منصة المتفلسفة '
                     ? currentUser.name
                     : [currentUser.firstName, currentUser.secondName, currentUser.thirdName, currentUser.lastName]
                         .filter(Boolean)

@@ -199,7 +199,7 @@ export const TeacherShowcaseView: React.FC<TeacherShowcaseViewProps> = ({
               )}
               <a
                 href={`https://wa.me/201040672314?text=${encodeURIComponent(
-                  `السلام عليكم، أود الاستفسار والاشتراك في كورسات ${teacher.gender === 'أنثى' ? 'الأستاذة' : 'الأستاذ'}: ${teacher.name} (${teacher.subject || ''}) على منصة قلب العلم.`
+                  `السلام عليكم، أود الاستفسار والاشتراك في كورسات ${teacher.gender === 'أنثى' ? 'الأستاذة' : 'الأستاذ'}: ${teacher.name} (${teacher.subject || ''}) على منصة المتفلسفة .`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

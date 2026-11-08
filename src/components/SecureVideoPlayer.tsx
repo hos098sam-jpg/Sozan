@@ -2629,8 +2629,8 @@ export const SecureVideoPlayer: React.FC<SecureVideoPlayerProps> = ({
     : currentUser?.email
     ? `طالب: ${currentUser.name || 'طالب المنصة'} - ${currentUser.email}`
     : videoId
-    ? `طالب منصة قلب العلم - ID: ${videoId}`
-    : 'منصة قلب العلم - محتوى محمي';
+    ? `طالب منصة المتفلسفة  - ID: ${videoId}`
+    : 'منصة المتفلسفة  - محتوى محمي';
 
   const retryPlayback = () => {
     setLoading(true);
@@ -2893,7 +2893,7 @@ export const SecureVideoPlayer: React.FC<SecureVideoPlayerProps> = ({
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 sandbox="allow-scripts allow-same-origin allow-forms"
                 referrerPolicy="no-referrer"
-                title="مشغل منصة قلب العلم الخاص - بدون إعلانات"
+                title="مشغل منصة المتفلسفة  الخاص - بدون إعلانات"
                 onLoad={() => setLoading(false)}
               />
             </div>
@@ -3216,7 +3216,7 @@ export const SecureVideoPlayer: React.FC<SecureVideoPlayerProps> = ({
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups"
             referrerPolicy={isAvcaption ? 'origin-when-cross-origin' : isDood ? 'origin' : 'no-referrer'}
-            title="مشغل منصة قلب العلم الخاص"
+            title="مشغل منصة المتفلسفة  الخاص"
             onLoad={() => setLoading(false)}
           />
           {/* Floating Fullscreen & Mirror Buttons */}
@@ -3269,7 +3269,7 @@ export const SecureVideoPlayer: React.FC<SecureVideoPlayerProps> = ({
               >
                 <span className="text-[10px] text-slate-300 font-bold flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-amber-400" />
-                  <span>قلب العلم</span>
+                  <span>المتفلسفة </span>
                 </span>
               </div>
 

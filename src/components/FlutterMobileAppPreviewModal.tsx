@@ -242,7 +242,7 @@ export const FlutterMobileAppPreviewModal: React.FC<FlutterMobileAppPreviewModal
                   >
                     <Menu className="w-4 h-4" />
                   </button>
-                  <span className="font-black text-sm text-white tracking-tight">منصة قلب العلم</span>
+                  <span className="font-black text-sm text-white tracking-tight">منصة المتفلسفة </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button

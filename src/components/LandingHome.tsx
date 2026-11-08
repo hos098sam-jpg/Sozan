@@ -994,7 +994,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       ? activeSettings.heroBannerImage
                       : '/hero-banner-qalbalelm.jpg'
                   }
-                  alt={activeSettings.platformName || 'منصة قلب العلم'}
+                  alt={activeSettings.platformName || 'منصة المتفلسفة '}
                   className="w-full h-auto block object-contain"
                   referrerPolicy="no-referrer"
                 />

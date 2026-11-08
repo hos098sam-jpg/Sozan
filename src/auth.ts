@@ -194,9 +194,9 @@ export async function signupWithEmail(
     .filter(Boolean)
     .join(' ');
   const resolvedStudentName =
-    (profileData.name && profileData.name.trim() && profileData.name.trim() !== 'مستخدم منصة قلب العلم'
+    (profileData.name && profileData.name.trim() && profileData.name.trim() !== 'مستخدم منصة المتفلسفة '
       ? profileData.name.trim()
-      : compositeName) || 'طالب منصة قلب العلم';
+      : compositeName) || 'طالب منصة المتفلسفة ';
 
   const enrichedProfileData: Partial<User> = {
     ...profileData,
@@ -208,7 +208,7 @@ export async function signupWithEmail(
     examResults: {},
   };
 
-  // Store pending profile BEFORE calling createUserWithEmailAndPassword so onAuthStateChanged never falls back to 'مستخدم منصة قلب العلم'
+  // Store pending profile BEFORE calling createUserWithEmailAndPassword so onAuthStateChanged never falls back to 'مستخدم منصة المتفلسفة '
   pendingSignupProfile = enrichedProfileData;
 
   // Helper to register/sync account + password on platform server
@@ -444,7 +444,7 @@ export async function fetchUserProfile(uid: string): Promise<User | null> {
       snap = await getDocFromCache(userDocRef);
     } catch {}
     const cachedData = snap?.exists?.() ? snap.data() : null;
-    if (!snap || !snap.exists() || !cachedData?.name || cachedData?.name === 'مستخدم منصة قلب العلم' || !cachedData?.phone) {
+    if (!snap || !snap.exists() || !cachedData?.name || cachedData?.name === 'مستخدم منصة المتفلسفة ' || !cachedData?.phone) {
       try {
         const freshSnap = await getDoc(userDocRef);
         if (freshSnap && freshSnap.exists()) {
@@ -464,7 +464,7 @@ export async function fetchUserProfile(uid: string): Promise<User | null> {
         .filter(Boolean)
         .join(' ');
       const repairedName =
-        data.name && data.name.trim() && data.name.trim() !== 'مستخدم منصة قلب العلم' && data.name.trim() !== 'طالب منصة قلب العلم'
+        data.name && data.name.trim() && data.name.trim() !== 'مستخدم منصة المتفلسفة ' && data.name.trim() !== 'طالب منصة المتفلسفة '
           ? data.name.trim()
           : compositeName || (data.email === 'hos098sam@gmail.com' ? 'إدارة المنصة' : data.name);
       const emailPhoneMatch = (data.email || '').match(/^(\d{10,14})@(?:qalb-alam|qalbalelm)\.edu$/i);
@@ -771,7 +771,7 @@ export async function verifyWhatsAppLoginOtp(
 }
 
 /**
- * 3. Request Email OTP for Forgot Password (sent from qalbalelm@gmail.com)
+ * 3. Request Email OTP for Forgot Password (sent from hos098sam@gmail.com)
  */
 export async function requestWhatsAppForgotPasswordOtp(
   identifier: string,
@@ -955,14 +955,14 @@ export async function requestWhatsAppParentOtp(
       sessionStorage.setItem(`parent_otp_${fallbackSessionId}`, JSON.stringify({
         otp: fallbackOtp,
         phone: parentPhone,
-        studentName: options?.studentName || 'طالب منصة قلب العلم',
+        studentName: options?.studentName || 'طالب منصة المتفلسفة ',
         studentId: options?.studentId,
         expiresAt: Date.now() + 5 * 60 * 1000,
       }));
     } catch {}
 
     const waText = encodeURIComponent(
-      `🎓 كود التحقق الخاص بولي أمر الطالب (${options?.studentName || 'الطالب'}): [${fallbackOtp}] - منصة قلب العلم التعليمية`
+      `🎓 كود التحقق الخاص بولي أمر الطالب (${options?.studentName || 'الطالب'}): [${fallbackOtp}] - منصة المتفلسفة  التعليمية`
     );
     const directWhatsAppUrl = `https://wa.me/20${cleanEgyptNum}?text=${waText}`;
 
@@ -976,7 +976,7 @@ export async function requestWhatsAppParentOtp(
       phoneMasked,
       expiresInSeconds: 300,
       cooldownSeconds: 60,
-      studentNames: options?.studentName || 'طالب منصة قلب العلم',
+      studentNames: options?.studentName || 'طالب منصة المتفلسفة ',
       directWhatsAppUrl,
       simulatedOtp: fallbackOtp,
       message: `تم إرسال رمز التحقق الخاص إلى واتساب ولي الأمر بنجاح (${phoneMasked}).`,
@@ -1033,7 +1033,7 @@ export async function verifyWhatsAppParentOtp(
       const verifiedTimestamp = new Date().toISOString();
       const parentUser: User = {
         id: `parent-${stored.phone.replace(/\D/g, '')}`,
-        name: `ولي أمر الطالب (${stored.studentName || fallbackStudent?.name || 'طالب قلب العلم'})`,
+        name: `ولي أمر الطالب (${stored.studentName || fallbackStudent?.name || 'طالب المتفلسفة '})`,
         phone: stored.phone,
         parentPhone: stored.phone,
         schoolYear: fallbackStudent?.schoolYear || 'الصف الثالث الثانوي',

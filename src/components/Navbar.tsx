@@ -447,7 +447,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="w-10 h-10 rounded-full bg-white border border-indigo-400/40 flex items-center justify-center shadow-sm overflow-hidden shrink-0">
                     <img
                       src={qalbAlElmLogo}
-                      alt="شعار منصة قلب العلم"
+                      alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
@@ -457,7 +457,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {currentUser ? 'قائمة الحساب والمنصة' : 'القائمة وبوابات الدخول'}
                     </h3>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                      منصة قلب العلم التعليمية 2027
+                      منصة المتفلسفة  التعليمية 2027
                     </p>
                   </div>
                 </div>
@@ -778,7 +778,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <div className="w-11 h-11 rounded-full bg-white border border-blue-400/50 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0 overflow-hidden">
                         <img
                           src={qalbAlElmLogo}
-                          alt="شعار منصة قلب العلم"
+                          alt="شعار منصة المتفلسفة "
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
                         />
@@ -788,7 +788,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           بوابة الدخول والتسجيل
                         </h4>
                         <p className="text-[11px] text-blue-300/90 font-bold">
-                          مرحباً بك في منصة قلب العلم 💙
+                          مرحباً بك في منصة المتفلسفة  💙
                         </p>
                       </div>
                     </div>
@@ -951,7 +951,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="py-2 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"
                 >
                   <Facebook className="w-3.5 h-3.5 fill-current shrink-0" />
-                  <span>فيسبوك: قلب العلم</span>
+                  <span>فيسبوك: المتفلسفة </span>
                 </a>
 
                 {/* TikTok Link */}
@@ -960,10 +960,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"
-                  title="تيك توك: قلب العلم"
+                  title="تيك توك: المتفلسفة "
                 >
                   <TikTokIcon className="w-3.5 h-3.5 shrink-0" />
-                  <span>تيك توك: قلب العلم</span>
+                  <span>تيك توك: المتفلسفة </span>
                 </a>
 
                 {/* Facebook Group Link */}
@@ -972,10 +972,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="py-2 px-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"
-                  title="جروب طلاب قلب العلم"
+                  title="جروب طلاب المتفلسفة "
                 >
                   <Facebook className="w-3.5 h-3.5 fill-current shrink-0" />
-                  <span>جروب طلاب قلب العلم</span>
+                  <span>جروب طلاب المتفلسفة </span>
                 </a>
 
                 {/* WhatsApp Link */}

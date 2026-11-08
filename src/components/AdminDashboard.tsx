@@ -270,7 +270,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (granted) {
       await broadcastNotification(
         '🔔 اختبار إشعار الجهاز والسحابة',
-        'يعمل نظام إشعارات الأجهزة وسحابة Firebase بنجاح على منصة قلب العلم التعليمية!',
+        'يعمل نظام إشعارات الأجهزة وسحابة Firebase بنجاح على منصة المتفلسفة  التعليمية!',
         'normal',
         'all'
       );
@@ -1574,7 +1574,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/50 overflow-hidden shrink-0">
               <img
                 src={qalbAlElmLogo}
-                alt="شعار منصة قلب العلم"
+                alt="شعار منصة المتفلسفة "
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
@@ -1587,7 +1587,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-300">
-                منصة قلب العلم • المشرف العام: <b>{platformSettings.supervisorName}</b> • متابعة الطلاب، الكورسات، والامتحانات
+                منصة المتفلسفة  • المشرف العام: <b>{platformSettings.supervisorName}</b> • متابعة الطلاب، الكورسات، والامتحانات
               </p>
             </div>
           </div>
@@ -1891,7 +1891,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             <Mail className="w-4 h-4 text-indigo-400" />
-            <span>بريد الاسترداد (qalbalelm@gmail.com)</span>
+            <span>بريد الاسترداد (hos098sam@gmail.com)</span>
           </button>
 
           <button
@@ -1926,7 +1926,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 activeTab === 'coupons' ? 'توليد وإدارة كوبونات الخصم 🏷️' :
                 activeTab === 'fawaterak' ? 'بوابة فودافون كاش (SMS) 📱' :
                 activeTab === 'competitions' ? 'إدارة المسابقات الكبرى 🏆' :
-                activeTab === 'whatsapp' ? 'إدارة البريد الرسمي لاسترداد كلمة السر (qalbalelm@gmail.com) 📧' :
+                activeTab === 'whatsapp' ? 'إدارة البريد الرسمي لاسترداد كلمة السر (hos098sam@gmail.com) 📧' :
                 activeTab === 'support_chat' ? 'رسائل الدعم الفني المباشر مع الطلاب 💬' :
                 'إعدادات وهوية المنصة ⚙️'
               }
@@ -5644,7 +5644,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <div>
                     <h3 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
-                      <span>توليد كروت اشتراك منصة قلب العلم</span>
+                      <span>توليد كروت اشتراك منصة المتفلسفة </span>
                       <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
                         تصميم الكارت الذهبي المعتمد
                       </span>
@@ -5783,7 +5783,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Submit Generator Button */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
               <div className="text-xs text-slate-500 font-bold">
-                💡 سيتم إنشاء كروت اشتراك فريدة ومحمية تحمل شعار قلب العلم جاهزة للتحميل الفوري كصور عالية الدقة.
+                💡 سيتم إنشاء كروت اشتراك فريدة ومحمية تحمل شعار المتفلسفة  جاهزة للتحميل الفوري كصور عالية الدقة.
               </div>
 
               <button
@@ -5875,7 +5875,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div>
                     <h4 className="text-base font-black text-slate-800">لا توجد كروت اشتراك مطابقة</h4>
                     <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                      اضغط على زر &quot;توليد كروت اشتراك فوري&quot; بالأعلى لإنشاء كروت جديدة بتصميم كارت قلب العلم المعتمد.
+                      اضغط على زر &quot;توليد كروت اشتراك فوري&quot; بالأعلى لإنشاء كروت جديدة بتصميم كارت المتفلسفة  المعتمد.
                     </p>
                   </div>
                   <button

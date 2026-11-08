@@ -3,11 +3,11 @@ import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Static Hosting API Router & HTML-to-JSON Shield for qalbalelm.web.app and custom domains
+// Static Hosting API Router & HTML-to-JSON Shield for motafalsifa.vercel.app and custom domains
 if (typeof window !== 'undefined') {
   const host = window.location.hostname;
   const isStaticHosting =
-    host === 'qalbalelm.web.app' ||
+    host === 'motafalsifa.vercel.app' ||
     host === 'qalbalelm.firebaseapp.com' ||
     host.endsWith('.dpdns.org') ||
     host.endsWith('.pages.dev') ||
@@ -18,7 +18,7 @@ if (typeof window !== 'undefined') {
     const origFetch = window.fetch.bind(window);
     window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
       const urlStr = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
-      const isApiCall = urlStr.startsWith('/api/') || urlStr.includes('//qalbalelm.web.app/api/') || urlStr.includes('//qalbalelm.firebaseapp.com/api/');
+      const isApiCall = urlStr.startsWith('/api/') || urlStr.includes('//motafalsifa.vercel.app/api/') || urlStr.includes('//qalbalelm.firebaseapp.com/api/');
 
       if (isApiCall) {
         const cleanPath = urlStr.replace(/^https?:\/\/[^/]+/, '');
@@ -162,7 +162,7 @@ if (typeof window !== 'undefined') {
           if (cleanDigits.length >= 10 || input.includes('@')) {
             const fallbackStudent = {
               id: `user_${Date.now()}`,
-              name: 'طالب منصة قلب العلم',
+              name: 'طالب منصة المتفلسفة ',
               email: input.includes('@') ? input.toLowerCase() : `${cleanDigits}@qalb-alam.edu`,
               phone: cleanDigits || '01000000000',
               role: 'student',

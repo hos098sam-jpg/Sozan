@@ -120,7 +120,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     if (result === 'granted') {
       playNotificationSound();
       try {
-        new Notification('منصة قلب العلم التعليمية', {
+        new Notification('منصة المتفلسفة  التعليمية', {
           body: 'تم تفعيل إشعارات الجهاز بنجاح! ستصلك التنبيهات الرسمية من المشرف العام فور صدورها.',
           icon: '/logo.png',
           dir: 'rtl',
@@ -198,7 +198,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
                     سحابي مباشر
                   </span>
                 </div>
-                <p className="text-[10px] text-amber-300 font-medium">منصة قلب العلم لدفعة 2027</p>
+                <p className="text-[10px] text-amber-300 font-medium">منصة المتفلسفة  لدفعة 2027</p>
               </div>
             </div>
 

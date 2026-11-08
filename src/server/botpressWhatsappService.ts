@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // ============================================================================
-// BOTPRESS WHATSAPP OTP ENGINE - منصة قلب العلم التعليمية
+// BOTPRESS WHATSAPP OTP ENGINE - منصة المتفلسفة  التعليمية
 // ============================================================================
 
 export const BOTPRESS_CONFIG = {
@@ -56,7 +56,7 @@ export async function sendOtpToWhatsApp(payload: SendOtpPayload): Promise<Botpre
 
   const messageText =
     customMessage ||
-    `🔐 رمز التحقق الخاص بك لمنصة قلب العلم التعليمية هو: *${otpCode}*\n\nيرجى عدم مشاركة هذا الرمز مع أي شخص لحماية حسابك.`;
+    `🔐 رمز التحقق الخاص بك لمنصة المتفلسفة  التعليمية هو: *${otpCode}*\n\nيرجى عدم مشاركة هذا الرمز مع أي شخص لحماية حسابك.`;
 
   try {
     // 1. تطبيق حيلة الانتظار لمدة 15 ثانية لتوليد حركة "جاري الكتابة" تلقائياً
