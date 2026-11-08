@@ -6,13 +6,14 @@ import {
   persistentMultipleTabManager,
 } from "firebase/firestore";
 
+// دمج البيانات الجديدة ديناميكياً لتأمين منصة المتفلسفة وفصل السيرفر تماماً مجاناً 100%
 const firebaseConfig = {
-  apiKey: "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4",
-  authDomain: "qalbalelm.firebaseapp.com",
-  projectId: "qalbalelm",
-  storageBucket: "qalbalelm.firebasestorage.app",
-  messagingSenderId: "203955396863",
-  appId: "1:203955396863:web:07a1ac17ee0a1ee7a7ecca"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "alesraa-academy.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "alesraa-academy",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "alesraa-academy.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "158593983527",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:158593983527:web:1867211dfdfaa6ca109a02"
 };
 
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
