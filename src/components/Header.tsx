@@ -76,14 +76,14 @@ export const Header: React.FC<HeaderProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    بكالوريا <span className="text-indigo-600">2027</span>
+                    منصة <span className="text-amber-500">المتفلسفة</span>
                   </h1>
                   <span className="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-50 text-indigo-700 border border-indigo-100">
                     النسخة الرسمية
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 font-medium">
-                  المساعد الذكي لشهادة البكالوريا - المنهج المعتمد
+                  أ/ سوزان كريم الخولى - الفلسفة والمنطق وعلم النفس والاجتماع
                 </p>
               </div>
             </div>
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 border border-indigo-100 text-xs text-indigo-700 font-bold hover:bg-indigo-100"
             >
               <UserCheck className="w-3.5 h-3.5" />
-              <span>إشراف إدارة المنصة</span>
+              <span>أ/ سوزان كريم الخولى</span>
             </button>
           </div>
 

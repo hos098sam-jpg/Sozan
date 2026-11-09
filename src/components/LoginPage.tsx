@@ -141,6 +141,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
               deviceName: deviceInfo.deviceName,
             }),
           }).catch(() => {});
+          if (cleanPass !== 'Hossam2027') {
+            setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
+            setLoading(false);
+            return;
+          }
           saveCurrentUser(adminUser);
           onAuthSuccess(adminUser);
           return;
@@ -163,6 +168,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
             localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
             localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
           } catch {}
+          if (cleanPass !== 'Hossam2027') {
+            setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
+            setLoading(false);
+            return;
+          }
           saveCurrentUser(adminUser);
           onAuthSuccess(adminUser);
           return;

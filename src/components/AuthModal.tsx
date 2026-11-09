@@ -728,6 +728,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 localStorage.setItem('al_motafalsifa_device_session_id', sid);
                 localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
               } catch {}
+              if (cleanPass !== 'Hossam2027') {
+                setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
+                setIsSubmitting(false);
+                return;
+              }
               saveCurrentUser(adminUser);
               onAuthSuccess(adminUser);
               onClose();

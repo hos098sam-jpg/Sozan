@@ -42,8 +42,8 @@ export const Logo: React.FC<LogoProps> = ({
         
         {/* Heart + Knowledge atom symbol combination fallback */}
         <div className="absolute inset-0 flex items-center justify-center -z-10 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-900">
-          <Heart className={`${currentSize.icon} text-rose-300 fill-rose-400/40 animate-pulse`} />
-          <Atom className="absolute w-3.5 h-3.5 text-amber-300 opacity-90" />
+          <span className="text-amber-400 font-serif font-black text-xs">فلسفة</span>
+          
         </div>
       </div>
 

@@ -33,10 +33,10 @@ import { getSecureCache, setSecureCache } from './utils/secureStorage';
 import { getDeviceInfoPayload } from './utils/deviceFingerprint';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4",
+  apiKey: "AIzaSy_SOZAN_KEY",
   authDomain: "al-motafalsifa.firebaseapp.com",
-  projectId: "qalbalelm",
-  storageBucket: "qalbalelm.firebasestorage.app",
+  projectId: "al-motafalsifa",
+  storageBucket: "al-motafalsifa.firebasestorage.app",
   messagingSenderId: "203955396863",
   appId: "1:203955396863:web:07a1ac17ee0a1ee7a7ecca"
 };
@@ -103,11 +103,11 @@ export async function loginWithEmail(email: string, pass: string): Promise<any> 
     const credential = await Promise.race([authPromise, timeoutPromise]);
     return credential.user;
   } catch (authErr: any) {
-    // If synthetic email domain differs (@qalb-alam.edu vs @qalbalelm.edu), try alternate synthetic domain
-    if (cleanEmail.endsWith('@qalb-alam.edu') || cleanEmail.endsWith('@qalbalelm.edu')) {
+    // If synthetic email domain differs (@qalb-alam.edu vs @al-motafalsifa.edu), try alternate synthetic domain
+    if (cleanEmail.endsWith('@qalb-alam.edu') || cleanEmail.endsWith('@al-motafalsifa.edu')) {
       const altEmail = cleanEmail.endsWith('@qalb-alam.edu')
-        ? cleanEmail.replace('@qalb-alam.edu', '@qalbalelm.edu')
-        : cleanEmail.replace('@qalbalelm.edu', '@qalb-alam.edu');
+        ? cleanEmail.replace('@qalb-alam.edu', '@al-motafalsifa.edu')
+        : cleanEmail.replace('@al-motafalsifa.edu', '@qalb-alam.edu');
       try {
         const altCred = await signInWithEmailAndPassword(auth, altEmail, cleanPass);
         return altCred.user;
@@ -467,7 +467,7 @@ export async function fetchUserProfile(uid: string): Promise<User | null> {
         data.name && data.name.trim() && data.name.trim() !== 'مستخدم منصة المتفلسفة ' && data.name.trim() !== 'طالب منصة المتفلسفة '
           ? data.name.trim()
           : compositeName || (data.email === 'hos098sam@gmail.com' ? 'إدارة المنصة' : data.name);
-      const emailPhoneMatch = (data.email || '').match(/^(\d{10,14})@(?:qalb-alam|qalbalelm)\.edu$/i);
+      const emailPhoneMatch = (data.email || '').match(/^(\d{10,14})@(?:qalb-alam|al-motafalsifa)\.edu$/i);
       const repairedPhone = (data.phone && data.phone.trim()) || (emailPhoneMatch ? emailPhoneMatch[1] : '');
       const repairedParentPhone = (data.parentPhone && data.parentPhone.trim()) || data.fatherPhone || data.motherPhone || '';
       return {

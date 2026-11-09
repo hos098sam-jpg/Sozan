@@ -42,9 +42,9 @@ export const INITIAL_PLATFORM_SETTINGS: PlatformSettings = {
   platformName: 'المتفلسفة ',
   heroTitle: 'منصة المتفلسفة  لدفعة 2027',
   heroSubtitle: 'المنصة المتكاملة لتقديم الكورسات، الامتحانات الإلكترونية، والمسابقات الرسمية لدفعة 2027 تحت إشراف إدارة المنصة.',
-  supervisorName: 'إدارة المنصة',
-  supervisorTitle: 'المشرف العام وإدارة المنصة',
-  heroBannerImage: '/hero-banner-qalbalelm.jpg',
+  supervisorName: 'أ/ سوزان كريم الخولى',
+  supervisorTitle: 'معلمة الفلسفة والمنطق والمشرف العام',
+  heroBannerImage: '/logo.png',
   announcementText: '',
   contactPhone: '+201040672314',
   supportWhatsapp: '+201040672314',
@@ -61,14 +61,14 @@ export const INITIAL_PLATFORM_SETTINGS: PlatformSettings = {
 export const INITIAL_STUDENTS: User[] = [
   {
     id: 'teacher-1791139743075',
-    name: 'ميس : إسراء فرج',
+    name: 'أ/ سوزان كريم الخولى',
     role: 'teacher',
-    phone: '01063839943',
+    phone: '01040672314',
     parentPhone: '',
     status: 'active',
     registeredAt: '2026-09-20',
-    bio: 'معلمة التاريخ والجغرافيا للمرحلة الثانوية',
-    subject: 'التاريخ والجغرافيا',
+    bio: 'خبيرة وموجهة الفلسفة والمنطق وعلم النفس والاجتماع للمرحلة الثانوية',
+    subject: 'الفلسفة والمنطق وعلم النفس والاجتماع',
     schoolYear: 'جميع المراحل الدراسية',
     enrolledCourseIds: [],
   } as unknown as User,
@@ -2354,7 +2354,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
         }
       }, (err) => {
         console.warn("Firestore courses snapshot error:", err);
-        notifyCloudStatus('error', err?.message);
+        // notifyCloudStatus('error', err?.message);
       });
       unsubs.push(unsub);
     }
@@ -2517,7 +2517,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
     }
   } catch (err: any) {
     console.warn("Error setting up Firestore snapshots", err);
-    notifyCloudStatus('error', err?.message);
+    // notifyCloudStatus('error', err?.message);
   }
 
   return () => {
