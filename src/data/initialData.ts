@@ -235,8 +235,8 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
 
   const totalChunks = chunks.length;
   const nowIso = new Date().toISOString();
-  const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
-  const projectId = "qalbalelm";
+  const apiKey = "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4";
+  const projectId = "alesraa-academy";
 
   let idToken: string | undefined;
   try {
@@ -343,8 +343,8 @@ export async function loadShardedUsersFromFirestore(): Promise<User[]> {
   }
 
   const userMap = new Map<string, User>();
-  const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
-  const projectId = "qalbalelm";
+  const apiKey = "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4";
+  const projectId = "alesraa-academy";
 
   let idToken: string | undefined;
   try {
@@ -493,8 +493,8 @@ export async function saveToFirebase(collectionName: string, data: any): Promise
       } catch (e: any) {
         // 2. Fallback to Firestore REST API using the web API key
         try {
-          const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
-          const projectId = "qalbalelm";
+          const apiKey = "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4";
+          const projectId = "alesraa-academy";
           const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${collectionName}?key=${apiKey}`;
           const res = await fetch(restUrl, {
             method: "PATCH",
@@ -585,8 +585,8 @@ export async function loadFromFirebase(collectionName: string, preferCacheFirst:
 
   // Attempt REST fallback using web API key (guarantees connectivity in iframe / school tablet networks)
   try {
-    const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
-    const projectId = "qalbalelm";
+    const apiKey = "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4";
+    const projectId = "alesraa-academy";
     const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${collectionName}?key=${apiKey}`;
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timeoutId = setTimeout(() => controller?.abort(), 2500);
@@ -1548,8 +1548,8 @@ export async function saveSingleUserToServer(user: User): Promise<boolean> {
       // 3. Fallback direct REST write to users/{id} with auth token
       if (idToken) {
         try {
-          const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
-          const projectId = "qalbalelm";
+          const apiKey = "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4";
+          const projectId = "alesraa-academy";
           const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${encodeURIComponent(user.id)}?key=${apiKey}`;
           const fieldsObj: Record<string, any> = {};
           for (const [k, v] of Object.entries(firestoreSafeUser)) {

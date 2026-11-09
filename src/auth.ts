@@ -33,12 +33,14 @@ import { getSecureCache, setSecureCache } from './utils/secureStorage';
 import { getDeviceInfoPayload } from './utils/deviceFingerprint';
 
 const firebaseConfig = {
-  apiKey: "AIzaSy_SOZAN_KEY",
-  authDomain: "al-motafalsifa.firebaseapp.com",
-  projectId: "al-motafalsifa",
-  storageBucket: "al-motafalsifa.firebasestorage.app",
-  messagingSenderId: "203955396863",
-  appId: "1:203955396863:web:07a1ac17ee0a1ee7a7ecca"
+  apiKey: "AIzaSyDdwnLfJbsQ8hbXP-CzocjaejmvYC4FOh4",
+  authDomain: "alesraa-academy.firebaseapp.com",
+  databaseURL: "https://alesraa-academy-default-rtdb.firebaseio.com",
+  projectId: "alesraa-academy",
+  storageBucket: "alesraa-academy.firebasestorage.app",
+  messagingSenderId: "158593983527",
+  appId: "1:158593983527:web:4646886c1bd03491109a02",
+  measurementId: "G-KQ152GCF4W"
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
