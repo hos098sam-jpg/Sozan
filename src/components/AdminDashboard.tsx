@@ -295,7 +295,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [newCourseTitle, setNewCourseTitle] = useState('');
   const [newCourseYear, setNewCourseYear] = useState<SchoolYearGrade>('الصف الثالث الثانوي');
   const [newCourseDivision, setNewCourseDivision] = useState<string>('عام لجميع الشعب');
-  const [newCourseSubject, setNewCourseSubject] = useState('الفيزياء');
+  const [newCourseSubject, setNewCourseSubject] = useState('الفلسفة والمنطق');
   const [newCoursePrice, setNewCoursePrice] = useState<number>(180);
   const [newCoursePaymentPhone, setNewCoursePaymentPhone] = useState<string>('');
   const [newCoursePaymentQrCode, setNewCoursePaymentQrCode] = useState<string>('');
@@ -398,7 +398,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [teacherAvatar, setTeacherAvatar] = useState(
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'
   );
-  const [teacherSubject, setTeacherSubject] = useState('فيزياء');
+  const [teacherSubject, setTeacherSubject] = useState('الفلسفة والمنطق');
   const [teacherCustomSubject, setTeacherCustomSubject] = useState('');
   const [teacherSpecialty, setTeacherSpecialty] = useState('شعبة علمي علوم');
   const [teacherGender, setTeacherGender] = useState<'ذكر' | 'أنثى'>('ذكر');
@@ -416,7 +416,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editCourseDesc, setEditCourseDesc] = useState('');
   const [editCourseSchoolYear, setEditCourseSchoolYear] = useState('الصف الثالث الثانوي');
   const [editCourseDivision, setEditCourseDivision] = useState('عام لجميع الشعب');
-  const [editCourseSubject, setEditCourseSubject] = useState('فيزياء');
+  const [editCourseSubject, setEditCourseSubject] = useState('الفلسفة والمنطق');
   const [editCourseCover, setEditCourseCover] = useState('');
   const [editCoursePaymentPhone, setEditCoursePaymentPhone] = useState('');
   const [editCoursePaymentQrCode, setEditCoursePaymentQrCode] = useState('');
@@ -1632,10 +1632,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               href="/api/template-export/mohamed-saber-platform.zip"
               download="mohamed-saber-physics-platform.zip"
               className="px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-xs transition-all shadow-lg shadow-cyan-500/25 flex items-center gap-2 cursor-pointer"
-              title="تحميل النسخة الكاملة المستقلة لمنصة أ/ سوزان كريم الخولى (مادة الفيزياء - مدرس واحد) بصيغة ZIP"
+              title="تحميل النسخة الكاملة المستقلة لمنصة أ/ سوزان كريم الخولى (مادتي الفلسفة والمنطق وعلم النفس والاجتماع) بصيغة ZIP"
             >
               <Download className="w-4 h-4 text-white" />
-              <span>تحميل نسخة أ/ سوزان كريم الخولى (فيزياء ⚡) ZIP</span>
+              <span>تحميل نسخة أ/ سوزان كريم الخولى (فلسفة ومنطق 🏛️) ZIP</span>
             </a>
 
             {!isAdmin && (
@@ -4314,7 +4314,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       required
                       value={newCourseTitle}
                       onChange={(e) => setNewCourseTitle(e.target.value)}
-                      placeholder="مثال: كورس الفيزياء الكهربية الحديثة 2027"
+                      placeholder="مثال: كورس الفلسفة والمنطق للثانوية العامة 2027"
                       className="w-full p-3 rounded-2xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600"
                     />
                   </div>
@@ -5721,7 +5721,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     type="text"
                     value={codeCustomCourseTitle}
                     onChange={(e) => setCodeCustomCourseTitle(e.target.value)}
-                    placeholder="اكتب اسم الكورس (مثال: فيزياء 3 ثانوي - الباب الأول)"
+                    placeholder="اكتب اسم الكورس (مثال: الفلسفة 3 ثانوي - الباب الأول: الفلسفة وقضايا البيئة)"
                     className="w-full mt-2 p-2.5 rounded-xl border border-indigo-200 text-xs bg-indigo-50/30 font-bold focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20"
                   />
                 )}
