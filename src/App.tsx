@@ -177,11 +177,11 @@ export const ensureUserPrivileges = (u: User): User => {
 
   const rawSchoolYear = (u.schoolYear || '').trim();
   const resolvedSchoolYear =
-    !rawSchoolYear || rawSchoolYear === 'طالب منصة المتفلسفة '
-      ? u.role === 'admin' || u.email === 'hos098sam@gmail.com'
-        ? 'إدارة المنصة'
-        : 'الصف الثالث الثانوي'
-      : rawSchoolYear;
+    rawSchoolYear && rawSchoolYear !== 'طالب منصة المتفلسفة '
+      ? rawSchoolYear
+      : u.role === 'admin' || u.email === 'hos098sam@gmail.com'
+      ? 'إدارة المنصة'
+      : (u.grade || 'الصف الأول الثانوي');
 
   const updatedUser: User = {
     ...u,
@@ -387,7 +387,7 @@ export default function App() {
               schoolYear:
                 profile.schoolYear && profile.schoolYear !== 'طالب منصة المتفلسفة '
                   ? profile.schoolYear
-                  : localCandidate?.schoolYear || profile.schoolYear || 'الصف الثالث الثانوي',
+                  : profile.schoolYear || localCandidate?.schoolYear || 'الصف الأول الثانوي',
               activeSessionId: localSessionId || profile.activeSessionId,
               emailVerified: fbUser.emailVerified,
             });
@@ -411,7 +411,7 @@ export default function App() {
               email: fbUser.email || '',
               phone: '',
               parentPhone: '',
-              schoolYear: 'الصف الثالث الثانوي',
+              schoolYear: localCandidate?.schoolYear || 'الصف الأول الثانوي',
               role: fbUser.email === 'hos098sam@gmail.com' ? 'admin' : 'student',
               status: 'active',
               registeredAt: new Date().toISOString().split('T')[0],

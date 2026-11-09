@@ -1934,16 +1934,18 @@ export function saveUsers(users: User[]) {
 
 export function getCurrentUser(): User | null {
   try {
+    const rawLocal = localStorage.getItem('al_motafalsifa_current_user') || localStorage.getItem('qalb_alam_current_user');
+    if (rawLocal) {
+      try {
+        const parsed = JSON.parse(rawLocal);
+        if (parsed && parsed.id && !isDemoOrDeletedUser(parsed)) {
+          return parsed;
+        }
+      } catch {}
+    }
     const cached = getSecureCache<User>(STORAGE_KEYS.CURRENT_USER);
     if (cached.data && cached.data.id && !isDemoOrDeletedUser(cached.data)) {
       return cached.data;
-    }
-    const rawBackup = localStorage.getItem('al_motafalsifa_current_user');
-    if (rawBackup) {
-      const parsed = JSON.parse(rawBackup);
-      if (parsed && parsed.id && !isDemoOrDeletedUser(parsed)) {
-        return parsed;
-      }
     }
   } catch (e) {}
   return null;
