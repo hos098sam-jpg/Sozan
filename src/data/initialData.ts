@@ -1961,13 +1961,7 @@ export function saveCurrentUser(user: User | null) {
       localStorage.setItem('al_motafalsifa_current_user', JSON.stringify(safeUser));
     }
   } catch (e) {}
-} else {
-      const safeUser = { ...user };
-      delete (safeUser as any).password;
-      setSecureCache(STORAGE_KEYS.CURRENT_USER, safeUser);
-    }
-  } catch (e) {}
-}
+
 
 // === STUDENT ENROLLED COURSES PERSISTENCE (AES-256 Encrypted) ===
 
