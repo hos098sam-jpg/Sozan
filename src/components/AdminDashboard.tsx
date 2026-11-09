@@ -1632,10 +1632,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               href="/api/template-export/mohamed-saber-platform.zip"
               download="mohamed-saber-physics-platform.zip"
               className="px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-xs transition-all shadow-lg shadow-cyan-500/25 flex items-center gap-2 cursor-pointer"
-              title="تحميل النسخة الكاملة المستقلة لمنصة مستر محمد صابر (مادة الفيزياء - مدرس واحد) بصيغة ZIP"
+              title="تحميل النسخة الكاملة المستقلة لمنصة أ/ سوزان كريم الخولى (مادة الفيزياء - مدرس واحد) بصيغة ZIP"
             >
               <Download className="w-4 h-4 text-white" />
-              <span>تحميل نسخة مستر محمد صابر (فيزياء ⚡) ZIP</span>
+              <span>تحميل نسخة أ/ سوزان كريم الخولى (فيزياء ⚡) ZIP</span>
             </a>
 
             {!isAdmin && (
@@ -4414,7 +4414,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         required
                         value={newCourseSubject}
                         onChange={(e) => setNewCourseSubject(e.target.value)}
-                        placeholder="الفيزياء / الرياضيات / الكيمياء..."
+                        placeholder="الفيزياء / الرياضيات / الفلسفة والمنطق..."
                         className="w-full p-3 rounded-2xl border border-slate-200 text-xs"
                       />
                     </div>

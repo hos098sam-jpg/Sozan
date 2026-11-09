@@ -368,11 +368,11 @@ export default function App() {
             null;
 
           if (profile) {
-            let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
+            let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
             if (!localSessionId && profile.activeSessionId) {
               localSessionId = profile.activeSessionId;
               try {
-                localStorage.setItem('qalb_alam_device_session_id', localSessionId);
+                localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
               } catch {}
             }
             const verifiedUser: User = ensureUserPrivileges({
@@ -493,12 +493,12 @@ export default function App() {
           // Single-device session check for students
           if (freshData.activeSessionId) {
             try {
-              const localSessionId = localStorage.getItem('qalb_alam_device_session_id');
-              const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
+              const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
+              const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
               const isPastLoginGrace = Date.now() - loginTs > 10000;
 
               if (!localSessionId) {
-                localStorage.setItem('qalb_alam_device_session_id', freshData.activeSessionId);
+                localStorage.setItem('al_motafalsifa_device_session_id', freshData.activeSessionId);
               } else if (
                 localSessionId !== freshData.activeSessionId &&
                 isPastLoginGrace &&
@@ -869,11 +869,11 @@ export default function App() {
 
     // Ensure current device has a session ID registered if missing
     try {
-      let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
+      let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
       if (!localSessionId) {
         localSessionId = currentUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-        localStorage.setItem('qalb_alam_device_session_id', localSessionId);
-        localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+        localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
+        localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
       }
     } catch {}
 
@@ -882,8 +882,8 @@ export default function App() {
       const activeMe = currentUserRef.current;
       if (!activeMe?.id) return;
 
-      const localSessionId = localStorage.getItem('qalb_alam_device_session_id') || activeMe.activeSessionId || '';
-      const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
+      const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id') || activeMe.activeSessionId || '';
+      const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
       if (Date.now() - loginTs <= 3000) return;
 
       try {
@@ -963,8 +963,8 @@ export default function App() {
     const newSessionId = rawUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
     const nowIso = new Date().toISOString();
     try {
-      localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-      localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+      localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+      localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
     } catch {}
 
     const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
@@ -1060,7 +1060,7 @@ export default function App() {
     isLoggingOutRef.current = true;
     currentUserRef.current = null;
     try {
-      localStorage.removeItem('qalb_alam_device_session_id');
+      localStorage.removeItem('al_motafalsifa_device_session_id');
       localStorage.removeItem('qalb_alam_current_user');
     } catch {}
     setCurrentUser(null);

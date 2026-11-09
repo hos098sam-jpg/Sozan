@@ -52,7 +52,7 @@ export const AdminSupportChatTab: React.FC<{ adminName?: string }> = ({ adminNam
     let unsub: (() => void) | null = null;
     if (auth.currentUser) {
       try {
-        const docRef = doc(db, 'qalbalelm_data', 'support_chats');
+        const docRef = doc(db, 'al_motafalsifa_data', 'support_chats');
         unsub = onSnapshot(
           docRef,
           (snap) => {
@@ -89,7 +89,7 @@ export const AdminSupportChatTab: React.FC<{ adminName?: string }> = ({ adminNam
 
   const syncListToCloud = async (updatedList: SupportChatTicket[]) => {
     try {
-      const docRef = doc(db, 'qalbalelm_data', 'support_chats');
+      const docRef = doc(db, 'al_motafalsifa_data', 'support_chats');
       await setDoc(docRef, { data: updatedList, updatedAt: new Date().toISOString() }, { merge: true });
     } catch {}
   };

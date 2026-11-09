@@ -126,8 +126,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
           };
           const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
           try {
-            localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-            localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
           } catch {}
           // Register session asynchronously without blocking login
           fetch('/api/auth/register-session', {
@@ -160,8 +160,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
           };
           const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
           try {
-            localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-            localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
           } catch {}
           saveCurrentUser(adminUser);
           onAuthSuccess(adminUser);
@@ -187,8 +187,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
           if (sData && sData.user) {
             if (sData.sessionId) {
               try {
-                localStorage.setItem('qalb_alam_device_session_id', sData.sessionId);
-                localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+                localStorage.setItem('al_motafalsifa_device_session_id', sData.sessionId);
+                localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
               } catch {}
             }
             saveCurrentUser(sData.user);
@@ -244,8 +244,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
           }).catch(() => {});
 
           try {
-            localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-            localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
           } catch {}
 
           saveCurrentUser(matchedProfile as User);
@@ -294,8 +294,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
         }
 
         try {
-          localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-          localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+          localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+          localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
         } catch {}
 
         saveCurrentUser(matched);
@@ -369,8 +369,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
         if (res.success && res.user) {
           const sid = res.sessionId || res.user.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
           try {
-            localStorage.setItem('qalb_alam_device_session_id', sid);
-            localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+            localStorage.setItem('al_motafalsifa_device_session_id', sid);
+            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
           } catch {}
           const userWithSession = { ...res.user, activeSessionId: sid };
           saveCurrentUser(userWithSession);
@@ -482,7 +482,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
               <div className="absolute bottom-4 inset-x-4 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4 rounded-2xl text-right">
                 <p className="text-sm font-black text-white">منصة المتفلسفة  التعليمية المعتمدة</p>
                 <p className="text-xs text-blue-200/80 mt-0.5">
-                  بيئة تعليمية شاملة ومحمية لدراسة الرياضيات، الفيزياء، الكيمياء، واللغة العربية
+                  بيئة تعليمية شاملة ومحمية لدراسة الرياضيات، الفيزياء، الفلسفة والمنطق، واللغة العربية
                 </p>
               </div>
             </div>

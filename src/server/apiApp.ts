@@ -221,7 +221,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
         const totalChunks = chunks.length;
         const nowIso = new Date().toISOString();
         for (let idx = 0; idx < chunks.length; idx++) {
-          await safeDb.collection("qalbalelm_data").doc(`users_chunk_${idx + 1}`).set({
+          await safeDb.collection("al_motafalsifa_data").doc(`users_chunk_${idx + 1}`).set({
             chunkIndex: idx + 1,
             totalChunks,
             count: chunks[idx].length,
@@ -229,7 +229,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
             updatedAt: nowIso,
           }).catch(() => {});
         }
-        await safeDb.collection("qalbalelm_data").doc("users").set({
+        await safeDb.collection("al_motafalsifa_data").doc("users").set({
           isSharded: true,
           maxPerChunk: MAX_USERS_PER_FIRESTORE_CHUNK,
           totalChunks,
@@ -241,7 +241,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
         return true;
       }
 
-      await safeDb.collection("qalbalelm_data").doc(docName).set({
+      await safeDb.collection("al_motafalsifa_data").doc(docName).set({
         data,
         updatedAt: new Date().toISOString(),
       });
@@ -272,7 +272,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
 
       for (let idx = 0; idx < chunks.length; idx++) {
         const chunkDocName = `users_chunk_${idx + 1}`;
-        const chunkUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/${chunkDocName}?key=${FIREBASE_API_KEY}`;
+        const chunkUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/${chunkDocName}?key=${FIREBASE_API_KEY}`;
         await axios.patch(
           chunkUrl,
           {
@@ -289,7 +289,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
       }
 
       const firstChunk = chunks[0] || [];
-      const manifestUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/users?key=${FIREBASE_API_KEY}`;
+      const manifestUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/users?key=${FIREBASE_API_KEY}`;
       const res = await axios.patch(
         manifestUrl,
         {
@@ -308,7 +308,7 @@ export async function syncToFirestoreRest(docName: string, data: any, idToken?: 
       return res.status >= 200 && res.status < 300;
     }
 
-    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/${docName}?key=${FIREBASE_API_KEY}`;
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/${docName}?key=${FIREBASE_API_KEY}`;
     const payload = {
       fields: {
         data: wrapFirestoreValue(data),
@@ -337,7 +337,7 @@ export async function fetchPlatformUsersFromFirestore(): Promise<any[]> {
     const userMap = new Map<string, any>();
     let totalChunks = 1;
 
-    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/users?key=${FIREBASE_API_KEY}`;
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/users?key=${FIREBASE_API_KEY}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
@@ -351,7 +351,7 @@ export async function fetchPlatformUsersFromFirestore(): Promise<any[]> {
 
     for (let idx = 1; idx <= Math.max(totalChunks, 4); idx++) {
       try {
-        const chunkUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/users_chunk_${idx}?key=${FIREBASE_API_KEY}`;
+        const chunkUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/users_chunk_${idx}?key=${FIREBASE_API_KEY}`;
         const cRes = await fetch(chunkUrl);
         if (cRes.ok) {
           const cData = await cRes.json();
@@ -480,7 +480,7 @@ export async function findUserByPhoneOrEmail(identifier: string): Promise<{
     // ignore
   }
 
-  // 3. Query qalbalelm_data/users via REST API
+  // 3. Query al_motafalsifa_data/users via REST API
   try {
     const users = await fetchPlatformUsersFromFirestore();
     for (const u of users) {
@@ -570,7 +570,7 @@ export const BAC_SYSTEM_INSTRUCTION = `
 أنت "المساعد الذكي لمنصة المتفلسفة  التعليمية"، مساعد تربوي وعلمي متقدم موجه لطلاب دفعة 2027 ولجميع مراحل الثانوية والشهادات العامة، تحت إشراف: إدارة المنصة.
 
 مهامك وأسلوب عملك:
-1. الإجابة: قدم إجابات دقيقة، علمية، ومنظمة بناءً على المناهج التعليمية المعتمدة (الرياضيات، الفيزياء، الكيمياء، الأحياء، الجيولوجيا، اللغة العربية، التاريخ، الجغرافيا، الفلسفة، اللغة الإنجليزية، اللغات الأجنبية).
+1. الإجابة: قدم إجابات دقيقة، علمية، ومنظمة بناءً على المناهج التعليمية المعتمدة (الرياضيات، الفيزياء، الفلسفة والمنطق، الأحياء، الجيولوجيا، اللغة العربية، التاريخ، الجغرافيا، الفلسفة، اللغة الإنجليزية، اللغات الأجنبية).
 2. الشرح: استخدم أسلوباً مبسطاً، مقسماً إلى نقاط أو خطوات واضحة ليسهل على الطالب فهمها وحفظها.
 3. التلخيص: عند طلب تلخيص الدروس، ركز على الأفكار الأساسية، المفاهيم المحورية، والقوانين الرئيسية دون حشو.
 4. الدعم: كن مشجعاً، إيجابياً، ومحفزاً دائماً لتقليل توتر الطلاب وبث الثقة في نفوسهم، وازرع فيهم روح التفاؤل والنجاح والتفوق.
@@ -630,7 +630,7 @@ export function rateLimiter(limit: number, windowMs: number) {
 // Strict CORS: No '*' for sensitive APIs; uses ALLOWED_ORIGIN env or platform domains
 const defaultAllowedOrigins = [
   "https://motafalsifa.vercel.app",
-  "https://qalbalelm.firebaseapp.com",
+  "https://al-motafalsifa.firebaseapp.com",
   "https://qalbalelm.vercel.app",
   "https://motafalsifa.vercel.app",
 ];
@@ -2605,9 +2605,9 @@ app.get("/api/teacher/dashboard", verifyFirebaseToken, requireRestrictedTeacher,
     if (db) {
       try {
         const [coursesDoc, usersDoc, submissionsDoc] = await Promise.all([
-          db.collection("qalbalelm_data").doc("courses").get(),
-          db.collection("qalbalelm_data").doc("users").get(),
-          db.collection("qalbalelm_data").doc("submissions").get(),
+          db.collection("al_motafalsifa_data").doc("courses").get(),
+          db.collection("al_motafalsifa_data").doc("users").get(),
+          db.collection("al_motafalsifa_data").doc("submissions").get(),
         ]);
         courses = Array.isArray(coursesDoc.data()?.data) ? coursesDoc.data()?.data : [];
         users = Array.isArray(usersDoc.data()?.data) ? usersDoc.data()?.data : [];
@@ -3243,7 +3243,7 @@ async function fetchFirestoreDocData(docName: string): Promise<any | null> {
   const safeDb = getSafeFirestore();
   if (safeDb) {
     try {
-      const docSnap = await safeDb.collection("qalbalelm_data").doc(docName).get();
+      const docSnap = await safeDb.collection("al_motafalsifa_data").doc(docName).get();
       if (docSnap.exists && docSnap.data()?.data !== undefined) {
         return docSnap.data()?.data;
       }
@@ -3251,7 +3251,7 @@ async function fetchFirestoreDocData(docName: string): Promise<any | null> {
   }
 
   try {
-    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/${encodeURIComponent(docName)}?key=${FIREBASE_API_KEY}`;
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/${encodeURIComponent(docName)}?key=${FIREBASE_API_KEY}`;
     const res = await axios.get(url, { timeout: 4500 });
     if (res.data?.fields?.data !== undefined) {
       return unwrapFirestoreValue(res.data.fields.data);
@@ -3679,7 +3679,7 @@ app.post("/api/courses/save", async (req, res) => {
     const safeDb = getSafeFirestore();
     if (safeDb) {
       try {
-        await safeDb.collection("qalbalelm_data").doc("courses").set({
+        await safeDb.collection("al_motafalsifa_data").doc("courses").set({
           data: fullyCompressed,
           updatedAt: new Date().toISOString(),
         });
@@ -3712,7 +3712,7 @@ app.delete("/api/courses/:id", async (req, res) => {
     const safeDb = getSafeFirestore();
     if (safeDb) {
       try {
-        await safeDb.collection("qalbalelm_data").doc("courses").set({
+        await safeDb.collection("al_motafalsifa_data").doc("courses").set({
           data: updated,
           updatedAt: new Date().toISOString(),
         });
@@ -3754,10 +3754,10 @@ app.delete("/api/users/:id", async (req, res) => {
     if (safeDb) {
       try {
         await safeDb.collection("users").doc(id).delete();
-        const docSnap = await safeDb.collection("qalbalelm_data").doc("users").get();
+        const docSnap = await safeDb.collection("al_motafalsifa_data").doc("users").get();
         if (docSnap.exists && Array.isArray(docSnap.data()?.data)) {
           const filtered = docSnap.data()?.data.filter((u: any) => u.id !== id);
-          await safeDb.collection("qalbalelm_data").doc("users").set({
+          await safeDb.collection("al_motafalsifa_data").doc("users").set({
             data: filtered,
             updatedAt: new Date().toISOString(),
           });
@@ -3822,7 +3822,7 @@ app.post("/api/users/save", async (req, res) => {
             delete copy.password;
             return copy;
           });
-          await safeDb.collection("qalbalelm_data").doc("users").set({
+          await safeDb.collection("al_motafalsifa_data").doc("users").set({
             data: cloudSafeUsers,
             updatedAt: new Date().toISOString(),
           });
@@ -3887,7 +3887,7 @@ app.post("/api/users/save-single", async (req, res) => {
     }
     writeDiskUsers(updatedUsers);
 
-    // 1. Sync updated users array to qalbalelm_data/users unconditionally
+    // 1. Sync updated users array to al_motafalsifa_data/users unconditionally
     syncToFirestoreRest("users", updatedUsers, idToken).catch(() => {});
 
     // 2. Direct REST write to users/{user.id} (without plaintext password)
@@ -3989,7 +3989,7 @@ app.post("/api/settings/save", async (req, res) => {
       const safeDb = getSafeFirestore();
       if (safeDb) {
         try {
-          await safeDb.collection("qalbalelm_data").doc("settings").set({
+          await safeDb.collection("al_motafalsifa_data").doc("settings").set({
             data: settings,
             updatedAt: new Date().toISOString(),
           });
@@ -5407,7 +5407,7 @@ app.post("/api/exams/save", verifyFirebaseToken, requireRestrictedTeacher, async
         }, { merge: true });
 
         if (courseUpdated) {
-          await safeDb.collection("qalbalelm_data").doc("courses").set({
+          await safeDb.collection("al_motafalsifa_data").doc("courses").set({
             data: updatedCourses,
             updatedAt: new Date().toISOString(),
           }, { merge: true });
@@ -9367,7 +9367,7 @@ async function resolveStudentAccountRecordFromDB(
     } catch {}
   }
 
-  // 2. Check Firestore `qalbalelm_data/users` if needed
+  // 2. Check Firestore `al_motafalsifa_data/users` if needed
   let cloudUserFromList: any = null;
   if (uIdx === -1 && !firestoreUserDoc) {
     try {
@@ -9693,7 +9693,7 @@ app.post("/api/courses/subscribe-db", rateLimiter(35, 5 * 60 * 1000), async (req
       // SECURITY: Only validate against authoritative server & Firestore access codes (never merge untrusted clientKnownCodes)
       let serverCodes = loadServerAccessCodes();
 
-      // Also check Firestore qalbalelm_data/access_codes if code not yet in local list
+      // Also check Firestore al_motafalsifa_data/access_codes if code not yet in local list
       let codeIdx = serverCodes.findIndex(
         (c: any) =>
           String(c.code || "").trim().toUpperCase() === cleanCardCode &&
@@ -9702,7 +9702,7 @@ app.post("/api/courses/subscribe-db", rateLimiter(35, 5 * 60 * 1000), async (req
 
       if (codeIdx === -1) {
         try {
-          const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/access_codes?key=${FIREBASE_API_KEY}`;
+          const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/access_codes?key=${FIREBASE_API_KEY}`;
           const fsRes = await fetch(url);
           if (fsRes.ok) {
             const fsJson = await fsRes.json();
@@ -10597,10 +10597,10 @@ app.post("/api/wallet/redeem", async (req, res) => {
       (c) => String(c.code || "").trim().toUpperCase() === cleanCode
     );
 
-    // If not found in memory/disk, check Firestore qalbalelm_data/wallet_codes
+    // If not found in memory/disk, check Firestore al_motafalsifa_data/wallet_codes
     if (codeIdx === -1) {
       try {
-        const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/qalbalelm_data/wallet_codes?key=${FIREBASE_API_KEY}`;
+        const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/al_motafalsifa_data/wallet_codes?key=${FIREBASE_API_KEY}`;
         const fsRes = await fetch(url);
         if (fsRes.ok) {
           const fsJson = await fsRes.json();

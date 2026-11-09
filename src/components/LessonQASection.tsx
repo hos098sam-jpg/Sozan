@@ -62,7 +62,7 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
   }, [courseId, lessonId]);
 
   useEffect(() => {
-    const storageKey = `qalb_video_notes_${currentUser?.id || 'guest'}`;
+    const storageKey = `motafalsifa_video_notes_${currentUser?.id || 'guest'}`;
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
@@ -205,7 +205,7 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
     setLocalNotes(updated);
     setNoteText('');
 
-    const storageKey = `qalb_video_notes_${currentUser?.id || 'guest'}`;
+    const storageKey = `motafalsifa_video_notes_${currentUser?.id || 'guest'}`;
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch {}
@@ -217,7 +217,7 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
   const handleDeleteNote = (noteId: string) => {
     const updated = localNotes.filter((n) => n.id !== noteId);
     setLocalNotes(updated);
-    const storageKey = `qalb_video_notes_${currentUser?.id || 'guest'}`;
+    const storageKey = `motafalsifa_video_notes_${currentUser?.id || 'guest'}`;
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch {}

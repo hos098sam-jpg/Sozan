@@ -265,8 +265,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         // Use server-authoritative session ID to ensure old sessions on other devices are killed
         const deviceSessionId = res.sessionId || ('sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10));
         try {
-          localStorage.setItem('qalb_alam_device_session_id', deviceSessionId);
-          localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+          localStorage.setItem('al_motafalsifa_device_session_id', deviceSessionId);
+          localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
         } catch {}
 
         const authenticatedUser: User = {
@@ -596,8 +596,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           if (sData.user) {
             const sid = sData.sessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
             try {
-              localStorage.setItem('qalb_alam_device_session_id', sid);
-              localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+              localStorage.setItem('al_motafalsifa_device_session_id', sid);
+              localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
             } catch {}
             // Also sign in to client Firebase Auth in background if email is available so Firestore rules recognize auth.currentUser
             const fbCandidateEmail = sData.user.email || `${cleanInput.replace(/\D/g, '')}@qalb-alam.edu`;
@@ -725,8 +725,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               };
               const sid = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
               try {
-                localStorage.setItem('qalb_alam_device_session_id', sid);
-                localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+                localStorage.setItem('al_motafalsifa_device_session_id', sid);
+                localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
               } catch {}
               saveCurrentUser(adminUser);
               onAuthSuccess(adminUser);
@@ -853,8 +853,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       }
 
       try {
-        localStorage.setItem('qalb_alam_device_session_id', deviceSessionId);
-        localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+        localStorage.setItem('al_motafalsifa_device_session_id', deviceSessionId);
+        localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
       } catch {}
 
       try {
@@ -1201,8 +1201,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     const deviceSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
     const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
     try {
-      localStorage.setItem('qalb_alam_device_session_id', deviceSessionId);
-      localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+      localStorage.setItem('al_motafalsifa_device_session_id', deviceSessionId);
+      localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
     } catch {}
 
     const profileData: Partial<User> = {

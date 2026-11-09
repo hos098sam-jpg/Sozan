@@ -34,7 +34,7 @@ import { getDeviceInfoPayload } from './utils/deviceFingerprint';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4",
-  authDomain: "qalbalelm.firebaseapp.com",
+  authDomain: "al-motafalsifa.firebaseapp.com",
   projectId: "qalbalelm",
   storageBucket: "qalbalelm.firebasestorage.app",
   messagingSenderId: "203955396863",

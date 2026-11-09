@@ -103,7 +103,7 @@ export const INITIAL_COURSES: Course[] = DEFAULT_COURSES;
 
 export const STORAGE_KEYS = {
   CURRENT_USER: 'qalb_alam_current_user_live',
-  USERS: 'qalb_alam_users_list_live',
+  USERS: 'al_motafalsifa_users_list_live',
   COURSES: 'qalb_alam_courses_list_live',
   COMPETITIONS: 'qalb_alam_competitions_list_live',
   PLATFORM_SETTINGS: 'qalb_alam_settings_live',
@@ -196,7 +196,7 @@ export function wrapRestValue(val: any): any {
 const writeDebounceTimers = new Map<string, any>();
 
 /**
- * Maximum number of students per sharded document in `qalbalelm_data/users_chunk_{i}`.
+ * Maximum number of students per sharded document in `al_motafalsifa_data/users_chunk_{i}`.
  * Strictly capped at 500 students per chunk so no document ever approaches Firestore's 1MB limit,
  * allowing 2,000+ to 50,000+ students without ever hitting the 1MB ceiling.
  */
@@ -205,11 +205,11 @@ export const MAX_USERS_PER_CHUNK = 500;
 /**
  * Splits a list of users into chunks of max 500 students and writes:
  * 1. Individual documents `users/{uid}` for updated records
- * 2. Sharded chunk documents `qalbalelm_data/users_chunk_1`, `users_chunk_2`, ...
- * 3. A lightweight manifest `qalbalelm_data/users` containing `totalChunks`, `totalUsers`, and up to the first 500 records for backward compatibility.
+ * 2. Sharded chunk documents `al_motafalsifa_data/users_chunk_1`, `users_chunk_2`, ...
+ * 3. A lightweight manifest `al_motafalsifa_data/users` containing `totalChunks`, `totalUsers`, and up to the first 500 records for backward compatibility.
  */
 export async function saveShardedUsersToFirestore(users: User[]): Promise<boolean> {
-  // Only Admin or Teacher is allowed to write to the sharded users manifest (`qalbalelm_data/users`).
+  // Only Admin or Teacher is allowed to write to the sharded users manifest (`al_motafalsifa_data/users`).
   // Students write exclusively to their own isolated document `users/{uid}` as enforced by firestore.rules.
   const activeUser = getCurrentUser();
   if (activeUser && activeUser.role !== 'admin' && activeUser.role !== 'teacher') {
@@ -256,7 +256,7 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
     const chunkData = chunks[idx];
 
     try {
-      await setDoc(doc(db, "qalbalelm_data", chunkDocName), {
+      await setDoc(doc(db, "al_motafalsifa_data", chunkDocName), {
         chunkIndex: idx + 1,
         totalChunks,
         count: chunkData.length,
@@ -267,7 +267,7 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
     } catch {
       if (idToken) {
         try {
-          const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/${chunkDocName}?key=${apiKey}`;
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${chunkDocName}?key=${apiKey}`;
           const res = await fetch(restUrl, {
             method: "PATCH",
             headers: restHeaders,
@@ -287,10 +287,10 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
     }
   }
 
-  // 2. Write the primary manifest `qalbalelm_data/users` (stores chunk metadata + first chunk only so it NEVER exceeds 1MB)
+  // 2. Write the primary manifest `al_motafalsifa_data/users` (stores chunk metadata + first chunk only so it NEVER exceeds 1MB)
   const firstChunk = chunks[0] || [];
   try {
-    await setDoc(doc(db, "qalbalelm_data", "users"), {
+    await setDoc(doc(db, "al_motafalsifa_data", "users"), {
       isSharded: true,
       maxPerChunk: MAX_USERS_PER_CHUNK,
       totalChunks,
@@ -303,7 +303,7 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
   } catch {
     if (idToken) {
       try {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/users?key=${apiKey}`;
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/users?key=${apiKey}`;
         const res = await fetch(restUrl, {
           method: "PATCH",
           headers: restHeaders,
@@ -335,7 +335,7 @@ export async function saveShardedUsersToFirestore(users: User[]): Promise<boolea
  * and merges them seamlessly.
  */
 export async function loadShardedUsersFromFirestore(): Promise<User[]> {
-  // Only Admin or Teacher should load the full sharded users list (`qalbalelm_data/users`).
+  // Only Admin or Teacher should load the full sharded users list (`al_motafalsifa_data/users`).
   // Students load their own isolated document `users/{uid}` in loadAllFromFirebase.
   const activeUser = getCurrentUser();
   if (activeUser && activeUser.role !== 'admin' && activeUser.role !== 'teacher') {
@@ -357,15 +357,15 @@ export async function loadShardedUsersFromFirestore(): Promise<User[]> {
 
   let totalChunks = 1;
 
-  // 1. Read manifest / first chunk from `qalbalelm_data/users`
+  // 1. Read manifest / first chunk from `al_motafalsifa_data/users`
   try {
     let snap: any = null;
     try {
-      snap = await getDocFromCache(doc(db, "qalbalelm_data", "users"));
+      snap = await getDocFromCache(doc(db, "al_motafalsifa_data", "users"));
     } catch {}
     if (!snap || !snap.exists()) {
       snap = await Promise.race([
-        getDoc(doc(db, "qalbalelm_data", "users")),
+        getDoc(doc(db, "al_motafalsifa_data", "users")),
         new Promise<null>((r) => setTimeout(() => r(null), 2000)),
       ]);
     }
@@ -380,7 +380,7 @@ export async function loadShardedUsersFromFirestore(): Promise<User[]> {
         });
       }
     } else if (idToken) {
-      const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/users?key=${apiKey}`;
+      const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/users?key=${apiKey}`;
       const res = await fetch(restUrl, { headers: restHeaders });
       if (res.ok) {
         const json = await res.json();
@@ -405,11 +405,11 @@ export async function loadShardedUsersFromFirestore(): Promise<User[]> {
         try {
           let cSnap: any = null;
           try {
-            cSnap = await getDocFromCache(doc(db, "qalbalelm_data", chunkDocName));
+            cSnap = await getDocFromCache(doc(db, "al_motafalsifa_data", chunkDocName));
           } catch {}
           if (!cSnap || !cSnap.exists()) {
             cSnap = await Promise.race([
-              getDoc(doc(db, "qalbalelm_data", chunkDocName)),
+              getDoc(doc(db, "al_motafalsifa_data", chunkDocName)),
               new Promise<null>((r) => setTimeout(() => r(null), 2000)),
             ]);
           }
@@ -426,7 +426,7 @@ export async function loadShardedUsersFromFirestore(): Promise<User[]> {
 
         if (idToken) {
           try {
-            const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/${chunkDocName}?key=${apiKey}`;
+            const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${chunkDocName}?key=${apiKey}`;
             const res = await fetch(restUrl, { headers: restHeaders });
             if (res.ok) {
               const json = await res.json();
@@ -483,7 +483,7 @@ export async function saveToFirebase(collectionName: string, data: any): Promise
 
       // 1. Attempt Firestore Client SDK write
       try {
-        await setDoc(doc(db, "qalbalelm_data", collectionName), {
+        await setDoc(doc(db, "al_motafalsifa_data", collectionName), {
           data: sanitized,
           updatedAt: new Date().toISOString(),
         });
@@ -495,7 +495,7 @@ export async function saveToFirebase(collectionName: string, data: any): Promise
         try {
           const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
           const projectId = "qalbalelm";
-          const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/${collectionName}?key=${apiKey}`;
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${collectionName}?key=${apiKey}`;
           const res = await fetch(restUrl, {
             method: "PATCH",
             headers: apiHeaders,
@@ -540,7 +540,7 @@ export async function loadFromFirebase(collectionName: string, preferCacheFirst:
     if (sharded.length > 0) return sharded;
   }
 
-  // Protected admin/teacher documents in qalbalelm_data should not be queried by unauthenticated or student clients
+  // Protected admin/teacher documents in al_motafalsifa_data should not be queried by unauthenticated or student clients
   const protectedCollections = ['users', 'accessCodes', 'submissions', 'exams', 'support_chats'];
   if (protectedCollections.includes(collectionName) && !isPrivileged) {
     return null;
@@ -549,7 +549,7 @@ export async function loadFromFirebase(collectionName: string, preferCacheFirst:
   // 1. Cache-First strategy via Firestore Offline Persistence Cache (for non-courses collections)
   if (preferCacheFirst && collectionName !== "courses") {
     try {
-      const cachedSnap = await getDocFromCache(doc(db, "qalbalelm_data", collectionName));
+      const cachedSnap = await getDocFromCache(doc(db, "al_motafalsifa_data", collectionName));
       if (cachedSnap && cachedSnap.exists()) {
         const cachedData = cachedSnap.data()?.data;
         if (cachedData) {
@@ -564,7 +564,7 @@ export async function loadFromFirebase(collectionName: string, preferCacheFirst:
 
   try {
     notifyCloudStatus('connecting');
-    const firestorePromise = getDoc(doc(db, "qalbalelm_data", collectionName));
+    const firestorePromise = getDoc(doc(db, "al_motafalsifa_data", collectionName));
     const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500));
     const snap: any = await Promise.race([firestorePromise, timeoutPromise]);
 
@@ -587,7 +587,7 @@ export async function loadFromFirebase(collectionName: string, preferCacheFirst:
   try {
     const apiKey = "AIzaSyAn6z4sDy1_sF-YmkLjA0Z1TQwU_iLClf4";
     const projectId = "qalbalelm";
-    const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qalbalelm_data/${collectionName}?key=${apiKey}`;
+    const restUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/al_motafalsifa_data/${collectionName}?key=${apiKey}`;
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timeoutId = setTimeout(() => controller?.abort(), 2500);
     const res = await fetch(restUrl, { signal: controller?.signal });
@@ -2325,7 +2325,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
 
   try {
     if (callbacks.onCourses) {
-      const unsub = onSnapshot(doc(db, "qalbalelm_data", "courses"), (snap) => {
+      const unsub = onSnapshot(doc(db, "al_motafalsifa_data", "courses"), (snap) => {
         if (snap.exists()) {
           const data = snap.data()?.data;
           if (Array.isArray(data)) {
@@ -2411,10 +2411,10 @@ export function subscribeToFirebaseRealtime(callbacks: {
             console.warn("Error setting up users collection snapshot:", e);
           }
 
-          // 2. Secondary fallback listener on qalbalelm_data/users
+          // 2. Secondary fallback listener on al_motafalsifa_data/users
           try {
             const unsub = onSnapshot(
-              doc(db, "qalbalelm_data", "users"),
+              doc(db, "al_motafalsifa_data", "users"),
               (snap) => {
                 if (snap.exists()) {
                   const data = snap.data()?.data;
@@ -2465,7 +2465,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
     }
 
     if (callbacks.onSettings) {
-      const unsub = onSnapshot(doc(db, "qalbalelm_data", "settings"), (snap) => {
+      const unsub = onSnapshot(doc(db, "al_motafalsifa_data", "settings"), (snap) => {
         if (snap.exists()) {
           const data = snap.data()?.data;
           if (data && data.platformName) {
@@ -2480,7 +2480,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
     }
 
     if (callbacks.onCompetitions) {
-      const unsub = onSnapshot(doc(db, "qalbalelm_data", "competitions"), (snap) => {
+      const unsub = onSnapshot(doc(db, "al_motafalsifa_data", "competitions"), (snap) => {
         if (snap.exists()) {
           const data = snap.data()?.data;
           if (Array.isArray(data)) {
@@ -2495,7 +2495,7 @@ export function subscribeToFirebaseRealtime(callbacks: {
     }
 
     if (callbacks.onNotifications) {
-      const unsub = onSnapshot(doc(db, "qalbalelm_data", "notifications"), (snap) => {
+      const unsub = onSnapshot(doc(db, "al_motafalsifa_data", "notifications"), (snap) => {
         if (snap.exists()) {
           const data = snap.data()?.data;
           if (Array.isArray(data)) {

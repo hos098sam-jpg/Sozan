@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
   const host = window.location.hostname;
   const isStaticHosting =
     host === 'motafalsifa.vercel.app' ||
-    host === 'qalbalelm.firebaseapp.com' ||
+    host === 'al-motafalsifa.firebaseapp.com' ||
     host.endsWith('.dpdns.org') ||
     host.endsWith('.pages.dev') ||
     host.endsWith('.netlify.app') ||
@@ -18,7 +18,7 @@ if (typeof window !== 'undefined') {
     const origFetch = window.fetch.bind(window);
     window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
       const urlStr = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
-      const isApiCall = urlStr.startsWith('/api/') || urlStr.includes('//motafalsifa.vercel.app/api/') || urlStr.includes('//qalbalelm.firebaseapp.com/api/');
+      const isApiCall = urlStr.startsWith('/api/') || urlStr.includes('//motafalsifa.vercel.app/api/') || urlStr.includes('//al-motafalsifa.firebaseapp.com/api/');
 
       if (isApiCall) {
         const cleanPath = urlStr.replace(/^https?:\/\/[^/]+/, '');
@@ -136,7 +136,7 @@ if (typeof window !== 'undefined') {
           }
 
           try {
-            const rawStored = localStorage.getItem('qalb_alam_users_list_live');
+            const rawStored = localStorage.getItem('al_motafalsifa_users_list_live');
             if (rawStored) {
               const parsed = JSON.parse(rawStored);
               const usersList = Array.isArray(parsed) ? parsed : (parsed.data || []);

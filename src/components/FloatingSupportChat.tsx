@@ -118,7 +118,7 @@ export const FloatingSupportChat: React.FC<FloatingSupportChatProps> = ({
 
     if (isPrivileged) {
       try {
-        const docRef = doc(db, 'qalbalelm_data', 'support_chats');
+        const docRef = doc(db, 'al_motafalsifa_data', 'support_chats');
         unsubFirestore = onSnapshot(
           docRef,
           (snap) => {
@@ -163,7 +163,7 @@ export const FloatingSupportChat: React.FC<FloatingSupportChatProps> = ({
         auth.currentUser?.email === 'hos098sam@gmail.com');
     if (!isPrivileged) return;
     try {
-      const docRef = doc(db, 'qalbalelm_data', 'support_chats');
+      const docRef = doc(db, 'al_motafalsifa_data', 'support_chats');
       const snap = await getDoc(docRef);
       let list: SupportChatTicket[] = [];
       if (snap.exists() && Array.isArray(snap.data()?.data)) {

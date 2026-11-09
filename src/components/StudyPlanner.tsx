@@ -21,7 +21,7 @@ export const StudyPlanner: React.FC<StudyPlannerProps> = ({ branch }) => {
   const [hoursPerDay, setHoursPerDay] = useState('6 ساعات');
   const [focusSubjects, setFocusSubjects] = useState(
     branch === 'scientific'
-      ? 'الرياضيات والفيزياء والكيمياء واللغات'
+      ? 'الرياضيات والفيزياء والفلسفة والمنطق واللغات'
       : 'الفلسفة واللغة العربية والتاريخ واللغات'
   );
   const [weeks, setWeeks] = useState('أسبوع واحد نموذجي');

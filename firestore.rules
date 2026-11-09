@@ -116,11 +116,11 @@ service cloud.firestore {
     }
 
     // =========================================================================
-    // 5. PLATFORM SYNCED DATA & SHARDED USER CHUNKS (qalbalelm_data/{docId})
+    // 5. PLATFORM SYNCED DATA & SHARDED USER CHUNKS (al_motafalsifa_data/{docId})
     // - Enables seamless Cloud Run server REST hydration & persistence across
     //   deployments so zero courses, videos, exams, or users are lost on redeploy.
     // =========================================================================
-    match /qalbalelm_data/{docId} {
+    match /al_motafalsifa_data/{docId} {
       allow read: if true;
       allow write: if isAdmin() || isTeacher() || (request.resource.data.keys().hasAll(['data', 'updatedAt']) && !request.resource.data.keys().hasAny(['password']));
     }

@@ -70,7 +70,7 @@ const INITIAL_FORUM_POSTS: ForumPost[] = [
     title: 'سؤال في مسائل الاتزان الكيميائي وقوانين لوشاتيليه 🧪',
     content: 'يا شباب وأستاذنا الفاضل، عندي استفسار في تأثير زيادة الضغط على التفاعل الغازي لما يكون عدد مولات المتفاعلات مساوياً لعدد مولات النواتج. هل يؤثر على موضع الاتزان أو قيمة ثابت الاتزان؟',
     category: 'academic',
-    subjectName: 'الكيمياء',
+    subjectName: 'الفلسفة والمنطق',
     authorId: 'student-seed-2',
     authorName: 'مريم أحمد عبد الرحمن',
     authorRole: 'student',
@@ -648,7 +648,7 @@ export const ForumView: React.FC<ForumViewProps> = ({ currentUser, onOpenAuth })
                     <option value="اللغة الإنجليزية">اللغة الإنجليزية</option>
                     <option value="الرياضيات">الرياضيات</option>
                     <option value="الفيزياء">الفيزياء</option>
-                    <option value="الكيمياء">الكيمياء</option>
+                    <option value="الفلسفة والمنطق">الفلسفة والمنطق</option>
                     <option value="الأحياء">الأحياء</option>
                     <option value="الجيولوجيا">الجيولوجيا</option>
                     <option value="التاريخ والجغرافيا">التاريخ والجغرافيا</option>
