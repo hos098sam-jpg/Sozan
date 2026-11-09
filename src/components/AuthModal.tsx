@@ -1660,19 +1660,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         }}
                         className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white font-medium text-slate-800"
                       >
-                        <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                          <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                          <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                          <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                          <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                          <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                          <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                          <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                          <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                          <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                        </optgroup>
+                        
+                        
                         <optgroup label="المرحلة الثانوية">
                           <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
                           <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>

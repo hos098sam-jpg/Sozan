@@ -373,19 +373,8 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         }}
                         className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
                       >
-                        <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                          <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                          <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                          <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                          <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                          <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                          <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                          <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                          <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                          <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                        </optgroup>
+                        
+                        
                         <optgroup label="المرحلة الثانوية">
                           <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
                           <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>

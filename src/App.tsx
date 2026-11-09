@@ -424,19 +424,26 @@ export default function App() {
           console.error('Error synchronizing authenticated user profile:', err);
         }
       } else {
-        // Firebase Auth session is null: keep any saved persistent user session intact!
+        // Firebase Auth session is temporarily null or loading:
+        // STRICTLY preserve current logged in session across refreshes!
         const saved = getCurrentUser();
         if (saved && saved.id) {
           const privileged = ensureUserPrivileges(saved);
           setCurrentUser(privileged);
           return;
         }
-        setCurrentUser((prev) => {
-          if (prev && prev.id) {
-            return prev;
-          }
-          return null;
-        });
+        const rawLocal = localStorage.getItem('al_motafalsifa_current_user') || localStorage.getItem('qalb_alam_current_user');
+        if (rawLocal) {
+          try {
+            const parsed = JSON.parse(rawLocal);
+            if (parsed && parsed.id) {
+              const privileged = ensureUserPrivileges(parsed);
+              setCurrentUser(privileged);
+              return;
+            }
+          } catch {}
+        }
+        setCurrentUser((prev) => (prev && prev.id ? prev : null));
       }
     });
 
@@ -513,7 +520,8 @@ export default function App() {
                 if (snap.metadata?.fromCache || remoteTs <= localTs + 2000) {
                   setDoc(userDocRef, { activeSessionId: localSessionId }, { merge: true }).catch(() => {});
                 } else {
-                  triggerConcurrentDeviceLogout();
+                  // Single device grace on refresh
+                if (isPastLoginGrace) { triggerConcurrentDeviceLogout(); }
                   return;
                 }
               }
@@ -922,7 +930,8 @@ export default function App() {
 
             // Only trigger logout if the server's session ID is genuinely NEWER than our local session
             if (data.sessionKilled || remoteTs > localTs + 1500) {
-              triggerConcurrentDeviceLogout();
+              // Single device grace on refresh
+                if (isPastLoginGrace) { triggerConcurrentDeviceLogout(); }
             } else {
               // Our local session is newer (e.g. server had an older disk record before our latest login finished syncing)
               fetch('/api/auth/register-session', {

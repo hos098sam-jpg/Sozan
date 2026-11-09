@@ -1938,6 +1938,13 @@ export function getCurrentUser(): User | null {
     if (cached.data && cached.data.id && !isDemoOrDeletedUser(cached.data)) {
       return cached.data;
     }
+    const rawBackup = localStorage.getItem('al_motafalsifa_current_user');
+    if (rawBackup) {
+      const parsed = JSON.parse(rawBackup);
+      if (parsed && parsed.id && !isDemoOrDeletedUser(parsed)) {
+        return parsed;
+      }
+    }
   } catch (e) {}
   return null;
 }
@@ -1946,7 +1953,15 @@ export function saveCurrentUser(user: User | null) {
   try {
     if (!user || !user.id || isDemoOrDeletedUser(user)) {
       removeSecureCache(STORAGE_KEYS.CURRENT_USER);
+      localStorage.removeItem('al_motafalsifa_current_user');
     } else {
+      const safeUser = { ...user };
+      delete (safeUser as any).password;
+      setSecureCache(STORAGE_KEYS.CURRENT_USER, safeUser);
+      localStorage.setItem('al_motafalsifa_current_user', JSON.stringify(safeUser));
+    }
+  } catch (e) {}
+} else {
       const safeUser = { ...user };
       delete (safeUser as any).password;
       setSecureCache(STORAGE_KEYS.CURRENT_USER, safeUser);
