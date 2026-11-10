@@ -147,22 +147,3 @@ html.dark body {
 }
 
 
-
-
-/* === Al-Motafalsifa Royal Indigo & Gold Theme Palette === */
-:root {
-  --motafalsifa-primary: #1e1145;
-  --motafalsifa-secondary: #2d186b;
-  --motafalsifa-accent: #d4af37;
-  --motafalsifa-gold: #f59e0b;
-}
-
-/* Default body clean palette */
-body {
-  background-color: #f8fafc;
-  color: #0f172a;
-}
-html.dark body {
-  background-color: #0d0824;
-  color: #f8fafc;
-}

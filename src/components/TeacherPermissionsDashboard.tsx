@@ -7,8 +7,6 @@ import {
   LogOut,
   Save,
   Users,
-  Award,
-  Key,
   X,
   BookOpen,
   Eye,
@@ -62,7 +60,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
   lockedAssistantMode,
 }) => {
   const [submissions, setSubmissions] = useState<StudentExamSubmission[]>(() => getSavedSubmissions());
-  const [activeTab, setActiveTab] = useState<'courses' | 'students' | 'coupons' | 'overview' | 'scores' | 'essay'>(() =>
+  const [activeTab, setActiveTab] = useState<'courses' | 'overview' | 'scores' | 'essay'>(() =>
     lockedAssistantMode === 'essay_grading' ? 'essay' : 'courses'
   );
   const [isAssistantsModalOpen, setIsAssistantsModalOpen] = useState(false);
@@ -205,7 +203,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
   const getStudentName = (submission: StudentExamSubmission) =>
     submission.studentName ||
     allStudents.find((student) => student.id === submission.studentId)?.name ||
-    'طالب منصة المتفلسفة ';
+    'طالب منصة قلب العلم';
 
   const getCourse = (submission: StudentExamSubmission) =>
     courses.find((course) => course.id === submission.courseId);
@@ -500,34 +498,12 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
               onClick={() => setActiveTab('courses')}
               className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'courses'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
+                  ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <BookOpen className="w-4 h-4" />
               <span>إدارة كورساتي ({courses.length}) 📚</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('students')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'students'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              <span>الطلاب وتفعيل الاشتراكات ({allStudents.filter(s => s.role === 'student').length}) 👨‍🎓</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('coupons')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'coupons'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>توليد أكواد الخصم والاشتراك 🏷️</span>
             </button>
             <button
               onClick={() => setActiveTab('overview')}
@@ -569,143 +545,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
       )}
 
       {/* Tab: Courses Management (إدارة وإضافة الكورسات للمدرس) */}
-      {activeTab === 'students' && (
-        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-            <div>
-              <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-amber-500" />
-                <span>إدارة طلاب منصة المتفلسفة وتفعيل الاشتراكات</span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                استعراض الطلاب المسجلين بالمنصة، تفعيل الحسابات، وفتح الكورسات والاشتراكات للطلاب مباشرة.
-              </p>
-            </div>
-            <div className="px-3.5 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-xs font-black text-amber-800 dark:text-amber-300">
-              إجمالي الطلاب: {allStudents.filter(s => s.role === 'student').length} طالب
-            </div>
-          </div>
-
-          {/* Students List Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-right text-xs">
-              <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
-                  <th className="py-3 px-4 font-black">اسم الطالب</th>
-                  <th className="py-3 px-4 font-black">رقم الهاتف</th>
-                  <th className="py-3 px-4 font-black">الصف الدراسي</th>
-                  <th className="py-3 px-4 font-black">حالة الحساب</th>
-                  <th className="py-3 px-4 font-black">الكورسات المفعلة</th>
-                  <th className="py-3 px-4 font-black text-center">إجراء تفعيل الاشتراك</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {allStudents.filter(s => s.role === 'student').length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-500 text-sm">
-                      لم يسجل أي طالب بعد في المنصة. بمجرد تسجيل الطلاب ستظهر حساباتهم هنا لتفعيلها فوراً.
-                    </td>
-                  </tr>
-                ) : (
-                  allStudents.filter(s => s.role === 'student').map((st) => (
-                    <tr key={st.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
-                      <td className="py-3.5 px-4 font-black text-slate-900 dark:text-white">
-                        {st.name || 'طالب منصة المتفلسفة'}
-                      </td>
-                      <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-300">
-                        {st.phone || '—'}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold">
-                          {st.schoolYear || 'الصف الثالث الثانوي'}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-2 py-0.5 rounded-full font-black text-[11px] ${
-                          st.status === 'active'
-                            ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300'
-                            : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300'
-                        }`}>
-                          {st.status === 'active' ? 'مفعل ومقبول ✅' : 'قيد المراجعة ⏳'}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-bold">
-                        {(st.enrolledCourseIds || []).length} كورس
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          {courses.map((c) => {
-                            const isEnrolled = (st.enrolledCourseIds || []).includes(c.id);
-                            return (
-                              <button
-                                key={c.id}
-                                onClick={() => {
-                                  const cur = st.enrolledCourseIds || [];
-                                  const updatedCourses = isEnrolled
-                                    ? cur.filter(id => id !== c.id)
-                                    : [...cur, c.id];
-                                  const updatedUser = { ...st, enrolledCourseIds: updatedCourses, status: 'active' as const };
-                                  onUpdateStudents(allStudents.map(s => s.id === st.id ? updatedUser : s));
-                                  showToast(isEnrolled ? `تم إلغاء تفعيل كورس ${c.title}` : `تم تفعيل كورس ${c.title} للطالب بنجاح!`);
-                                }}
-                                className={`px-2.5 py-1 rounded-lg font-black text-[11px] transition-all cursor-pointer ${
-                                  isEnrolled
-                                    ? 'bg-emerald-500 text-slate-950 hover:bg-rose-500 hover:text-white'
-                                    : 'bg-amber-400 hover:bg-amber-500 text-slate-950'
-                                }`}
-                                title={isEnrolled ? 'اضغط لإلغاء التفعيل' : 'اضغط لتفعيل الكورس للطالب'}
-                              >
-                                {isEnrolled ? `مشترك: ${c.title.slice(0, 15)}... (إلغاء)` : `+ تفعيل: ${c.title.slice(0, 15)}...`}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
-
-      {activeTab === 'coupons' && (
-        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
-            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <Key className="w-5 h-5 text-amber-500" />
-              <span>توليد أكواد الاشتراك وأكواد الخصم لكورسات المتفلسفة</span>
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              يمكنك توليد أكواد تفعيل مباشرة لتوزيعها على الطلاب لفتح الكورس تلقائياً عند كتابة الكود.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {courses.map((c) => (
-              <div key={c.id} className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 space-y-3">
-                <h4 className="text-sm font-black text-slate-900 dark:text-white truncate">{c.title}</h4>
-                <div className="text-xs text-slate-500">{c.schoolYear} • {c.subject}</div>
-                <div className="text-xs font-mono bg-white dark:bg-slate-900 p-2 rounded-xl border border-dashed border-amber-400 text-center font-bold text-amber-600 dark:text-amber-400">
-                  كود الاشتراك العام: {c.accessCode || `SOZAN_${c.id.slice(-4).toUpperCase()}`}
-                </div>
-                <button
-                  onClick={() => {
-                    const code = c.accessCode || `SOZAN_${c.id.slice(-4).toUpperCase()}`;
-                    navigator.clipboard.writeText(code);
-                    showToast(`تم نسخ كود الكورس (${code}) للمشاركة مع الطلاب!`);
-                  }}
-                  className="w-full py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs cursor-pointer"
-                >
-                  نسخ كود التفعيل 📋
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-{activeTab === 'courses' && (
+      {activeTab === 'courses' && (
         <div className="space-y-6 animate-fadeIn">
           {/* Top Action Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">

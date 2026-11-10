@@ -118,121 +118,6 @@ const ScrollRevealItem: React.FC<{
       } ${className}`}
     >
       {children}
-
-      {/* Platform Theme Color Customizer Modal */}
-      {showColorPickerModal && (
-        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
-          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-base">تخصيص ألوان أجزاء المنصة</h3>
-                  <p className="text-xs text-slate-400">تحكم كامل في الألوان والأزرار وخلفيات المنصة</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Primary Accent Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-amber-300">لون الأزرار والعناصر الرئيسية (Gold/Accent)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Background Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-300">لون الخلفية العامة للمنصة (Background)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="space-y-2 pt-2">
-                <label className="text-xs font-black text-slate-400">نماذج ألوان جاهزة بضغطة زر:</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => applyColors('#d4af37', '#0d0824', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0d0824] border border-[#d4af37]/60 text-xs font-bold text-amber-400 hover:scale-102 transition-transform"
-                  >
-                    🏛️ المتفلسفة الملكي (ذهبي ونيلي)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#f59e0b', '#0f172a', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0f172a] border border-amber-500/60 text-xs font-bold text-amber-300 hover:scale-102 transition-transform"
-                  >
-                    🌌 كلاسيك داكن (Dark Slate)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#8b5cf6', '#090514', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#090514] border border-purple-500/60 text-xs font-bold text-purple-300 hover:scale-102 transition-transform"
-                  >
-                    🔮 بنفسجي ملكي عميق
-                  </button>
-                  <button
-                    onClick={() => applyColors('#10b981', '#06130e', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#06130e] border border-emerald-500/60 text-xs font-bold text-emerald-300 hover:scale-102 transition-transform"
-                  >
-                    🌿 زمردي إسلامي
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pt-2">
-              <button
-                onClick={() => {
-                  applyColors(customPrimaryColor, customBgColor, customTextColor);
-                  setShowColorPickerModal(false);
-                }}
-                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 cursor-pointer"
-              >
-                تطبيق وحفظ الألوان الآن ✅
-              </button>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
-              >
-                إلغاء
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };
@@ -257,27 +142,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   const [selectedGradeFilter, setSelectedGradeFilter] = useState<'all' | 'primary' | 'prep' | 'secondary' | SchoolYearGrade>('all');
   const [draftSettings, setDraftSettings] = useState<PlatformSettings>(platformSettings);
   const [saveToast, setSaveToast] = useState<string | null>(null);
-  const [showColorPickerModal, setShowColorPickerModal] = useState(false);
-  const [customPrimaryColor, setCustomPrimaryColor] = useState(() => localStorage.getItem('sozan_primary_color') || '#d4af37');
-  const [customBgColor, setCustomBgColor] = useState(() => localStorage.getItem('sozan_bg_color') || '#0d0824');
-  const [customTextColor, setCustomTextColor] = useState(() => localStorage.getItem('sozan_text_color') || '#ffffff');
-
-  const applyColors = (pColor: string, bColor: string, tColor: string) => {
-    setCustomPrimaryColor(pColor);
-    setCustomBgColor(bColor);
-    setCustomTextColor(tColor);
-    try {
-      localStorage.setItem('sozan_primary_color', pColor);
-      localStorage.setItem('sozan_bg_color', bColor);
-      localStorage.setItem('sozan_text_color', tColor);
-      document.documentElement.style.setProperty('--motafalsifa-accent', pColor);
-      document.documentElement.style.setProperty('--motafalsifa-gold', pColor);
-      document.body.style.backgroundColor = bColor;
-    } catch {}
-    setSaveToast('✅ تم تطبيق وتخصيص ألوان المنصة بنجاح!');
-    setTimeout(() => setSaveToast(null), 3000);
-  };
-
   const [teacherPendingDelete, setTeacherPendingDelete] = useState<User | null>(null);
 
   // Sub-editor states inside visual mode (so original layout stays 100% intact until clicked)
@@ -1117,53 +981,23 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
               </div>
             )}
 
-            {/* RESPONSIVE HERO BANNER WITH FULL AL-MOTAFALSIFA LOGO & TITLE */}
+            {/* FULL HERO BANNER IMAGE WITHOUT OVERLAPPING TEXT REGION */}
             <ScrollRevealItem delayIndex={1} disabled={isVisualEditMode}>
               <section
                 onClick={() => !isVisualEditMode && onNavigate('courses')}
-                className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-b from-[#160d38] via-[#10072b] to-[#0a041c] text-white overflow-hidden shadow-2xl border-2 border-amber-500/40 cursor-pointer group p-4 sm:p-8"
+                className="relative rounded-[40px] bg-slate-950 text-white overflow-hidden shadow-2xl border border-blue-900/40 cursor-pointer group"
               >
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-10">
-                  {/* Right side: Welcome text & buttons */}
-                  <div className="flex-1 text-center lg:text-right space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-black shadow-xs">
-                      <span>🏛️ المنصة الرسمية لشهادة الثانوية العامة 2027</span>
-                    </div>
-                    <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
-                      منصة <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">المتفلسفة</span> التعليمية
-                    </h1>
-                    <p className="text-amber-200/90 text-sm sm:text-lg font-bold">
-                      تحت إشراف: <span className="text-white font-black underline decoration-amber-400 decoration-2">أ/ سوزان كريم الخولى</span>
-                    </p>
-                    <p className="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
-                      المنظومة التعليمية المتكاملة والمتخصصة في مادتي الفلسفة والمنطق، وعلم النفس والاجتماع للمرحلة الثانوية العامة (أولى، تانية، وتالتة ثانوي).
-                    </p>
-                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onNavigate('courses'); }}
-                        className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 transition-transform active:scale-95 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span>استعراض الكورسات والمحاضرات 📚</span>
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onOpenAuth('signup'); }}
-                        className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-black text-sm transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span>إنشاء حساب طالب جديد ✨</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Left side: Full Official Al-Motafalsifa Logo without any clipping */}
-                  <div className="w-56 h-56 sm:w-72 sm:h-72 lg:w-96 lg:h-96 relative shrink-0 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-purple-600/20 to-transparent rounded-full blur-2xl -z-10 animate-pulse"></div>
-                    <img
-                      src="/logo.png"
-                      alt="شعار منصة المتفلسفة الرسمي"
-                      className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(212,175,55,0.35)] group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
+                <img
+                  src={
+                    activeSettings.heroBannerImage &&
+                    !activeSettings.heroBannerImage.includes('images.unsplash.com')
+                      ? activeSettings.heroBannerImage
+                      : '/hero-banner-qalbalelm.jpg'
+                  }
+                  alt={activeSettings.platformName || 'منصة قلب العلم'}
+                  className="w-full h-auto block object-contain"
+                  referrerPolicy="no-referrer"
+                />
 
                 {/* Optional Extra Items if Admin added any */}
                 {heroExtraItems.length > 0 && (
@@ -1448,8 +1282,19 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       className="px-3 py-1.5 rounded-xl text-xs font-black bg-indigo-50 text-indigo-900 border border-indigo-200 focus:outline-none cursor-pointer"
                     >
                       <option value="all">اختر صفاً محدداً (1 ابتدائي - 3 ثانوي)...</option>
-                      
-                      
+                      <optgroup label="المرحلة الابتدائية">
+                        <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
+                        <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
+                        <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                      </optgroup>
+                      <optgroup label="المرحلة الإعدادية">
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                      </optgroup>
                       <optgroup label="المرحلة الثانوية">
                         <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
                         <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
@@ -2185,121 +2030,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           </div>
         </div>
       )}
-
-      {/* Platform Theme Color Customizer Modal */}
-      {showColorPickerModal && (
-        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
-          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-base">تخصيص ألوان أجزاء المنصة</h3>
-                  <p className="text-xs text-slate-400">تحكم كامل في الألوان والأزرار وخلفيات المنصة</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Primary Accent Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-amber-300">لون الأزرار والعناصر الرئيسية (Gold/Accent)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Background Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-300">لون الخلفية العامة للمنصة (Background)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="space-y-2 pt-2">
-                <label className="text-xs font-black text-slate-400">نماذج ألوان جاهزة بضغطة زر:</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => applyColors('#d4af37', '#0d0824', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0d0824] border border-[#d4af37]/60 text-xs font-bold text-amber-400 hover:scale-102 transition-transform"
-                  >
-                    🏛️ المتفلسفة الملكي (ذهبي ونيلي)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#f59e0b', '#0f172a', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0f172a] border border-amber-500/60 text-xs font-bold text-amber-300 hover:scale-102 transition-transform"
-                  >
-                    🌌 كلاسيك داكن (Dark Slate)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#8b5cf6', '#090514', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#090514] border border-purple-500/60 text-xs font-bold text-purple-300 hover:scale-102 transition-transform"
-                  >
-                    🔮 بنفسجي ملكي عميق
-                  </button>
-                  <button
-                    onClick={() => applyColors('#10b981', '#06130e', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#06130e] border border-emerald-500/60 text-xs font-bold text-emerald-300 hover:scale-102 transition-transform"
-                  >
-                    🌿 زمردي إسلامي
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pt-2">
-              <button
-                onClick={() => {
-                  applyColors(customPrimaryColor, customBgColor, customTextColor);
-                  setShowColorPickerModal(false);
-                }}
-                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 cursor-pointer"
-              >
-                تطبيق وحفظ الألوان الآن ✅
-              </button>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
-              >
-                إلغاء
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };

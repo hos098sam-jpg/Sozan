@@ -151,8 +151,8 @@ export const ensureUserPrivileges = (u: User): User => {
   const rawName = (u.name || '').trim();
   const isPlaceholderName =
     !rawName ||
-    rawName === 'مستخدم منصة المتفلسفة ' ||
-    rawName === 'طالب منصة المتفلسفة ' ||
+    rawName === 'مستخدم منصة قلب العلم' ||
+    rawName === 'طالب منصة قلب العلم' ||
     rawName === 'مستخدم المنصة';
 
   let resolvedPhone = (u.phone || '').trim();
@@ -171,17 +171,17 @@ export const ensureUserPrivileges = (u: User): User => {
       ? combinedPartsName
       : resolvedPhone
       ? `طالب (${resolvedPhone})`
-      : 'مستخدم منصة المتفلسفة ';
+      : 'مستخدم منصة قلب العلم';
 
   const resolvedName = !isPlaceholderName ? rawName : fallbackName;
 
   const rawSchoolYear = (u.schoolYear || '').trim();
   const resolvedSchoolYear =
-    rawSchoolYear && rawSchoolYear !== 'طالب منصة المتفلسفة '
-      ? rawSchoolYear
-      : u.role === 'admin' || u.email === 'hos098sam@gmail.com'
-      ? 'إدارة المنصة'
-      : (u.grade || 'الصف الأول الثانوي');
+    !rawSchoolYear || rawSchoolYear === 'طالب منصة قلب العلم'
+      ? u.role === 'admin' || u.email === 'hos098sam@gmail.com'
+        ? 'إدارة المنصة'
+        : 'الصف الثالث الثانوي'
+      : rawSchoolYear;
 
   const updatedUser: User = {
     ...u,
@@ -197,7 +197,7 @@ export const ensureUserPrivileges = (u: User): User => {
       ...updatedUser,
       role: 'admin',
       status: 'active',
-      name: updatedUser.name && updatedUser.name !== 'مستخدم منصة المتفلسفة ' ? updatedUser.name : 'إدارة المنصة',
+      name: updatedUser.name && updatedUser.name !== 'مستخدم منصة قلب العلم' ? updatedUser.name : 'إدارة المنصة',
     };
   }
   return updatedUser;
@@ -368,26 +368,26 @@ export default function App() {
             null;
 
           if (profile) {
-            let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
+            let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
             if (!localSessionId && profile.activeSessionId) {
               localSessionId = profile.activeSessionId;
               try {
-                localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
+                localStorage.setItem('qalb_alam_device_session_id', localSessionId);
               } catch {}
             }
             const verifiedUser: User = ensureUserPrivileges({
               ...localCandidate,
               ...profile,
               name:
-                profile.name && profile.name !== 'مستخدم منصة المتفلسفة '
+                profile.name && profile.name !== 'مستخدم منصة قلب العلم'
                   ? profile.name
                   : localCandidate?.name || fbUser.displayName || profile.name,
               phone: profile.phone || localCandidate?.phone || '',
               parentPhone: profile.parentPhone || localCandidate?.parentPhone || '',
               schoolYear:
-                profile.schoolYear && profile.schoolYear !== 'طالب منصة المتفلسفة '
+                profile.schoolYear && profile.schoolYear !== 'طالب منصة قلب العلم'
                   ? profile.schoolYear
-                  : profile.schoolYear || localCandidate?.schoolYear || 'الصف الأول الثانوي',
+                  : localCandidate?.schoolYear || profile.schoolYear || 'الصف الثالث الثانوي',
               activeSessionId: localSessionId || profile.activeSessionId,
               emailVerified: fbUser.emailVerified,
             });
@@ -396,6 +396,12 @@ export default function App() {
           } else {
             if (localCandidate) {
               const verifiedLocal = ensureUserPrivileges({
+                name: localCandidate.name,
+                phone: localCandidate.phone,
+                schoolYear: localCandidate.schoolYear,
+                role: localCandidate.role,
+                parentPhone: localCandidate.parentPhone || "",
+                registeredAt: localCandidate.registeredAt || new Date().toISOString(),
                 ...localCandidate,
                 id: fbUser.uid,
                 emailVerified: fbUser.emailVerified,
@@ -407,11 +413,11 @@ export default function App() {
             // New or minimal user
             const fallbackUser: User = ensureUserPrivileges({
               id: fbUser.uid,
-              name: fbUser.displayName || 'مستخدم منصة المتفلسفة ',
+              name: fbUser.displayName || 'مستخدم منصة قلب العلم',
               email: fbUser.email || '',
               phone: '',
               parentPhone: '',
-              schoolYear: localCandidate?.schoolYear || 'الصف الأول الثانوي',
+              schoolYear: 'الصف الثالث الثانوي',
               role: fbUser.email === 'hos098sam@gmail.com' ? 'admin' : 'student',
               status: 'active',
               registeredAt: new Date().toISOString().split('T')[0],
@@ -424,26 +430,19 @@ export default function App() {
           console.error('Error synchronizing authenticated user profile:', err);
         }
       } else {
-        // Firebase Auth session is temporarily null or loading:
-        // STRICTLY preserve current logged in session across refreshes!
+        // Firebase Auth session is null: keep any saved persistent user session intact!
         const saved = getCurrentUser();
         if (saved && saved.id) {
           const privileged = ensureUserPrivileges(saved);
           setCurrentUser(privileged);
           return;
         }
-        const rawLocal = localStorage.getItem('al_motafalsifa_current_user') || localStorage.getItem('qalb_alam_current_user');
-        if (rawLocal) {
-          try {
-            const parsed = JSON.parse(rawLocal);
-            if (parsed && parsed.id) {
-              const privileged = ensureUserPrivileges(parsed);
-              setCurrentUser(privileged);
-              return;
-            }
-          } catch {}
-        }
-        setCurrentUser((prev) => (prev && prev.id ? prev : null));
+        setCurrentUser((prev) => {
+          if (prev && prev.id) {
+            return prev;
+          }
+          return null;
+        });
       }
     });
 
@@ -477,9 +476,9 @@ export default function App() {
         (snap) => {
           if (!snap.exists()) {
             // Document does not exist yet in Firestore.
-            // Only write user data if it is a complete profile (never overwrite with placeholder 'مستخدم منصة المتفلسفة ')
+            // Only write user data if it is a complete profile (never overwrite with placeholder 'مستخدم منصة قلب العلم')
             const me = currentUserRef.current;
-            if (me?.id && me.name && me.name !== 'مستخدم منصة المتفلسفة ') {
+            if (me?.id && me.name && me.name !== 'مستخدم منصة قلب العلم') {
               try {
                 const { password, ...safeMe } = me as any;
                 setDoc(
@@ -500,12 +499,12 @@ export default function App() {
           // Single-device session check for students
           if (freshData.activeSessionId) {
             try {
-              const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
-              const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
+              const localSessionId = localStorage.getItem('qalb_alam_device_session_id');
+              const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
               const isPastLoginGrace = Date.now() - loginTs > 10000;
 
               if (!localSessionId) {
-                localStorage.setItem('al_motafalsifa_device_session_id', freshData.activeSessionId);
+                localStorage.setItem('qalb_alam_device_session_id', freshData.activeSessionId);
               } else if (
                 localSessionId !== freshData.activeSessionId &&
                 isPastLoginGrace &&
@@ -520,8 +519,7 @@ export default function App() {
                 if (snap.metadata?.fromCache || remoteTs <= localTs + 2000) {
                   setDoc(userDocRef, { activeSessionId: localSessionId }, { merge: true }).catch(() => {});
                 } else {
-                  // Single device grace on refresh
-                if (isPastLoginGrace) { triggerConcurrentDeviceLogout(); }
+                  triggerConcurrentDeviceLogout();
                   return;
                 }
               }
@@ -534,17 +532,17 @@ export default function App() {
             ...currentMe,
             ...freshData,
             name:
-              freshData.name && freshData.name !== 'مستخدم منصة المتفلسفة '
+              freshData.name && freshData.name !== 'مستخدم منصة قلب العلم'
                 ? freshData.name
-                : currentMe?.name && currentMe.name !== 'مستخدم منصة المتفلسفة '
+                : currentMe?.name && currentMe.name !== 'مستخدم منصة قلب العلم'
                 ? currentMe.name
                 : freshData.name,
             phone: freshData.phone || currentMe?.phone || '',
             parentPhone: freshData.parentPhone || currentMe?.parentPhone || '',
             schoolYear:
-              freshData.schoolYear && freshData.schoolYear !== 'طالب منصة المتفلسفة '
+              freshData.schoolYear && freshData.schoolYear !== 'طالب منصة قلب العلم'
                 ? freshData.schoolYear
-                : currentMe?.schoolYear && currentMe.schoolYear !== 'طالب منصة المتفلسفة '
+                : currentMe?.schoolYear && currentMe.schoolYear !== 'طالب منصة قلب العلم'
                 ? currentMe.schoolYear
                 : freshData.schoolYear,
             id: currentMe?.id || freshData.id || snap.id,
@@ -555,9 +553,9 @@ export default function App() {
 
           // Self-heal Firestore document if it had placeholder values that were repaired from 4-part name / email
           if (
-            (freshData.name === 'مستخدم منصة المتفلسفة ' && freshUser.name !== 'مستخدم منصة المتفلسفة ') ||
+            (freshData.name === 'مستخدم منصة قلب العلم' && freshUser.name !== 'مستخدم منصة قلب العلم') ||
             (!freshData.phone && freshUser.phone) ||
-            (freshData.schoolYear === 'طالب منصة المتفلسفة ' && freshUser.schoolYear !== 'طالب منصة المتفلسفة ')
+            (freshData.schoolYear === 'طالب منصة قلب العلم' && freshUser.schoolYear !== 'طالب منصة قلب العلم')
           ) {
             setDoc(
               userDocRef,
@@ -877,11 +875,11 @@ export default function App() {
 
     // Ensure current device has a session ID registered if missing
     try {
-      let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
+      let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
       if (!localSessionId) {
         localSessionId = currentUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-        localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
-        localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
+        localStorage.setItem('qalb_alam_device_session_id', localSessionId);
+        localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
       }
     } catch {}
 
@@ -890,8 +888,8 @@ export default function App() {
       const activeMe = currentUserRef.current;
       if (!activeMe?.id) return;
 
-      const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id') || activeMe.activeSessionId || '';
-      const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
+      const localSessionId = localStorage.getItem('qalb_alam_device_session_id') || activeMe.activeSessionId || '';
+      const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
       if (Date.now() - loginTs <= 3000) return;
 
       try {
@@ -930,8 +928,7 @@ export default function App() {
 
             // Only trigger logout if the server's session ID is genuinely NEWER than our local session
             if (data.sessionKilled || remoteTs > localTs + 1500) {
-              // Single device grace on refresh
-                if (isPastLoginGrace) { triggerConcurrentDeviceLogout(); }
+              triggerConcurrentDeviceLogout();
             } else {
               // Our local session is newer (e.g. server had an older disk record before our latest login finished syncing)
               fetch('/api/auth/register-session', {
@@ -972,8 +969,8 @@ export default function App() {
     const newSessionId = rawUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
     const nowIso = new Date().toISOString();
     try {
-      localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
-      localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
+      localStorage.setItem('qalb_alam_device_session_id', newSessionId);
+      localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
     } catch {}
 
     const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
@@ -1069,7 +1066,7 @@ export default function App() {
     isLoggingOutRef.current = true;
     currentUserRef.current = null;
     try {
-      localStorage.removeItem('al_motafalsifa_device_session_id');
+      localStorage.removeItem('qalb_alam_device_session_id');
       localStorage.removeItem('qalb_alam_current_user');
     } catch {}
     setCurrentUser(null);
@@ -1730,12 +1727,12 @@ export default function App() {
             }}
             className="cursor-pointer transition-opacity hover:opacity-90"
           >
-            <Logo size="md" subtitle={platformSettings.platformName !== 'منصة المتفلسفة  التعليمية' && platformSettings.platformName !== 'منصة المتفلسفة ' ? platformSettings.platformName : 'المنصة التعليمية الحديثة • إشراف إدارة المنصة'} />
+            <Logo size="md" subtitle={platformSettings.platformName !== 'منصة قلب العلم التعليمية' && platformSettings.platformName !== 'منصة قلب العلم' ? platformSettings.platformName : 'المنصة التعليمية الحديثة • إشراف إدارة المنصة'} />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            <a href="https://www.facebook.com/profile.php?id=61594492453139" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-colors shadow-xs" title="صفحة فيسبوك المتفلسفة "><Facebook className="w-3.5 h-3.5 fill-current" /><span>فيسبوك: المتفلسفة </span></a>
-            <a href="https://www.facebook.com/share/g/1KcP6KBSRC/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition-colors shadow-xs" title="جروب طلاب المتفلسفة "><Facebook className="w-3.5 h-3.5 fill-current" /><span>جروب طلاب المتفلسفة </span></a>
-            <a href="https://www.tiktok.com/@qalbalelm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك المتفلسفة "><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: المتفلسفة </span></a>
+            <a href="https://www.facebook.com/profile.php?id=61594492453139" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-colors shadow-xs" title="صفحة فيسبوك قلب العلم"><Facebook className="w-3.5 h-3.5 fill-current" /><span>فيسبوك: قلب العلم</span></a>
+            <a href="https://www.facebook.com/share/g/1KcP6KBSRC/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition-colors shadow-xs" title="جروب طلاب قلب العلم"><Facebook className="w-3.5 h-3.5 fill-current" /><span>جروب طلاب قلب العلم</span></a>
+            <a href="https://www.tiktok.com/@qalbalelm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك قلب العلم"><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: قلب العلم</span></a>
             <a href="https://wa.me/201040672314" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-colors shadow-xs" title="الدعم الفني للمنصة"><MessageCircle className="w-3.5 h-3.5" /><span>الدعم الفني للمنصة</span></a>
             <button onClick={() => { if (currentUser?.role === 'admin') setCurrentView('admin'); else handleOpenAuth('login'); }} className="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors" title="دخول المشرف / لوحة الكنترول"><ShieldCheck className="w-4 h-4" /></button>
           </div>
