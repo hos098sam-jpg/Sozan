@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs && find node_modules dist -name '*.map' -type f -delete && rm -rf node_modules/.vite node_modules/@firebase/firestore/dist/intermediate node_modules/@firebase/firestore/dist/lite node_modules/@firebase/database* node_modules/@firebase/ai node_modules/@firebase/data-connect node_modules/@firebase/messaging* node_modules/@firebase/storage* node_modules/@firebase/remote-config* node_modules/firebase/compat node_modules/lucide-react/dist/umd node_modules/lucide-react/dist/cjs node_modules/@img node_modules/sharp node_modules/lightningcss-linux-x64-musl node_modules/hls.js/src node_modules/hls.js/dist/hls.light* node_modules/hls.js/dist/hls-demo.js node_modules/typescript/lib/tsserver.js node_modules/typescript/lib/cs node_modules/typescript/lib/de node_modules/typescript/lib/es node_modules/typescript/lib/fr node_modules/typescript/lib/it node_modules/typescript/lib/ja node_modules/typescript/lib/ko node_modules/typescript/lib/pl node_modules/typescript/lib/pt-br node_modules/typescript/lib/ru node_modules/typescript/lib/tr node_modules/typescript/lib/zh-*",
+    "build": "vite build",
     "start": "node --import tsx server.ts",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
