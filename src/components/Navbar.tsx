@@ -100,11 +100,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full max-w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 h-15 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 min-h-[68px] sm:min-h-[74px] py-2 flex items-center justify-between gap-1.5 sm:gap-4">
         {/* Brand & Logo */}
         <div
           onClick={() => onNavigate('home')}
-          className="cursor-pointer select-none min-w-0 shrink"
+          className="cursor-pointer select-none shrink-0 flex items-center"
         >
           <Logo size="sm" className="sm:hidden" />
           <Logo size="md" className="hidden sm:flex" />
@@ -391,7 +391,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
               <button
                 onClick={() => onOpenAuth('login')}
-                className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[11px] sm:text-xs transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
+                className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black shadow-md font-black text-[11px] sm:text-xs transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
                 title="تسجيل الدخول"
               >
                 <LogIn className="w-3.5 h-3.5 shrink-0" />
@@ -410,15 +410,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
 
 
-          {/* 3-Bars Hamburger Button (زرار الـ ٣ شرطات - ظاهر للكل ويفتح كل الخانات لوحديها) */}
+          {/* 3-Bars Hamburger Button (زرار الـ ٣ شرطات - ظاهر وواضح جداً بلون ذهبي ملكي) */}
           <button
             onClick={() => setDrawerOpen(true)}
-            className="px-2.5 sm:px-3 py-2 rounded-xl border border-indigo-200 dark:border-indigo-900 bg-indigo-50/90 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900/80 text-indigo-900 dark:text-indigo-200 font-black text-xs flex items-center gap-1.5 sm:gap-2 transition-all shadow-xs shrink-0 cursor-pointer"
-            title="القائمة (٣ شرطات)"
+            className="px-3 py-2.5 rounded-2xl border-2 border-amber-400/80 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md shadow-amber-500/25 shrink-0 cursor-pointer active:scale-95"
+            title="القائمة الرئيسية (٣ شرطات)"
             aria-label="القائمة الجانبية"
           >
-            <Menu className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-            <span className="hidden sm:inline">القائمة</span>
+            <Menu className="w-5 h-5 text-slate-950 stroke-[2.5] shrink-0" />
+            <span className="font-black">القائمة</span>
           </button>
         </div>
       </div>
@@ -971,7 +971,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href="https://www.facebook.com/share/g/1KcP6KBSRC/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2 px-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"
+                  className="py-2 px-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black shadow-md text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"
                   title="جروب طلاب المتفلسفة "
                 >
                   <Facebook className="w-3.5 h-3.5 fill-current shrink-0" />

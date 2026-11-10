@@ -16,8 +16,8 @@ export const Logo: React.FC<LogoProps> = ({
   subtitle,
 }) => {
   const sizeMap = {
-    sm: { box: 'w-9 h-9 rounded-full', icon: 'w-4 h-4', title: 'text-sm', sub: 'text-[10px]' },
-    md: { box: 'w-11 h-11 rounded-full', icon: 'w-5 h-5', title: 'text-base sm:text-lg', sub: 'text-[11px]' },
+    sm: { box: 'w-11 h-11 rounded-2xl', icon: 'w-5 h-5', title: 'text-base', sub: 'text-[10px]' },
+    md: { box: 'w-13 h-13 rounded-2xl', icon: 'w-6 h-6', title: 'text-lg sm:text-xl', sub: 'text-xs' },
     lg: { box: 'w-14 h-14 rounded-full', icon: 'w-7 h-7', title: 'text-xl sm:text-2xl', sub: 'text-xs' },
     xl: { box: 'w-20 h-20 rounded-full', icon: 'w-10 h-10', title: 'text-2xl sm:text-3xl', sub: 'text-sm' },
   };
@@ -28,7 +28,7 @@ export const Logo: React.FC<LogoProps> = ({
     <div className={`flex items-center gap-3 select-none ${className}`}>
       {/* Visual Logo Icon Badge */}
       <div
-        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 border border-indigo-400/40 overflow-hidden shrink-0 group`}
+        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 border-2 border-amber-400/80 shadow-md shadow-amber-500/20 overflow-hidden shrink-0 group`}
       >
         <img
           src={qalbAlElmLogo}
