@@ -203,6 +203,18 @@ export const ensureUserPrivileges = (u: User): User => {
   return updatedUser;
 };
 
+const defaultSafePlatformSettings: PlatformSettings = {
+  platformName: 'منصة المتفلسفة التعليمية',
+  heroTitle: 'منصة المتفلسفة التعليمية 2027',
+  heroSubtitle: 'تحت إشراف: أ/ سوزان كريم الخولى',
+  supervisorName: 'أ/ سوزان كريم الخولى',
+  supervisorTitle: 'معلمة الفلسفة والمنطق والمشرف العام',
+  heroBannerImage: '/logo.png',
+  announcementText: '',
+  contactPhone: '01040672314',
+  supportWhatsapp: '01040672314',
+};
+
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [activeToolTab, setActiveToolTab] = useState<ActiveTab>('book_exams');
