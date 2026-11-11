@@ -119,7 +119,7 @@ const ScrollRevealItem: React.FC<{
     >
       {children}
 
-      {/* Platform Theme Color Customizer Modal */}
+            {/* Platform Theme Color Customizer Modal */}
       {showColorPickerModal && (
         <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
           <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
@@ -232,7 +232,6 @@ const ScrollRevealItem: React.FC<{
           </div>
         </div>
       )}
-
     </div>
   );
 };
@@ -2188,7 +2187,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
         </div>
       )}
 
-      {/* Platform Theme Color Customizer Modal */}
+            {/* Platform Theme Color Customizer Modal */}
       {showColorPickerModal && (
         <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
           <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
@@ -2301,7 +2300,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           </div>
         </div>
       )}
-
     </div>
   );
 };

@@ -298,6 +298,7 @@ export interface CourseLesson {
 }
 
 export interface Course {
+  accessCode?: string;
   id: string;
   title: string; // اسم الكورس
   courseType?: CourseType; // نوع الكورس: شرح متكامل / امتحانات فقط / مراجعة
