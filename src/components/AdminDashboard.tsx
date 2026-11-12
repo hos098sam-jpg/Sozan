@@ -1593,6 +1593,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            {/* Button to open Teachers management directly */}
+            <button
+              onClick={() => setActiveTab('teachers')}
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-xs transition-all shadow-lg shadow-amber-500/25 flex items-center gap-2 cursor-pointer border-2 border-amber-300"
+              title="إدارة وصلاحيات أ/ سوزان كريم الخولى (إدارة الكورسات، تفعيل الطلاب، وتوليد أكواد الاشتراك)"
+            >
+              <GraduationCap className="w-4 h-4 text-slate-950" />
+              <span>🏛️ حساب وصلاحيات أ/ سوزان كريم الخولى (المعلمة)</span>
+            </button>
+
             {onOpenHomeVisualEditor && (
               <button
                 onClick={onOpenHomeVisualEditor}

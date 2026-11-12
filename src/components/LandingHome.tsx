@@ -1313,10 +1313,10 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                   <div className="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-2xs">
                     {(
                       [
-                        { id: 'all', label: 'جميع الصفوف' },
-                        { id: 'primary', label: 'الابتدائية (1-6)' },
-                        { id: 'prep', label: 'الإعدادية (1-3)' },
-                        { id: 'secondary', label: 'الثانوية (1-3)' },
+                        { id: 'all', label: 'جميع صفوف الثانوية' },
+                        { id: 'الصف الأول الثانوي', label: 'الصف الأول الثانوي' },
+                        { id: 'الصف الثاني الثانوي', label: 'الصف الثاني الثانوي' },
+                        { id: 'الصف الثالث الثانوي', label: 'الصف الثالث الثانوي' },
                       ] as const
                     ).map((tab) => (
                       <button
@@ -1674,6 +1674,15 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
             >
               <Plus className="w-3.5 h-3.5" />
               <span>+ إضافة قسم (نص / صورة / فيديو) 🎬</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowColorPickerModal(true)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-black text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-500/30 transition-all border border-amber-300 animate-pulse"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-slate-950" />
+              <span>🎨 تخصيص ألوان المنصة</span>
             </button>
 
             <button

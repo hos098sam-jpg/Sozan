@@ -363,23 +363,17 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         onChange={(e) => {
                           const newGrade = e.target.value;
                           setSchoolYear(newGrade);
-                          if (newGrade.includes('الابتدائي') || newGrade.includes('الإعدادي')) {
-                            setDivision('');
-                          } else if (newGrade === 'الصف الثالث الثانوي') {
-                            setDivision('علمي علوم');
+                          if (newGrade === 'الصف الثالث الثانوي') {
+                            setDivision('شعبة أدبي');
                           } else {
-                            setDivision('بكالوريا');
+                            setDivision('عام');
                           }
                         }}
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#0d1b3e] border border-amber-500/40 rounded-xl text-white text-xs text-right focus:outline-none focus:border-amber-400"
                       >
-                        
-                        
-                        <optgroup label="المرحلة الثانوية">
-                          <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                          <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                          <option value="الصف الثالث الثانوي">الصف الثالث الثانوي (دفعة 2027)</option>
-                        </optgroup>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي (دفعة 2027)</option>
                       </select>
                     </div>
 
