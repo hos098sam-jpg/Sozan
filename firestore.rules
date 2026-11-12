@@ -2,9 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // =========================================================================
-    // 1. HELPER FUNCTIONS & ROLE VERIFICATION
-    // =========================================================================
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -13,23 +10,18 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Admin verification via Custom Claims, verified supervisor email, or Admin role document
     function isAdmin() {
       return isAuthenticated() && (
         request.auth.token.admin == true ||
         request.auth.token.role == 'admin' ||
-        request.auth.token.email == 'hos098sam@gmail.com' ||
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        request.auth.token.email == 'hos098sam@gmail.com'
       );
     }
 
     function isTeacher() {
       return isAuthenticated() && (
         request.auth.token.role == 'teacher' ||
-        isAdmin() ||
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher')
+        isAdmin()
       );
     }
 
@@ -43,51 +35,36 @@ service cloud.firestore {
         studentId in get(/databases/$(database)/documents/parents/$(request.auth.uid)).data.linkedStudentIds;
     }
 
-    // =========================================================================
-    // 2. STUDENT & USER PROFILES (users/{userId})
-    // - Strict Owner-Only Lock: A student can ONLY read or write their own
-    //   document matching `request.auth.uid == userId`.
-    // - Prevents any student from reading other students' profiles or admin data.
-    // - Prevents privilege escalation (cannot modify role, admin, permissions).
-    // =========================================================================
     match /users/{userId} {
-      allow get, list: if true;
-
-      allow create: if isAuthenticated() && !request.resource.data.keys().hasAny(['password']);
-
-      allow update: if isAdmin() || (
-        isOwner(userId) &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status', 'password'])
-      );
-
+      allow get: if isAuthenticated() && (isOwner(userId) || isAdmin() || isTeacher());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAuthenticated() && isOwner(userId) && !request.resource.data.keys().hasAny(['password']);
+      allow update: if isOwner(userId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status', 'password', 'admin']) &&
+        request.resource.data.email == resource.data.email;
       allow delete: if isAdmin();
     }
 
-    // =========================================================================
-    // 3. EXAM BANKS, MODEL ANSWERS & MASTER QUESTIONS PROTECTION
-    // - Students are strictly forbidden from reading master question banks or
-    //   model answer documents directly. Only Admin/Teacher/Server can access.
-    // =========================================================================
     match /exams/{examId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
     match /question_banks/{bankId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
     match /model_answers/{answerId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
     match /exam_answers/{answerId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
-    // =========================================================================
-    // 4. ADMIN DASHBOARD & PRIVILEGED SYSTEM PATHS
-    // - Strictly locked to Admin only. Regular users are completely blocked.
-    // =========================================================================
     match /admin/{document=**} {
       allow read, write: if isAdmin();
     }
@@ -97,11 +74,13 @@ service cloud.firestore {
     }
 
     match /coupons/{couponId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
     match /access_codes/{codeId} {
-      allow read, write: if isAdmin() || isTeacher();
+      allow read: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow write: if isAdmin() || isTeacher();
     }
 
     match /fawaterak_invoices/{invoiceId} {
@@ -115,19 +94,11 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
-    // =========================================================================
-    // 5. PLATFORM SYNCED DATA & SHARDED USER CHUNKS (al_motafalsifa_data/{docId})
-    // - Enables seamless Cloud Run server REST hydration & persistence across
-    //   deployments so zero courses, videos, exams, or users are lost on redeploy.
-    // =========================================================================
     match /al_motafalsifa_data/{docId} {
-      allow read: if true;
-      allow write: if isAdmin() || isTeacher() || (request.resource.data.keys().hasAll(['data', 'updatedAt']) && !request.resource.data.keys().hasAny(['password']));
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || isTeacher();
     }
 
-    // =========================================================================
-    // 6. PARENTS, COURSES, ENROLLMENTS & SUBMISSIONS
-    // =========================================================================
     match /parents/{parentUid} {
       allow read: if isOwner(parentUid) || isAdmin();
       allow write: if isAdmin();
@@ -178,9 +149,6 @@ service cloud.firestore {
       allow write: if isAdmin() || isTeacher();
     }
 
-    // =========================================================================
-    // 7. STRICT DEFAULT FALLBACK: DENY ALL UNHANDLED PATHS
-    // =========================================================================
     match /{document=**} {
       allow read, write: if false;
     }

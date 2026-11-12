@@ -23,12 +23,10 @@ if (typeof window !== 'undefined') {
       if (isApiCall) {
         const cleanPath = urlStr.replace(/^https?:\/\/[^/]+/, '');
 
-        // 1. Static platform data endpoint
         if (cleanPath === '/api/platform-data' || cleanPath.startsWith('/api/platform-data?')) {
           return origFetch('/initial_platform_data.json', init);
         }
 
-        // 2. Courses endpoint
         if (cleanPath === '/api/courses' || cleanPath.startsWith('/api/courses?')) {
           const res = await origFetch('/initial_platform_data.json', init).catch(() => null);
           if (res && res.ok) {
@@ -40,7 +38,6 @@ if (typeof window !== 'undefined') {
           }
         }
 
-        // 3. Exams endpoint
         if (cleanPath === '/api/exams' || cleanPath.startsWith('/api/exams?')) {
           const res = await origFetch('/initial_platform_data.json', init).catch(() => null);
           if (res && res.ok) {
@@ -52,7 +49,6 @@ if (typeof window !== 'undefined') {
           }
         }
 
-        // 4. Settings endpoint
         if (cleanPath === '/api/settings' || cleanPath.startsWith('/api/settings?')) {
           const res = await origFetch('/initial_platform_data.json', init).catch(() => null);
           if (res && res.ok) {
@@ -64,7 +60,6 @@ if (typeof window !== 'undefined') {
           }
         }
 
-        // 5. Users endpoint
         if (cleanPath === '/api/users' || cleanPath.startsWith('/api/users?')) {
           const res = await origFetch('/initial_platform_data.json', init).catch(() => null);
           if (res && res.ok) {
@@ -76,7 +71,6 @@ if (typeof window !== 'undefined') {
           }
         }
 
-        // 6. Enrollment status endpoint
         if (cleanPath.includes('/enrollment-status')) {
           return new Response(JSON.stringify({
             success: true,
@@ -89,7 +83,6 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 7. Video auth endpoint
         if (cleanPath.includes('/video-auth')) {
           return new Response(JSON.stringify({
             status: 'allowed',
@@ -100,99 +93,16 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 7b. Auth login endpoint for static hosting & offline access
         if (cleanPath === '/api/auth/login') {
-          let reqBody: any = {};
-          try {
-            if (typeof init?.body === 'string') {
-              reqBody = JSON.parse(init.body);
-            }
-          } catch {}
-          const input = String(reqBody.identifier || reqBody.phone || reqBody.email || '').trim();
-          const cleanDigits = input.replace(/\D/g, '');
-          const isSupervisor = input.toLowerCase() === 'hos098sam@gmail.com' || cleanDigits === '01040672314';
-          const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-
-          if (isSupervisor) {
-            const passInput = String(reqBody.password || '').trim();
-            if (passInput !== 'Hossam2027') {
-              return new Response(JSON.stringify({
-                success: false,
-                message: 'كلمة المرور غير صحيحة لحساب إدارة المنصة.',
-              }), {
-                status: 401,
-                headers: { 'Content-Type': 'application/json' },
-              });
-            }
-            const adminUser = {
-              id: 'admin-hosam-supervisor',
-              name: 'إدارة المنصة',
-              email: 'hos098sam@gmail.com',
-              phone: '01040672314',
-              role: 'admin',
-              status: 'active',
-              schoolYear: 'المشرف العام ومؤسس المنصة',
-              registeredAt: '2026-09-25',
-              emailVerified: true,
-            };
-            return new Response(JSON.stringify({
-              success: true,
-              user: adminUser,
-              sessionId: newSessionId,
-            }), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' },
-            });
-          }
-
-          try {
-            const rawStored = localStorage.getItem('al_motafalsifa_users_list_live');
-            if (rawStored) {
-              const parsed = JSON.parse(rawStored);
-              const usersList = Array.isArray(parsed) ? parsed : (parsed.data || []);
-              const matched = usersList.find((u: any) => {
-                if (!u) return false;
-                if (u.email && u.email.toLowerCase() === input.toLowerCase()) return true;
-                if (u.phone && (u.phone === input || u.phone.replace(/\D/g, '') === cleanDigits)) return true;
-                return false;
-              });
-              if (matched) {
-                return new Response(JSON.stringify({
-                  success: true,
-                  user: matched,
-                  sessionId: newSessionId,
-                }), {
-                  status: 200,
-                  headers: { 'Content-Type': 'application/json' },
-                });
-              }
-            }
-          } catch {}
-
-          if (cleanDigits.length >= 10 || input.includes('@')) {
-            const fallbackStudent = {
-              id: `user_${Date.now()}`,
-              name: 'طالب منصة المتفلسفة ',
-              email: input.includes('@') ? input.toLowerCase() : `${cleanDigits}@qalb-alam.edu`,
-              phone: cleanDigits || '01000000000',
-              role: 'student',
-              status: 'active',
-              schoolYear: 'الصف الثالث الثانوي',
-              registeredAt: new Date().toISOString(),
-              emailVerified: true,
-            };
-            return new Response(JSON.stringify({
-              success: true,
-              user: fallbackStudent,
-              sessionId: newSessionId,
-            }), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' },
-            });
-          }
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Authentication is handled by the backend server.',
+          }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' },
+          });
         }
 
-        // 8. Session check & register endpoints
         if (cleanPath.includes('/auth/check-session') || cleanPath.includes('/auth/register-session')) {
           return new Response(JSON.stringify({
             ok: true,
@@ -204,7 +114,6 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 9. GitHub HLS Status endpoint
         if (cleanPath === '/api/github-hls/status') {
           return new Response(JSON.stringify({
             connected: true,
@@ -218,7 +127,6 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 10. Deleted IDs & Wallet codes endpoints
         if (cleanPath.startsWith('/api/deleted-ids') || cleanPath.startsWith('/api/wallet/codes')) {
           return new Response(JSON.stringify({
             success: true,
@@ -233,7 +141,6 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 11. Any mutations (POST/PUT/DELETE) on static hosting: Return successful acknowledgement
         if (init?.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(init.method.toUpperCase())) {
           return new Response(JSON.stringify({
             success: true,
@@ -245,11 +152,9 @@ if (typeof window !== 'undefined') {
           });
         }
 
-        // 12. FALLTHROUGH GUARD: If physical file exists (like static .m3u8 or .ts), origFetch will fetch it!
         try {
           const res = await origFetch(input, init);
           const cType = res.headers.get('content-type') || '';
-          // If Firebase Hosting rewrite returned index.html for an API endpoint, NEVER pass HTML to res.json()!
           if (cType.includes('text/html')) {
             return new Response(JSON.stringify({
               error: 'Not found on static hosting',
@@ -328,11 +233,9 @@ if (typeof window !== 'undefined' && typeof HTMLVideoElement !== 'undefined') {
   const originalRequestPiP = HTMLVideoElement.prototype.requestPictureInPicture;
   if (originalRequestPiP) {
     HTMLVideoElement.prototype.requestPictureInPicture = async function (this: HTMLVideoElement) {
-      // If metadata has not loaded yet (readyState < HAVE_METADATA = 1) or PiP is disabled, gracefully avoid uncaught exception
       if (this.disablePictureInPicture || this.readyState < 1) {
         console.warn('requestPictureInPicture skipped: video metadata not loaded yet or PiP disabled.');
         return new Promise<PictureInPictureWindow>((_, reject) => {
-          // Return a handled rejection or resolve dummy if supported
           try {
             if (this.readyState >= 1 && !this.disablePictureInPicture) {
               originalRequestPiP.call(this).then(_).catch(reject);
@@ -344,7 +247,6 @@ if (typeof window !== 'undefined' && typeof HTMLVideoElement !== 'undefined') {
             reject(syncErr);
           }
         }).catch((err) => {
-          // Ensure the promise chain itself handles the error silently
           console.warn('Handled PiP request promise rejection:', err?.message || err);
           return null as unknown as PictureInPictureWindow;
         });
@@ -358,7 +260,6 @@ if (typeof window !== 'undefined' && typeof HTMLVideoElement !== 'undefined') {
     };
   }
 
-  // Global unhandled promise rejection handler
   window.addEventListener('unhandledrejection', (event) => {
     const reason = event.reason;
     const msg = String(reason?.message || reason || '');
@@ -385,7 +286,6 @@ if (typeof window !== 'undefined' && typeof HTMLVideoElement !== 'undefined') {
     }
   });
 
-  // Global window error handler for uncaught exceptions including PiP error and circular JSON errors
   window.addEventListener(
     'error',
     (event) => {
@@ -424,5 +324,3 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 );
-// Trigger Cloudflare build: Wed Nov 11 11:11:38 AM UTC 2026
-// Trigger Cloudflare build: Wed Nov 11 11:11:43 AM UTC 2026
