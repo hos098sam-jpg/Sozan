@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { User, SchoolYearGrade } from '../types';
 import { getSavedUsers, saveUsers, saveCurrentUser } from '../data/initialData';
-import qalbAlElmLogo from '../assets/images/qalb_alelm_official_logo_1791663594965.jpg';
+import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
 import { 
   loginWithEmail, 
   signupWithEmail, 

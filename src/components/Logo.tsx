@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, Atom } from 'lucide-react';
-import qalbAlElmLogo from '../assets/images/qalb_alelm_official_logo_1791663594965.jpg';
+import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
 
 interface LogoProps {
   className?: string;
@@ -31,8 +31,8 @@ export const Logo: React.FC<LogoProps> = ({
         className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 border border-indigo-400/40 overflow-hidden shrink-0 group`}
       >
         <img
-          src={qalbAlElmLogo}
-          alt="شعار منصة قلب العلم التعليمية"
+          src="/logo.png"
+          alt="شعار منصة المتفلسفة التعليمية"
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
@@ -51,7 +51,7 @@ export const Logo: React.FC<LogoProps> = ({
         <div className="text-right min-w-0">
           <div className="flex items-center gap-1 sm:gap-1.5">
             <h1 className={`${currentSize.title} font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate`}>
-              منصة قلب العلم
+              منصة المتفلسفة
             </h1>
             <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-rose-500 to-indigo-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
               2027

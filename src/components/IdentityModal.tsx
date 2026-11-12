@@ -2,7 +2,7 @@ import React from 'react';
 import { Award, CheckCircle2, X, Sparkles, ShieldCheck, Heart, ExternalLink, Facebook, MessageCircle } from 'lucide-react';
 import { TikTokIcon } from './TikTokIcon';
 import { IDENTITY_NOTICE } from '../data/bacData';
-import qalbAlElmLogo from '../assets/images/qalb_alelm_official_logo_1791663594965.jpg';
+import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
 
 interface IdentityModalProps {
   isOpen: boolean;

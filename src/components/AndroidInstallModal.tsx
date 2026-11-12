@@ -8,7 +8,7 @@ import {
   Zap,
   Sparkles
 } from 'lucide-react';
-import qalbAlElmLogo from '../assets/images/qalb_alelm_official_logo_1791663594965.jpg';
+import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
