@@ -32,6 +32,10 @@ export const TEACHER_PERMISSIONS: TeacherPermissions = {
 export type AssistantSpecialty = 'student_support' | 'essay_grading' | 'content_management';
 
 export interface User {
+  grade?: string;
+  completedLessonsIds?: string[];
+  watchedVideos?: any[];
+  completedExams?: any[];
   id: string;
   uid?: string;
   name: string;
@@ -115,6 +119,9 @@ export interface User {
 }
 
 export interface VideoTimestampNote {
+  courseId?: string;
+  lessonId?: string;
+  lessonTitle?: string;
   id: string;
   videoId: string;
   timestampSeconds: number;
@@ -261,6 +268,8 @@ export interface CourseAccessCode {
 export type CourseType = 'integrated' | 'exams_only' | 'revision';
 
 export interface LessonVideo {
+  vcdnHlsUrl?: string;
+  vcdnEmbedUrl?: string;
   id: string;
   title: string;
   url: string; // YouTube, MP4, Vimeo, Google Drive, or embed link
@@ -449,6 +458,8 @@ export interface EssayReviewItem {
 }
 
 export interface StudentExamSubmission {
+  score?: number;
+  totalPoints?: number;
   submissionId?: string;
   examId: string;
   courseId?: string;
@@ -604,6 +615,9 @@ export interface WalletOrder {
 }
 
 export interface CourseBundle {
+  badgeText?: string;
+  grade?: string;
+  features?: string[];
   id: string;
   title: string;
   description: string;
@@ -622,6 +636,7 @@ export interface CourseBundle {
 }
 
 export interface LessonQAReply {
+  text?: string;
   id: string;
   authorId: string;
   authorName: string;
@@ -632,6 +647,8 @@ export interface LessonQAReply {
 }
 
 export interface LessonQAItem {
+  videoTimestamp?: number;
+  imageUrl?: string;
   id: string;
   courseId: string;
   courseTitle?: string;

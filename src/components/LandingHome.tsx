@@ -119,120 +119,8 @@ const ScrollRevealItem: React.FC<{
     >
       {children}
 
-            {/* Platform Theme Color Customizer Modal */}
-      {showColorPickerModal && (
-        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
-          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-base">تخصيص ألوان أجزاء المنصة</h3>
-                  <p className="text-xs text-slate-400">تحكم كامل في الألوان والأزرار وخلفيات المنصة</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Primary Accent Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-amber-300">لون الأزرار والعناصر الرئيسية (Gold/Accent)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customPrimaryColor}
-                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Background Color */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-300">لون الخلفية العامة للمنصة (Background)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
-                  />
-                  <input
-                    type="text"
-                    value={customBgColor}
-                    onChange={(e) => setCustomBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="space-y-2 pt-2">
-                <label className="text-xs font-black text-slate-400">نماذج ألوان جاهزة بضغطة زر:</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => applyColors('#d4af37', '#0d0824', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0d0824] border border-[#d4af37]/60 text-xs font-bold text-amber-400 hover:scale-102 transition-transform"
-                  >
-                    🏛️ المتفلسفة الملكي (ذهبي ونيلي)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#f59e0b', '#0f172a', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#0f172a] border border-amber-500/60 text-xs font-bold text-amber-300 hover:scale-102 transition-transform"
-                  >
-                    🌌 كلاسيك داكن (Dark Slate)
-                  </button>
-                  <button
-                    onClick={() => applyColors('#8b5cf6', '#090514', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#090514] border border-purple-500/60 text-xs font-bold text-purple-300 hover:scale-102 transition-transform"
-                  >
-                    🔮 بنفسجي ملكي عميق
-                  </button>
-                  <button
-                    onClick={() => applyColors('#10b981', '#06130e', '#ffffff')}
-                    className="p-2 rounded-xl bg-[#06130e] border border-emerald-500/60 text-xs font-bold text-emerald-300 hover:scale-102 transition-transform"
-                  >
-                    🌿 زمردي إسلامي
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pt-2">
-              <button
-                onClick={() => {
-                  applyColors(customPrimaryColor, customBgColor, customTextColor);
-                  setShowColorPickerModal(false);
-                }}
-                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 cursor-pointer"
-              >
-                تطبيق وحفظ الألوان الآن ✅
-              </button>
-              <button
-                onClick={() => setShowColorPickerModal(false)}
-                className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
-              >
-                إلغاء
-              </button>
-            </div>
+            
           </div>
-        </div>
-      )}
-    </div>
   );
 };
 
@@ -2188,6 +2076,120 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       )}
 
             {/* Platform Theme Color Customizer Modal */}
+      {showColorPickerModal && (
+        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
+          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base">تخصيص ألوان أجزاء المنصة</h3>
+                  <p className="text-xs text-slate-400">تحكم كامل في الألوان والأزرار وخلفيات المنصة</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowColorPickerModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Primary Accent Color */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-black text-amber-300">لون الأزرار والعناصر الرئيسية (Gold/Accent)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={customPrimaryColor}
+                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
+                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
+                  />
+                  <input
+                    type="text"
+                    value={customPrimaryColor}
+                    onChange={(e) => setCustomPrimaryColor(e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Background Color */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-black text-slate-300">لون الخلفية العامة للمنصة (Background)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={customBgColor}
+                    onChange={(e) => setCustomBgColor(e.target.value)}
+                    className="w-12 h-10 rounded-xl cursor-pointer bg-slate-800 border border-slate-700"
+                  />
+                  <input
+                    type="text"
+                    value={customBgColor}
+                    onChange={(e) => setCustomBgColor(e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 font-mono text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Quick Presets */}
+              <div className="space-y-2 pt-2">
+                <label className="text-xs font-black text-slate-400">نماذج ألوان جاهزة بضغطة زر:</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => applyColors('#d4af37', '#0d0824', '#ffffff')}
+                    className="p-2 rounded-xl bg-[#0d0824] border border-[#d4af37]/60 text-xs font-bold text-amber-400 hover:scale-102 transition-transform"
+                  >
+                    🏛️ المتفلسفة الملكي (ذهبي ونيلي)
+                  </button>
+                  <button
+                    onClick={() => applyColors('#f59e0b', '#0f172a', '#ffffff')}
+                    className="p-2 rounded-xl bg-[#0f172a] border border-amber-500/60 text-xs font-bold text-amber-300 hover:scale-102 transition-transform"
+                  >
+                    🌌 كلاسيك داكن (Dark Slate)
+                  </button>
+                  <button
+                    onClick={() => applyColors('#8b5cf6', '#090514', '#ffffff')}
+                    className="p-2 rounded-xl bg-[#090514] border border-purple-500/60 text-xs font-bold text-purple-300 hover:scale-102 transition-transform"
+                  >
+                    🔮 بنفسجي ملكي عميق
+                  </button>
+                  <button
+                    onClick={() => applyColors('#10b981', '#06130e', '#ffffff')}
+                    className="p-2 rounded-xl bg-[#06130e] border border-emerald-500/60 text-xs font-bold text-emerald-300 hover:scale-102 transition-transform"
+                  >
+                    🌿 زمردي إسلامي
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                onClick={() => {
+                  applyColors(customPrimaryColor, customBgColor, customTextColor);
+                  setShowColorPickerModal(false);
+                }}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 cursor-pointer"
+              >
+                تطبيق وحفظ الألوان الآن ✅
+              </button>
+              <button
+                onClick={() => setShowColorPickerModal(false)}
+                className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Platform Theme Color Customizer Modal */}
       {showColorPickerModal && (
         <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-md flex items-center justify-center p-4" dir="rtl">
           <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-white space-y-6">
