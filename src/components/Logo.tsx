@@ -1,6 +1,5 @@
 import React from 'react';
 import { Heart, Atom } from 'lucide-react';
-const qalbAlElmLogo = '/logo.png';
 
 interface LogoProps {
   className?: string;
@@ -26,9 +25,8 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <div className={`flex items-center gap-3 select-none ${className}`}>
-      {/* Visual Logo Icon Badge */}
       <div
-        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 border border-indigo-400/40 overflow-hidden shrink-0 group`}
+        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-teal-900/20 border border-teal-700/30 overflow-hidden shrink-0 group`}
       >
         <img
           src="/logo.png"
@@ -39,10 +37,8 @@ export const Logo: React.FC<LogoProps> = ({
             e.currentTarget.style.display = 'none';
           }}
         />
-        
-        {/* Heart + Knowledge atom symbol combination fallback */}
-        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-900">
-          <Heart className={`${currentSize.icon} text-rose-300 fill-rose-400/40 animate-pulse`} />
+        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-gradient-to-br from-teal-700 via-teal-800 to-slate-900">
+          <Heart className={`${currentSize.icon} text-rose-200 fill-rose-300/40`} />
           <Atom className="absolute w-3.5 h-3.5 text-amber-300 opacity-90" />
         </div>
       </div>
@@ -53,7 +49,7 @@ export const Logo: React.FC<LogoProps> = ({
             <h1 className={`${currentSize.title} font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate`}>
               منصة المتفلسفة
             </h1>
-            <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-rose-500 to-indigo-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
+            <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-amber-500 to-teal-700 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
               2027
             </span>
           </div>

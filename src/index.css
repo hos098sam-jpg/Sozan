@@ -2,6 +2,16 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+:root {
+  color-scheme: light;
+  --motafalsifa-accent: #147d78;
+  --motafalsifa-accent-dark: #0e625e;
+  --motafalsifa-accent-soft: #e8f4f1;
+  --motafalsifa-gold: #b68b35;
+  --motafalsifa-paper: #f7f5ef;
+  --motafalsifa-ink: #203331;
+}
+
 @layer base {
   html, body {
     font-family: 'Cairo', 'Tajawal', sans-serif;
@@ -23,74 +33,101 @@ html.dark {
 }
 
 html.dark body {
-  background-color: #090d16;
-  color: #f1f5f9;
+  background-color: #102324;
+  color: #f1f5f2;
 }
 
 /* Automatic smooth palette adaptations in dark mode */
 .dark .bg-white {
-  background-color: #0f172a;
+  background-color: #163031;
 }
 .dark .bg-slate-50 {
-  background-color: #090d16;
+  background-color: #102324;
 }
 .dark .bg-slate-100 {
-  background-color: #1e293b;
+  background-color: #1d3b3b;
 }
-.dark .border-slate-200, 
+.dark .border-slate-200,
 .dark .border-slate-100 {
-  border-color: #1e293b;
+  border-color: #294545;
 }
 .dark .text-slate-900 {
-  color: #f8fafc;
+  color: #f5f5ee;
 }
 .dark .text-slate-800 {
-  color: #f1f5f9;
+  color: #e8eeea;
 }
 .dark .text-slate-700 {
-  color: #cbd5e1;
+  color: #d0ddda;
 }
 .dark .text-slate-600 {
-  color: #94a3b8;
+  color: #a9bfba;
 }
 .dark .text-slate-500 {
-  color: #94a3b8;
+  color: #9ab0ab;
 }
-.dark input, 
-.dark select, 
+.dark input,
+.dark select,
 .dark textarea {
-  background-color: #131d33;
-  color: #f8fafc;
-  border-color: #2b3952;
+  background-color: #173233;
+  color: #f5f5ee;
+  border-color: #34504e;
 }
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: #64748b;
+  color: #819994;
 }
 
-/* Custom smooth scrollbar for Clean Minimalism */
+/* Brand palette: philosophical teal, warm parchment, and antique gold. */
+html:not(.dark) body {
+  background-color: var(--motafalsifa-paper);
+  color: var(--motafalsifa-ink);
+}
+
+.bg-slate-50 { background-color: #f7f5ef; }
+.text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 { color: var(--motafalsifa-accent-dark); }
+.bg-indigo-50, .bg-indigo-100 { background-color: var(--motafalsifa-accent-soft); }
+.bg-indigo-600 { background-color: var(--motafalsifa-accent); }
+.bg-indigo-700 { background-color: var(--motafalsifa-accent-dark); }
+.border-indigo-100, .border-indigo-200 { border-color: #c8dfd9; }
+.border-indigo-400, .border-indigo-500 { border-color: #68a9a0; }
+.from-indigo-600 { --tw-gradient-from: var(--motafalsifa-accent) var(--tw-gradient-from-position); --tw-gradient-to: rgb(20 125 120 / 0%) var(--tw-gradient-to-position); }
+.to-indigo-600, .to-indigo-700 { --tw-gradient-to: var(--motafalsifa-accent-dark) var(--tw-gradient-to-position); }
+.hover\\:bg-indigo-700:hover { background-color: var(--motafalsifa-accent-dark); }
+.hover\\:bg-indigo-100:hover { background-color: #dcece7; }
+
+/* Deep indigo surfaces become calm teal in dark mode; gold remains the highlight. */
+.dark .bg-indigo-950\/40,
+.dark .bg-indigo-950\/60,
+.dark .bg-indigo-950\/80 { background-color: #193a39; }
+.dark .text-indigo-200,
+.dark .text-indigo-300,
+.dark .text-indigo-400 { color: #9ac9bd; }
+.dark .border-indigo-800 { border-color: #315a54; }
+
+/* Custom smooth scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.8);
+  background: rgba(241, 245, 239, 0.8);
 }
 .dark ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(16, 35, 36, 0.8);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(203, 213, 225, 0.9);
+  background: rgba(190, 202, 195, 0.9);
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.9);
+  background: rgba(63, 94, 88, 0.9);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.8);
+  background: rgba(20, 125, 120, 0.8);
 }
 
-/* Smooth progressive scroll reveal animations for LandingHome (Drop from top + side sequentially) */
+/* Smooth progressive scroll reveal animations for LandingHome */
 .reveal-on-scroll {
   opacity: 0;
   transform: translate3d(55px, -65px, 0) scale(0.95);
@@ -119,7 +156,7 @@ html.dark body {
 .reveal-delay-5 { transition-delay: 590ms; }
 .reveal-delay-6 { transition-delay: 710ms; }
 
-/* Video.js Modern Player Styling & Anti-tamper Protection */
+/* Video.js Modern Player Styling */
 .video-container {
   width: 100%;
   max-width: 100%;
@@ -138,12 +175,19 @@ html.dark body {
   height: 70px !important;
   line-height: 70px !important;
   border: 2px solid rgba(255, 255, 255, 0.25) !important;
-  background-color: rgba(79, 70, 229, 0.85) !important;
+  background-color: rgba(20, 125, 120, 0.9) !important;
   backdrop-filter: blur(8px) !important;
 }
 .video-js:hover .vjs-big-play-button {
-  background-color: rgb(79, 70, 229) !important;
+  background-color: rgb(14, 98, 94) !important;
   transform: translate(-50%, -50%) scale(1.05) !important;
 }
 
-
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
