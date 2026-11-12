@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { BacBranch, ActiveTab } from '../types';
 import { IDENTITY_NOTICE } from '../data/bacData';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 import confetti from 'canvas-confetti';
 
 interface HeaderProps {

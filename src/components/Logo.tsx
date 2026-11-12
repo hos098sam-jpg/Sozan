@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, Atom } from 'lucide-react';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 
 interface LogoProps {
   className?: string;

@@ -22,7 +22,7 @@ import { User, AppView } from '../types';
 import { signupWithEmail } from '../auth';
 import { getSavedUsers, saveUsers, saveCurrentUser } from '../data/initialData';
 import registerIllustration from '../assets/images/register_page_illustration_1790724483777.jpg';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 
 interface SignupPageProps {
   onNavigate: (view: AppView) => void;

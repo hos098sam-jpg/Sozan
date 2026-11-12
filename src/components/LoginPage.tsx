@@ -32,7 +32,7 @@ import {
 import { getSavedUsers, saveCurrentUser } from '../data/initialData';
 import { getDeviceInfoPayload } from '../utils/deviceFingerprint';
 import loginIllustration from '../assets/images/login_page_illustration_1790724497630.jpg';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 
 interface LoginPageProps {
   onNavigate: (view: AppView) => void;

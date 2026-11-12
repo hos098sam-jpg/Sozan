@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { User, AppView, PlatformSettings } from '../types';
 import { Logo } from './Logo';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 import { TikTokIcon } from './TikTokIcon';
 import { NotificationBell } from './NotificationBell';
 

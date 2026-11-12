@@ -66,7 +66,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { AdminWhatsAppManager } from './AdminWhatsAppManager';
 import { LuckyWheelModal } from './LuckyWheelModal';
 import { ParentWhatsappReportModal, buildDirectParentWhatsappUrl } from './ParentWhatsappReportModal';
-import qalbAlElmLogo from '../assets/images/logo_1791663594965.jpg';
+const qalbAlElmLogo = '/logo.png';
 import {
   calculateStudentStats,
   calculateGradeAggregateStats,
