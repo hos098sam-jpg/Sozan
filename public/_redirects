@@ -1,0 +1,5 @@
+/* Cloudflare Pages SPA routing: send client-side routes to the Vite entry point. */
+/* /api/* is intentionally not stubbed by static JSON; deploy a real authenticated API separately if API routes are enabled. */
+/* /api/* /api_fallback.json 200 */
+/* /<path:asset> <path:asset> 200 */
+/* /<path:route> /index.html 200 */

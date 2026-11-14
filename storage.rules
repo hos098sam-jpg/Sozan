@@ -1,41 +1,40 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-
-    function isAuthenticated() {
+    function signedIn() {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-
     function isAdmin() {
-      return isAuthenticated() && request.auth.token.admin == true;
+      return signedIn() && request.auth.token.admin == true;
     }
 
-    // User avatar uploads: max 5MB, image types only
+    // Public avatars only; writes are owner-only and limited to image uploads.
     match /avatars/{userId}/{fileName} {
       allow read: if true;
-      allow write: if isOwner(userId) && 
-        request.resource.size < 5 * 1024 * 1024 &&
-        request.resource.contentType.matches('image/.*');
+      allow create, update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if signedIn() && request.auth.uid == userId;
     }
 
-    // Student exam & homework PDF submissions: max 15MB
+    // Student submission files: allow only PDF/images with a strict size cap.
     match /submissions/{userId}/{fileName} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow write: if isOwner(userId) && 
-        request.resource.size < 15 * 1024 * 1024;
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
+      allow create, update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 15 * 1024 * 1024
+        && (request.resource.contentType == 'application/pdf'
+          || request.resource.contentType.matches('image/.*'));
+      allow delete: if isAdmin() || (signedIn() && request.auth.uid == userId);
     }
 
-    // Course educational media and materials (Protected: only Admin, teachers, or authorized enrolled students with verified custom claims)
-    match /courses/{courseId}/{allFiles=**} {
-      allow read: if isAdmin() || (isAuthenticated() && (request.auth.token.role == 'teacher' || (request.auth.token.enrolledCourses != null && courseId in request.auth.token.enrolledCourses)));
-      allow write: if isAdmin() || (isAuthenticated() && request.auth.token.role == 'teacher');
+    // Video uploads are intentionally disabled. Lessons use externally hosted URLs.
+    match /videos/{allPaths=**} {
+      allow read, write: if false;
     }
 
-    // Fallback: Deny everything else
     match /{allPaths=**} {
       allow read, write: if false;
     }
