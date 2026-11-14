@@ -10,7 +10,7 @@ export const ResponsiveContainer: React.FC<{
   </div>
 );
 
-const BaseChart: React.FC<{ data?: any[]; children?: React.ReactNode }> = ({ data = [], children }) => {
+const BaseChart: React.FC<{ data?: any[]; children?: React.ReactNode; [key: string]: any }> = ({ data = [], children }) => {
   if (!data || data.length === 0) return null;
   const maxVal = Math.max(100, ...data.map((d) => Number(d?.النسبة_المئوية ?? d?.percentage ?? d?.value ?? 0)));
   return (
@@ -54,7 +54,7 @@ export const AreaChart = BaseChart;
 export const LineChart = BaseChart;
 export const ComposedChart = BaseChart;
 
-export const PieChart: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
+export const PieChart: React.FC<{ children?: React.ReactNode; [key: string]: any }> = ({ children }) => (
   <div className="w-full h-full flex items-center justify-center p-2">{children}</div>
 );
 

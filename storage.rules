@@ -1,7 +1,6 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -10,32 +9,59 @@ service firebase.storage {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    function isAdmin() {
-      return isAuthenticated() && request.auth.token.admin == true;
+    function isEmailVerifiedAdmin() {
+      return isAuthenticated() &&
+        request.auth.token.email == 'hos098sam@gmail.com' &&
+        request.auth.token.email_verified == true;
     }
 
-    // User avatar uploads: max 5MB, image types only
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin' ||
+        isEmailVerifiedAdmin() ||
+        firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid)) ||
+        (firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isTeacher() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'teacher' ||
+        isAdmin() ||
+        (firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'teacher')
+      );
+    }
+
+    function isEnrolledStudent(courseId) {
+      return isAuthenticated() && (
+        (request.auth.token.enrolledCourses != null && courseId in request.auth.token.enrolledCourses) ||
+        (firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         courseId in firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.enrolledCourseIds)
+      );
+    }
+
     match /avatars/{userId}/{fileName} {
-      allow read: if true;
-      allow write: if isOwner(userId) && 
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) &&
         request.resource.size < 5 * 1024 * 1024 &&
         request.resource.contentType.matches('image/.*');
     }
 
-    // Student exam & homework PDF submissions: max 15MB
-    match /submissions/{userId}/{fileName} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow write: if isOwner(userId) && 
+    match /submissions/{userId}/{allFiles=**} {
+      allow read: if isOwner(userId) || isTeacher() || isAdmin();
+      allow write: if isOwner(userId) &&
         request.resource.size < 15 * 1024 * 1024;
     }
 
-    // Course educational media and materials (Protected: only Admin, teachers, or authorized enrolled students with verified custom claims)
     match /courses/{courseId}/{allFiles=**} {
-      allow read: if isAdmin() || (isAuthenticated() && (request.auth.token.role == 'teacher' || (request.auth.token.enrolledCourses != null && courseId in request.auth.token.enrolledCourses)));
-      allow write: if isAdmin() || (isAuthenticated() && request.auth.token.role == 'teacher');
+      allow read: if isAdmin() || isTeacher() || isEnrolledStudent(courseId);
+      allow write: if (isAdmin() || isTeacher()) &&
+        request.resource.size < 500 * 1024 * 1024;
     }
 
-    // Fallback: Deny everything else
     match /{allPaths=**} {
       allow read, write: if false;
     }

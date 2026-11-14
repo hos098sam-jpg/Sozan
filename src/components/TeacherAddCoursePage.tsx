@@ -51,7 +51,7 @@ export const TeacherAddCoursePage: React.FC<TeacherAddCoursePageProps> = ({
   // Form states
   const [courseTitle, setCourseTitle] = useState(existingCourse?.title || '');
   const [courseType, setCourseType] = useState<CourseType>(existingCourse?.courseType || 'integrated');
-  const [courseYear, setCourseYear] = useState<SchoolYearGrade>(existingCourse?.schoolYear as SchoolYearGrade || 'الصف الثالث الثانوي');
+  const [courseYear, setCourseYear] = useState<SchoolYearGrade>(existingCourse?.schoolYear as SchoolYearGrade || 'الصف الأول الثانوي');
   const [courseDivision, setCourseDivision] = useState<string>(existingCourse?.division || teacherSpecialty);
   const [coursePrice, setCoursePrice] = useState<number>(existingCourse?.price || 0);
   const [coursePaymentPhone, setCoursePaymentPhone] = useState<string>(existingCourse?.paymentPhone || '');
@@ -271,7 +271,7 @@ export const TeacherAddCoursePage: React.FC<TeacherAddCoursePageProps> = ({
               type="text"
               value={courseTitle}
               onChange={(e) => setCourseTitle(e.target.value)}
-              placeholder="مثال: كورس المراجعة النهائية في الفيزياء الكهربية 2027"
+              placeholder="مثال: كورس الشرح والمراجعة في مادة الفلسفة — الصف الأول الثانوي"
               required
               className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-bold focus:outline-none focus:border-indigo-500 text-right"
             />
@@ -312,24 +312,7 @@ export const TeacherAddCoursePage: React.FC<TeacherAddCoursePageProps> = ({
                 }}
                 className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:border-indigo-500 text-right"
               >
-                <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                  <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                  <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                  <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                  <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                  <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                  <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                </optgroup>
-                <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                  <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                  <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                  <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                </optgroup>
-                <optgroup label="المرحلة الثانوية">
-                  <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                  <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                  <option value="الصف الثالث الثانوي">الصف الثالث الثانوي (دفعة 2027)</option>
-                </optgroup>
+                <option value="الصف الأول الثانوي">الصف الأول الثانوي — مادة الفلسفة</option>
               </select>
             </div>
           </div>

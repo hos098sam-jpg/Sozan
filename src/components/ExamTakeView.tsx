@@ -362,7 +362,7 @@ export const ExamTakeView: React.FC<ExamTakeViewProps> = ({
       const studentName = currentUser?.name || 'طالب منصة المتفلسفة ';
       const studentPhone = currentUser?.phone || '';
       const parentPhone = currentUser?.parentPhone || currentUser?.fatherPhone || currentUser?.motherPhone || '';
-      const studentSchoolYear = currentUser?.schoolYear || 'الصف الثالث الثانوي';
+      const studentSchoolYear = currentUser?.schoolYear || 'الصف الأول الثانوي';
 
       let finalSubmission: StudentExamSubmission;
 

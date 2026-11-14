@@ -164,7 +164,7 @@ export const TeacherAssistantsModal: React.FC<Props> = ({
             assistantForTeacherName: teacher.name,
             subject: teacher.subject || 'مادة عامة',
             specialty: teacher.specialty || 'عام',
-            schoolYear: teacher.schoolYear || 'الصف الثالث الثانوي',
+            schoolYear: teacher.schoolYear || 'الصف الأول الثانوي',
             status: 'active',
           };
           return updatedAssistantObj;
@@ -188,7 +188,7 @@ export const TeacherAssistantsModal: React.FC<Props> = ({
         accountNumber: cleanNumber,
         password: cleanPass,
         parentPhone: '',
-        schoolYear: teacher.schoolYear || 'الصف الثالث الثانوي',
+        schoolYear: teacher.schoolYear || 'الصف الأول الثانوي',
         role: 'assistant',
         isAssistant: true,
         assistantSpecialty,

@@ -68,10 +68,14 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
       if (saved) {
         setLocalNotes(JSON.parse(saved));
       } else if (currentUser?.videoNotes) {
-        setLocalNotes(currentUser.videoNotes);
+        const notesMap = currentUser.videoNotes as Record<string, VideoTimestampNote[]>;
+        setLocalNotes(Array.isArray(notesMap) ? notesMap : (notesMap[lessonId] || notesMap["all"] || []));
       }
     } catch {
-      if (currentUser?.videoNotes) setLocalNotes(currentUser.videoNotes);
+      if (currentUser?.videoNotes) {
+        const notesMap = currentUser.videoNotes as Record<string, VideoTimestampNote[]>;
+        setLocalNotes(Array.isArray(notesMap) ? notesMap : (notesMap[lessonId] || notesMap["all"] || []));
+      }
     }
   }, [currentUser?.id]);
 
@@ -81,7 +85,8 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
       const res = await fetch(
         `/api/lesson-qa?courseId=${encodeURIComponent(courseId)}&lessonId=${encodeURIComponent(lessonId)}`
       );
-      if (res.ok) {
+      const ct = res.headers.get("content-type") || "";
+      if (res.ok && ct.includes("application/json")) {
         const data = await res.json();
         if (Array.isArray(data.items)) {
           setQaItems(data.items);
@@ -186,8 +191,12 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
     e.preventDefault();
     if (!noteText.trim()) return;
 
+    const parts = (noteTimestamp.trim() || '00:00').split(':').map((n) => parseInt(n, 10) || 0);
+    const tsSeconds = parts.length === 2 ? parts[0] * 60 + parts[1] : (parts.length === 3 ? parts[0] * 3600 + parts[1] * 60 + parts[2] : (parts[0] || 0));
     const newNote: VideoTimestampNote = {
       id: `vnote_${Date.now()}`,
+      videoId: lessonId,
+      timestampSeconds: tsSeconds,
       courseId,
       lessonId,
       lessonTitle,
@@ -374,7 +383,7 @@ export const LessonQASection: React.FC<LessonQASectionProps> = ({
                           {item.videoTimestamp && (
                             <button
                               type="button"
-                              onClick={() => onSeekToTimestamp && onSeekToTimestamp(item.videoTimestamp!)}
+                              onClick={() => onSeekToTimestamp && onSeekToTimestamp(String(item.videoTimestamp!))}
                               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-black hover:bg-amber-500/25 transition cursor-pointer"
                             >
                               <PlayCircle className="w-3 h-3" />

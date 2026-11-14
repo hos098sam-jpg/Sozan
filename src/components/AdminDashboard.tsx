@@ -66,7 +66,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { AdminWhatsAppManager } from './AdminWhatsAppManager';
 import { LuckyWheelModal } from './LuckyWheelModal';
 import { ParentWhatsappReportModal, buildDirectParentWhatsappUrl } from './ParentWhatsappReportModal';
-const qalbAlElmLogo = '/logo.png';
+const platformLogo = '/logo.png';
 import {
   calculateStudentStats,
   calculateGradeAggregateStats,
@@ -293,9 +293,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // --- Course Creation Modal / State ---
   const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
   const [newCourseTitle, setNewCourseTitle] = useState('');
-  const [newCourseYear, setNewCourseYear] = useState<SchoolYearGrade>('الصف الثالث الثانوي');
+  const [newCourseYear, setNewCourseYear] = useState<SchoolYearGrade>('الصف الأول الثانوي');
   const [newCourseDivision, setNewCourseDivision] = useState<string>('عام لجميع الشعب');
-  const [newCourseSubject, setNewCourseSubject] = useState('الفلسفة والمنطق');
+  const [newCourseSubject, setNewCourseSubject] = useState('الفلسفة');
   const [newCoursePrice, setNewCoursePrice] = useState<number>(180);
   const [newCoursePaymentPhone, setNewCoursePaymentPhone] = useState<string>('');
   const [newCoursePaymentQrCode, setNewCoursePaymentQrCode] = useState<string>('');
@@ -371,7 +371,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // --- Competition Creation State ---
   const [isAddCompModalOpen, setIsAddCompModalOpen] = useState(false);
   const [compTitle, setCompTitle] = useState('');
-  const [compYear, setCompYear] = useState<string>('الصف الثالث الثانوي');
+  const [compYear, setCompYear] = useState<string>('الصف الأول الثانوي');
   const [compDuration, setCompDuration] = useState<number>(15);
   const [compDesc, setCompDesc] = useState('');
   const [compPrize, setCompPrize] = useState('');
@@ -398,13 +398,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [teacherAvatar, setTeacherAvatar] = useState(
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'
   );
-  const [teacherSubject, setTeacherSubject] = useState('الفلسفة والمنطق');
+  const [teacherSubject, setTeacherSubject] = useState('الفلسفة');
   const [teacherCustomSubject, setTeacherCustomSubject] = useState('');
-  const [teacherSpecialty, setTeacherSpecialty] = useState('شعبة علمي علوم');
+  const [teacherSpecialty, setTeacherSpecialty] = useState('عام');
   const [teacherGender, setTeacherGender] = useState<'ذكر' | 'أنثى'>('ذكر');
-  const [teacherSchoolYear, setTeacherSchoolYear] = useState<string>('الصف الثالث الثانوي');
+  const [teacherSchoolYear, setTeacherSchoolYear] = useState<string>('الصف الأول الثانوي');
   const [teacherAccountNumber, setTeacherAccountNumber] = useState('');
-  const [teacherPassword, setTeacherPassword] = useState('123456');
+  const [teacherPassword, setTeacherPassword] = useState('');
   const [showPasswordMap, setShowPasswordMap] = useState<Record<string, boolean>>({});
 
   // Course Edit Modal for Admin
@@ -414,9 +414,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editCourseType, setEditCourseType] = useState<CourseType>('integrated');
   const [editCoursePrice, setEditCoursePrice] = useState(0);
   const [editCourseDesc, setEditCourseDesc] = useState('');
-  const [editCourseSchoolYear, setEditCourseSchoolYear] = useState('الصف الثالث الثانوي');
+  const [editCourseSchoolYear, setEditCourseSchoolYear] = useState('الصف الأول الثانوي');
   const [editCourseDivision, setEditCourseDivision] = useState('عام لجميع الشعب');
-  const [editCourseSubject, setEditCourseSubject] = useState('الفلسفة والمنطق');
+  const [editCourseSubject, setEditCourseSubject] = useState('الفلسفة');
   const [editCourseCover, setEditCourseCover] = useState('');
   const [editCoursePaymentPhone, setEditCoursePaymentPhone] = useState('');
   const [editCoursePaymentQrCode, setEditCoursePaymentQrCode] = useState('');
@@ -527,13 +527,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingTeacherId(null);
     setTeacherName('');
     setTeacherGender('ذكر');
-    setTeacherSchoolYear('الصف الثالث الثانوي');
+    setTeacherSchoolYear('الصف الأول الثانوي');
     setTeacherAvatar('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop');
-    setTeacherSubject('فيزياء');
+    setTeacherSubject('الفلسفة');
     setTeacherCustomSubject('');
-    setTeacherSpecialty('شعبة علمي علوم');
+    setTeacherSpecialty('عام');
     setTeacherAccountNumber(`teacher-${Math.floor(1000 + Math.random() * 9000)}`);
-    setTeacherPassword('123456');
+    setTeacherPassword('');
     setIsTeacherModalOpen(true);
   };
 
@@ -541,13 +541,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingTeacherId(t.id);
     setTeacherName(t.name);
     setTeacherGender(t.gender === 'أنثى' ? 'أنثى' : 'ذكر');
-    setTeacherSchoolYear(t.schoolYear || 'الصف الثالث الثانوي');
+    setTeacherSchoolYear(t.schoolYear || 'الصف الأول الثانوي');
     setTeacherAvatar(t.avatarUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop');
-    setTeacherSubject(t.subject || 'فيزياء');
+    setTeacherSubject(t.subject || 'الفلسفة');
     setTeacherCustomSubject('');
     setTeacherSpecialty(t.specialty || 'عام لجميع الشعب');
     setTeacherAccountNumber(t.accountNumber || t.phone);
-    setTeacherPassword(t.password || '123456');
+    setTeacherPassword('');
     setIsTeacherModalOpen(true);
   };
 
@@ -561,8 +561,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       showFeedback('يرجى تحديد رقم الحساب أو الهاتف للدخول', 'error');
       return;
     }
-    if (!teacherPassword.trim()) {
-      showFeedback('يرجى تحديد كلمة المرور الخاصة بالمعلم', 'error');
+    if (!editingTeacherId && teacherPassword.trim().length < 6) {
+      showFeedback('يرجى إدخال كلمة مرور لا تقل عن 6 أحرف للمعلم الجديد', 'error');
       return;
     }
 
@@ -586,7 +586,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             specialty: finalSpecialty,
             accountNumber: teacherAccountNumber.trim(),
             phone: teacherAccountNumber.trim(),
-            password: teacherPassword.trim(),
           };
           return updatedTeacherObj;
         }
@@ -621,7 +620,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         specialty: finalSpecialty,
         accountNumber: teacherAccountNumber.trim(),
         phone: teacherAccountNumber.trim(),
-        password: teacherPassword.trim(),
         parentPhone: '',
         schoolYear: teacherSchoolYear,
         role: 'teacher',
@@ -651,7 +649,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       name,
       phone: '',
       parentPhone: '',
-      schoolYear: 'الصف الثالث الثانوي',
+      schoolYear: 'الصف الأول الثانوي',
       registeredAt: new Date().toISOString(),
       role: 'teacher' as const,
     };
@@ -1573,7 +1571,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/50 overflow-hidden shrink-0">
               <img
-                src={qalbAlElmLogo}
+                src={platformLogo}
                 alt="شعار منصة المتفلسفة "
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
@@ -3612,19 +3610,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <option value="الرياضيات">الرياضيات</option>
                         <option value="العلوم">العلوم</option>
                         <option value="الدراسات الاجتماعية">الدراسات الاجتماعية</option>
-                        <option value="فيزياء">فيزياء</option>
-                        <option value="كيمياء">كيمياء</option>
-                        <option value="أحياء">أحياء</option>
-                        <option value="جيولوجيا وعلوم البيئة">جيولوجيا وعلوم البيئة</option>
-                        <option value="اللغة الفرنسية">اللغة الفرنسية</option>
-                        <option value="اللغة الألمانية">اللغة الألمانية</option>
-                        <option value="رياضيات بحتة وتطبيقية">رياضيات بحتة وتطبيقية</option>
-                        <option value="تاريخ">تاريخ</option>
-                        <option value="جغرافيا">جغرافيا</option>
-                        <option value="فلسفة ومنطق">فلسفة ومنطق</option>
-                        <option value="علم نفس واجتماع">علم نفس واجتماع</option>
-                        <option value="الحاسب الآلي وتكنولوجيا المعلومات">الحاسب الآلي وتكنولوجيا المعلومات</option>
-                        <option value="التربية الدينية">التربية الدينية</option>
+                        <option value="الفلسفة">الفلسفة (الصف الأول الثانوي)</option>
                         <option value="أخرى">مادة أخرى (تحديد يدوي)</option>
                       </select>
                     </div>
@@ -3662,25 +3648,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         }}
                         className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white"
                       >
-                        <option value="جميع المراحل الدراسية">جميع المراحل (ابتدائي - إعدادي - ثانوي)</option>
-                        <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                          <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                          <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                          <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                          <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                          <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                          <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                          <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                          <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                          <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الثانوية">
-                          <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                          <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                          <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                        </optgroup>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي — مادة الفلسفة</option>
                       </select>
                     </div>
 
@@ -3754,8 +3722,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <div className="space-y-1">
                         <label className="font-black text-slate-700 block">كلمة المرور الخاصة به *</label>
                         <input
-                          type="text"
-                          required
+                          type="password"
+                          required={!editingTeacherId}
                           placeholder="كلمة المرور"
                           value={teacherPassword}
                           onChange={(e) => setTeacherPassword(e.target.value)}
@@ -4360,24 +4328,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         }}
                         className="w-full p-3 rounded-2xl border border-slate-200 text-xs bg-white"
                       >
-                        <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                          <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                          <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                          <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                          <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                          <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                          <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                          <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                          <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                          <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الثانوية">
-                          <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                          <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                          <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                        </optgroup>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي — مادة الفلسفة</option>
                       </select>
                     </div>
 
@@ -4424,7 +4375,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         required
                         value={newCourseSubject}
                         onChange={(e) => setNewCourseSubject(e.target.value)}
-                        placeholder="الفيزياء / الرياضيات / الفلسفة والمنطق..."
+                        placeholder="الفلسفة (الصف الأول الثانوي)"
                         className="w-full p-3 rounded-2xl border border-slate-200 text-xs"
                       />
                     </div>
@@ -4624,24 +4575,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         }}
                         className="w-full p-3 rounded-2xl border border-slate-200 text-xs bg-white font-bold"
                       >
-                        <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                          <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                          <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                          <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                          <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                          <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                          <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                          <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                          <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                          <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                        </optgroup>
-                        <optgroup label="المرحلة الثانوية">
-                          <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                          <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                          <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                        </optgroup>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي — مادة الفلسفة</option>
                       </select>
                     </div>
 
@@ -6387,7 +6321,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
                       <span>إدارة قاعدة البيانات السحابية الدائمة (Firebase Firestore)</span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
-                        qalbalelm
+                        almotafalsifa
                       </span>
                     </h4>
                     <p className="text-xs text-slate-500">
@@ -6534,7 +6468,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
                   <span className="text-slate-400 text-[11px] block">مشروع Firebase</span>
-                  <span className="text-xs font-mono font-black text-indigo-600 block mt-1">qalbalelm</span>
+                  <span className="text-xs font-mono font-black text-indigo-600 block mt-1">almotafalsifa</span>
                 </div>
               </div>
             </div>

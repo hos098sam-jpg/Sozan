@@ -47,8 +47,7 @@ export const AdminWhatsAppManager: React.FC = () => {
   const getAuthHeaders = async (): Promise<Record<string, string>> => {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      "x-admin-secret-key": "qalbalelm_supervisor_secret_2025",
-    };
+          };
     try {
       const token = await getIdToken();
       if (token) {

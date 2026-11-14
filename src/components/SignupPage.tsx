@@ -19,10 +19,10 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { User, AppView } from '../types';
-import { signupWithEmail } from '../auth';
+import { signupWithEmail, getFriendlyAuthErrorMessage } from '../auth';
 import { getSavedUsers, saveUsers, saveCurrentUser } from '../data/initialData';
 import registerIllustration from '../assets/images/register_page_illustration_1790724483777.jpg';
-const qalbAlElmLogo = '/logo.png';
+const motafalsifaLogo = '/logo.png';
 
 interface SignupPageProps {
   onNavigate: (view: AppView) => void;
@@ -39,8 +39,8 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
   const [thirdName, setThirdName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
-  const [schoolYear, setSchoolYear] = useState('الصف الثالث الثانوي');
-  const [division, setDivision] = useState('علمي علوم');
+  const [schoolYear, setSchoolYear] = useState('الصف الأول الثانوي');
+  const [division, setDivision] = useState('عام');
 
   // Step 2: Parent & School Info
   const [fatherPhone, setFatherPhone] = useState('');
@@ -118,64 +118,29 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
 
     try {
       const cleanPhone = phone.replace(/\D/g, '');
-      const targetEmail = email.trim() || `${cleanPhone}@qalbalelm.edu`;
+      const targetEmail = email.trim() || `${cleanPhone}@al-motafalsifa.edu`;
 
-      const isPrimaryOrPrep = schoolYear.includes('الابتدائي') || schoolYear.includes('الإعدادي');
-      const effectiveDivision = isPrimaryOrPrep ? undefined : division;
-
-      // 1. Create in Firebase Auth or local store
-      let newUser: User;
-      try {
-        const res = await signupWithEmail(targetEmail, password, {
-          name: fullName,
-          firstName: firstName.trim(),
-          secondName: secondName.trim(),
-          thirdName: thirdName.trim(),
-          lastName: lastName.trim(),
-          role: 'student',
-          phone: cleanPhone,
-          parentPhone: fatherPhone.trim() || motherPhone.trim(),
-          fatherPhone: fatherPhone.trim(),
-          motherPhone: motherPhone.trim(),
-          schoolYear,
-          division: effectiveDivision,
-          schoolName: schoolName.trim(),
-          governorate,
-          educationSystem,
-          gender,
-          religion,
-          status: 'active',
-        });
-        newUser = res.profile;
-      } catch (authErr: any) {
-        // Fallback local create if network or offline
-        console.warn('Firebase signup notice:', authErr);
-        newUser = {
-          id: `student_${Date.now()}`,
-          name: fullName,
-          firstName: firstName.trim(),
-          secondName: secondName.trim(),
-          thirdName: thirdName.trim(),
-          lastName: lastName.trim(),
-          phone: cleanPhone,
-          parentPhone: fatherPhone.trim() || motherPhone.trim(),
-          fatherPhone: fatherPhone.trim(),
-          motherPhone: motherPhone.trim(),
-          email: targetEmail,
-          password: password,
-          schoolYear,
-          division: effectiveDivision,
-          schoolName: schoolName.trim(),
-          governorate,
-          educationSystem,
-          gender,
-          religion,
-          role: 'student',
-          status: 'active',
-          registeredAt: new Date().toISOString().split('T')[0],
-          enrolledCourseIds: [],
-        };
-      }
+      const res = await signupWithEmail(targetEmail, password, {
+        name: fullName,
+        firstName: firstName.trim(),
+        secondName: secondName.trim(),
+        thirdName: thirdName.trim(),
+        lastName: lastName.trim(),
+        role: 'student',
+        phone: cleanPhone,
+        parentPhone: fatherPhone.trim() || motherPhone.trim(),
+        fatherPhone: fatherPhone.trim(),
+        motherPhone: motherPhone.trim(),
+        schoolYear: 'الصف الأول الثانوي',
+        division: 'عام',
+        schoolName: schoolName.trim(),
+        governorate,
+        educationSystem,
+        gender,
+        religion,
+        status: 'active',
+      });
+      const newUser: User = res.profile;
 
       // Save to local list
       const prevUsers = getSavedUsers();
@@ -188,7 +153,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
         onAuthSuccess(newUser);
       }, 1000);
     } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.');
+      setError(err?.code ? getFriendlyAuthErrorMessage(err.code) : (err.message || 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.'));
     } finally {
       setLoading(false);
     }
@@ -196,7 +161,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
 
   return (
     <div
-      className="min-h-screen w-full bg-[#060b1e] text-white flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-x-hidden"
+      className="min-h-screen w-full bg-[#0c091d] text-white flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-x-hidden"
       dir="rtl"
     >
       {/* Background Glow */}
@@ -257,7 +222,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-white border border-blue-400/50 flex items-center justify-center shadow-md overflow-hidden shrink-0">
                     <img
-                      src={qalbAlElmLogo}
+                      src={motafalsifaLogo}
                       alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
@@ -311,28 +276,28 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="الاسم الأول"
-                        className="p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
+                        className="p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
                       />
                       <input
                         type="text"
                         value={secondName}
                         onChange={(e) => setSecondName(e.target.value)}
                         placeholder="اسم الأب"
-                        className="p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
+                        className="p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
                       />
                       <input
                         type="text"
                         value={thirdName}
                         onChange={(e) => setThirdName(e.target.value)}
                         placeholder="اسم الجد"
-                        className="p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
+                        className="p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
                       />
                       <input
                         type="text"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="اللقب / العائلة"
-                        className="p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
+                        className="p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs placeholder:text-slate-500 text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                   </div>
@@ -348,70 +313,19 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="01xxxxxxxxx"
-                        className="w-full pr-10 pl-4 py-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
+                        className="w-full pr-10 pl-4 py-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className={`space-y-1 ${(schoolYear.includes('الابتدائي') || schoolYear.includes('الإعدادي')) ? 'sm:col-span-2' : ''}`}>
-                      <label className="text-xs font-bold text-slate-300 block">
-                        السنة الدراسية
-                      </label>
-                      <select
-                        value={schoolYear}
-                        onChange={(e) => {
-                          const newGrade = e.target.value;
-                          setSchoolYear(newGrade);
-                          if (newGrade === 'الصف الثالث الثانوي') {
-                            setDivision('شعبة أدبي');
-                          } else {
-                            setDivision('عام');
-                          }
-                        }}
-                        className="w-full p-3 bg-[#0d1b3e] border border-amber-500/40 rounded-xl text-white text-xs text-right focus:outline-none focus:border-amber-400"
-                      >
-                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي (دفعة 2027)</option>
-                      </select>
+                  <div className="p-3.5 rounded-xl bg-[#15112c] border border-[#d4af37]/40 flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-[11px] font-bold text-[#d4af37] block">الصف الدراسي والمادة المعتمدة</span>
+                      <span className="text-sm font-black text-white">الصف الأول الثانوي — مادة الفلسفة</span>
                     </div>
-
-                    {!(schoolYear.includes('الابتدائي') || schoolYear.includes('الإعدادي')) && (
-                      <div className="space-y-1 animate-fadeIn">
-                        <label className="text-xs font-bold text-slate-300 block">
-                          {schoolYear === 'الصف الثالث الثانوي' ? 'الشعبة الدراسية (تالتة ثانوي)' : 'الشعبة (المرحلة الثانوية)'}
-                        </label>
-                        {schoolYear === 'الصف الثالث الثانوي' ? (
-                          <select
-                            value={division}
-                            onChange={(e) => setDivision(e.target.value)}
-                            className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
-                          >
-                            <optgroup label="شعب الصف الثالث الثانوي">
-                              <option value="علمي علوم">علمي علوم</option>
-                              <option value="علمي رياضة">علمي رياضة</option>
-                              <option value="شعبة أدبي">شعبة أدبي</option>
-                            </optgroup>
-                            <optgroup label="نظام المرحلة الثانوية">
-                              <option value="بكالوريا">بكالوريا</option>
-                              <option value="عام">عام</option>
-                              <option value="أزهر">أزهر</option>
-                            </optgroup>
-                          </select>
-                        ) : (
-                          <select
-                            value={division}
-                            onChange={(e) => setDivision(e.target.value)}
-                            className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
-                          >
-                            <option value="بكالوريا">بكالوريا</option>
-                            <option value="عام">عام</option>
-                            <option value="أزهر">أزهر</option>
-                          </select>
-                        )}
-                      </div>
-                    )}
+                    <span className="px-3 py-1 rounded-lg bg-[#d4af37]/15 border border-[#d4af37]/30 text-[#d4af37] text-xs font-black">
+                      أولى ثانوي
+                    </span>
                   </div>
 
                   <div className="pt-2">
@@ -439,7 +353,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         value={fatherPhone}
                         onChange={(e) => setFatherPhone(e.target.value)}
                         placeholder="01xxxxxxxxx"
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                     <div className="space-y-1">
@@ -451,7 +365,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         value={motherPhone}
                         onChange={(e) => setMotherPhone(e.target.value)}
                         placeholder="01xxxxxxxxx"
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                   </div>
@@ -464,7 +378,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                       <select
                         value={governorate}
                         onChange={(e) => setGovernorate(e.target.value)}
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
                       >
                         <option value="السويس">السويس</option>
                         <option value="القاهرة">القاهرة</option>
@@ -497,7 +411,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                       <select
                         value={educationSystem}
                         onChange={(e) => setEducationSystem(e.target.value)}
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
                       >
                         <option value="عربي">عام / عربي</option>
                         <option value="لغات تجريبي">لغات تجريبي</option>
@@ -516,7 +430,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                       value={schoolName}
                       onChange={(e) => setSchoolName(e.target.value)}
                       placeholder="مثال: مدرسة السويس الثانوية العسكرية بنين"
-                      className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
+                      className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
                     />
                   </div>
 
@@ -554,7 +468,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                           className={`p-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer ${
                             gender === 'ذكر'
                               ? 'bg-blue-600 border-blue-400 text-white shadow-md'
-                              : 'bg-[#0d1b3e] border-blue-500/30 text-slate-400'
+                              : 'bg-[#15112c] border-blue-500/30 text-slate-400'
                           }`}
                         >
                           طالب (بنين)
@@ -565,7 +479,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                           className={`p-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer ${
                             gender === 'أنثى'
                               ? 'bg-rose-600 border-rose-400 text-white shadow-md'
-                              : 'bg-[#0d1b3e] border-blue-500/30 text-slate-400'
+                              : 'bg-[#15112c] border-blue-500/30 text-slate-400'
                           }`}
                         >
                           طالبة (بنات)
@@ -582,7 +496,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="yourname@gmail.com"
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-xs text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                   </div>
@@ -599,7 +513,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
                           required
-                          className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
+                          className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
                         />
                         <button
                           type="button"
@@ -621,7 +535,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/30 rounded-xl text-white text-sm text-right focus:outline-none focus:border-blue-400"
                       />
                     </div>
                   </div>
@@ -632,7 +546,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
                       type="checkbox"
                       checked={termsAgreed}
                       onChange={(e) => setTermsAgreed(e.target.checked)}
-                      className="w-4 h-4 rounded border-blue-500/50 bg-[#0d1b3e] accent-blue-600"
+                      className="w-4 h-4 rounded border-blue-500/50 bg-[#15112c] accent-blue-600"
                     />
                     <span>
                       أوافق على <b>شروط الاستخدام</b> وسياسة حماية المحتوى والامتحانات بمنصة المتفلسفة .

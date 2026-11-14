@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { User, SchoolYearGrade } from '../types';
 import { getSavedUsers, saveUsers, saveCurrentUser } from '../data/initialData';
-const qalbAlElmLogo = '/logo.png';
+const motafalsifaLogo = '/logo.png';
 import { 
   loginWithEmail, 
   signupWithEmail, 
@@ -95,8 +95,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [parentLoginPhone, setParentLoginPhone] = useState('');
-  const [schoolYear, setSchoolYear] = useState<string>('الصف الثالث الثانوي');
-  const [division, setDivision] = useState<string>('شعبة علمي علوم');
+  const [schoolYear, setSchoolYear] = useState<string>('الصف الأول الثانوي');
+  const [division, setDivision] = useState<string>('عام');
 
   // Form states - Step 2: Parent & School Info (60%)
   const [fatherPhone, setFatherPhone] = useState('');
@@ -575,316 +575,139 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       // 1. Fetch hardware device identity
       const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
 
-      // 2. Query central server login FIRST to verify credentials (supports students, teachers, and teaching assistants by accountNumber/phone)
-      let serverStatus = 0;
-      let serverErrorMessage = '';
+      const cleanDigits = cleanInput.replace(/\D/g, "");
+      const isSupervisorInput =
+        targetEmail === "hos098sam@gmail.com" ||
+        cleanDigits === "01040672314" ||
+        cleanInput === "+201040672314";
+
+      if (isSupervisorInput) {
+        targetEmail = "hos098sam@gmail.com";
+      } else if (!targetEmail.includes("@")) {
+        if (cleanDigits.length >= 10) {
+          targetEmail = `${cleanDigits}@al-motafalsifa.edu`;
+        } else {
+          setError("يرجى إدخال رقم هاتف صحيح (11 رقم) أو بريد إلكتروني مسجل.");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // 2. Optional Express backend verification (only when API returns JSON)
+      if (!isSupervisorInput) {
+        try {
+          const sRes = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              identifier: cleanInput,
+              password: cleanPass,
+              deviceId: deviceInfo.deviceId,
+              deviceName: deviceInfo.deviceName,
+            }),
+          });
+          const sContentType = sRes.headers.get("content-type") || "";
+          if (sContentType.includes("application/json")) {
+            if (sRes.ok) {
+              const sData = await sRes.json();
+              if (sData.user) {
+                const sid = sData.sessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+                try {
+                  localStorage.setItem("al_motafalsifa_device_session_id", sid);
+                  localStorage.setItem("al_motafalsifa_session_login_ts", String(Date.now()));
+                } catch {}
+                const fbCandidateEmail = sData.user.email || targetEmail;
+                loginWithEmail(fbCandidateEmail, cleanPass).catch(() => {});
+                const authedUser: User = { ...sData.user, activeSessionId: sid };
+                saveCurrentUser(authedUser);
+                onAuthSuccess(authedUser);
+                onClose();
+                return;
+              }
+            } else if (sRes.status === 403 || sRes.status === 401) {
+              const sErr = await sRes.json().catch(() => ({}));
+              setError(sErr.error || "بيانات الدخول غير صحيحة.");
+              setIsSubmitting(false);
+              return;
+            }
+          }
+        } catch {}
+      }
+
+      // 3. Authoritative Firebase Authentication (Zero hardcoded passwords or client-side bypasses)
+      const fbUser = await loginWithEmail(targetEmail, cleanPass);
+      const userProfile = await fetchUserProfile(fbUser.uid);
+      const isSupervisor = fbUser.email === "hos098sam@gmail.com";
+
+      const authenticatedUser: User = userProfile
+        ? {
+            ...userProfile,
+            role: isSupervisor ? "admin" : userProfile.role,
+            status: userProfile.status || "active",
+            emailVerified: fbUser.emailVerified,
+          }
+        : {
+            id: fbUser.uid,
+            name: isSupervisor ? "إدارة المنصة" : fbUser.displayName || "طالب منصة المتفلسفة",
+            email: fbUser.email || targetEmail,
+            phone: isSupervisor ? "01040672314" : cleanDigits,
+            parentPhone: "",
+            schoolYear: isSupervisor ? "المشرف العام ومؤسس المنصة" : "الصف الأول الثانوي",
+            role: isSupervisor ? "admin" : "student",
+            status: "active",
+            registeredAt: new Date().toISOString().split("T")[0],
+            enrolledCourseIds: [],
+            examResults: {},
+            emailVerified: fbUser.emailVerified,
+          };
+
+      const deviceSessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
       try {
-        const sRes = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const regRes = await fetch("/api/auth/register-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            identifier: cleanInput,
-            password: cleanPass,
+            userId: authenticatedUser.id,
+            phone: authenticatedUser.phone || "",
+            activeSessionId: deviceSessionId,
             deviceId: deviceInfo.deviceId,
             deviceName: deviceInfo.deviceName,
           }),
         });
-        serverStatus = sRes.status;
-
-        if (sRes.ok) {
-          const sData = await sRes.json();
-          if (sData.user) {
-            const sid = sData.sessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-            try {
-              localStorage.setItem('al_motafalsifa_device_session_id', sid);
-              localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-            } catch {}
-            // Also sign in to client Firebase Auth in background if email is available so Firestore rules recognize auth.currentUser
-            const fbCandidateEmail = sData.user.email || `${cleanInput.replace(/\D/g, '')}@qalb-alam.edu`;
-            loginWithEmail(fbCandidateEmail, cleanPass).catch(() => {});
-
-            const authedUser: User = { ...sData.user, activeSessionId: sid };
-            saveCurrentUser(authedUser);
-            onAuthSuccess(authedUser);
-            onClose();
-            return;
-          }
-        } else if (sRes.status === 403) {
-          const sErr = await sRes.json().catch(() => ({}));
-          setError(sErr.error || 'عذراً، لقد استنفذت الحد المسموح به لتغيير الجهاز (مرتان شهرياً كحد أقصى لمنع مشاركة الحساب).');
+        const rType = regRes.headers.get("content-type") || "";
+        if (rType.includes("application/json") && !regRes.ok && regRes.status === 403) {
+          const regErr = await regRes.json().catch(() => ({}));
+          setError(regErr.error || "عذراً، لقد استنفذت الحد المسموح به لتغيير الجهاز (مرتان شهرياً كحد أقصى).");
           setIsSubmitting(false);
           return;
-        } else {
-          const sErr = await sRes.json().catch(() => ({}));
-          serverErrorMessage = sErr.error || '';
         }
-      } catch (netErr) {
-        console.warn('Direct server login network notice:', netErr);
-      }
-
-      // Check if user is logging in as Admin with email (hos098sam@gmail.com)
-      const isAdminAccount = targetEmail === 'hos098sam@gmail.com';
-
-      // If user typed a phone number or accountNumber instead of email, resolve from registered list or standard synthetic email
-      if (!targetEmail.includes('@')) {
-        let matchedEmail = '';
-        const cleanDigits = cleanInput.replace(/\D/g, '');
-
-        // Check if admin entered admin phone
-        if (cleanDigits === '01040672314' || cleanInput === '+201040672314') {
-          targetEmail = 'hos098sam@gmail.com';
-        } else {
-          // 1. Check local saved users list by accountNumber or phone
-          const localUsers = getSavedUsers();
-          const matchedLocal = localUsers.find(
-            (u) =>
-              (u.accountNumber && u.accountNumber.trim().toLowerCase() === cleanInput.toLowerCase()) ||
-              (u.phone && u.phone.trim().toLowerCase() === cleanInput.toLowerCase()) ||
-              (cleanDigits.length > 0 && u.phone && u.phone.replace(/\D/g, '') === cleanDigits)
-          );
-          if (matchedLocal) {
-            if (matchedLocal.password && matchedLocal.password === cleanPass) {
-              const sid = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-              const authedUser: User = { ...matchedLocal, activeSessionId: sid };
-              saveCurrentUser(authedUser);
-              onAuthSuccess(authedUser);
-              onClose();
-              return;
-            }
-            matchedEmail = matchedLocal.email?.toLowerCase() || `${cleanDigits || cleanInput}@qalb-alam.edu`;
-          }
-
-          // 2. If not found locally, query Firestore by phone
-          if (!matchedEmail) {
-            try {
-              const qPhone = query(collection(db, 'users'), where('phone', '==', cleanInput), limit(1));
-              const snapPhone = await getDocs(qPhone);
-              if (!snapPhone.empty) {
-                const docData = snapPhone.docs[0].data();
-                matchedEmail = (docData?.email || `${cleanDigits || cleanInput}@qalb-alam.edu`).toLowerCase();
-              }
-            } catch (e) {
-              // Firestore read may be restricted while unauthenticated; fall back to synthetic email
-            }
-          }
-
-          // 3. Always allow falling back to the platform's standard phone-based email (@qalb-alam.edu)
-          if (matchedEmail) {
-            targetEmail = matchedEmail;
-          } else if (cleanDigits.length >= 10) {
-            targetEmail = `${cleanDigits}@qalb-alam.edu`;
-          } else {
-            setError(serverErrorMessage || 'رقم الهاتف أو الحساب غير مسجل في المنصة. يرجى التأكد من الرقم.');
-            setIsSubmitting(false);
-            return;
-          }
-        }
-      }
-
-      // 3. Fallback: Authenticate with Firebase Authentication (with direct server fallback for school tablets)
-      let fbUser: any = null;
-      try {
-        fbUser = await loginWithEmail(targetEmail, cleanPass);
-      } catch (authErr: any) {
-        const errCode = authErr?.code || '';
-        console.warn('Firebase login attempt result:', errCode || authErr?.message);
-
-        if (!fbUser) {
-          // If user credentials do not exist or mismatch
-          if (errCode === 'auth/invalid-credential' || errCode === 'auth/user-not-found' || errCode === 'auth/wrong-password') {
-            const isSupervisor = targetEmail === 'hos098sam@gmail.com';
-            const localUsers = getSavedUsers();
-            const localMatch = localUsers.find(
-              (u) =>
-                u.email?.toLowerCase() === targetEmail ||
-                (u.accountNumber && u.accountNumber.trim().toLowerCase() === cleanInput.toLowerCase()) ||
-                (u.phone && u.phone.replace(/\D/g, '') === cleanInput.replace(/\D/g, ''))
-            );
-
-            // If local account has an explicit saved password that matches cleanPass
-            if (localMatch && localMatch.password && localMatch.password === cleanPass) {
-              fbUser = {
-                uid: localMatch.id,
-                email: localMatch.email || targetEmail,
-                displayName: localMatch.name,
-                emailVerified: true,
-                serverUser: localMatch,
-              };
-            } else if (isSupervisor) {
-              const adminUser: User = {
-                id: 'admin-hosam-supervisor',
-                name: 'إدارة المنصة',
-                email: 'hos098sam@gmail.com',
-                phone: '01040672314',
-                parentPhone: '',
-                role: 'admin',
-                status: 'active',
-                schoolYear: 'المشرف العام ومؤسس المنصة',
-                registeredAt: '2026-09-25',
-                emailVerified: true,
-              };
-              const sid = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-              try {
-                localStorage.setItem('al_motafalsifa_device_session_id', sid);
-                localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-              } catch {}
-              if (cleanPass !== 'Hossam2027') {
-                setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
-                setIsSubmitting(false);
-                return;
-              }
-              saveCurrentUser(adminUser);
-              onAuthSuccess(adminUser);
-              onClose();
-              return;
-            } else if (localMatch || serverStatus === 401) {
-              setError(serverErrorMessage || 'كلمة المرور غير صحيحة. يرجى التأكد من كتابة كلمة المرور بشكل دقيق.');
-              setIsSubmitting(false);
-              return;
-            } else {
-              // Account does not exist on platform
-              setError(serverErrorMessage || 'هذا الحساب أو الرقم غير مسجل في المنصة. يرجى إنشاء حساب جديد أولاً.');
-              setIsSubmitting(false);
-              return;
-            }
-          } else {
-            console.warn('Login error encountered:', errCode);
-            setError(serverErrorMessage || getFriendlyAuthErrorMessage(errCode) || authErr.message);
-            setIsSubmitting(false);
-            return;
-          }
-        }
-      }
-
-      if (!fbUser) {
-        setError(serverErrorMessage || 'هذا الحساب غير مسجل في المنصة. يرجى إنشاء حساب جديد.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 4. Fetch official profile from serverUser or Firestore
-      let userProfile = fbUser.serverUser || (await fetchUserProfile(fbUser.uid));
-      const isSupervisor = fbUser.email === 'hos098sam@gmail.com' || targetEmail === 'hos098sam@gmail.com';
-
-      if (!userProfile && !isSupervisor) {
-        const localUsers = getSavedUsers();
-        const localMatch = localUsers.find(
-          (u) => u.email?.toLowerCase() === targetEmail || (u.phone && u.phone.replace(/\D/g, '') === cleanInput.replace(/\D/g, ''))
-        );
-        if (localMatch) {
-          userProfile = localMatch;
-          try {
-            await setDoc(doc(db, 'users', fbUser.uid), { ...localMatch, id: fbUser.uid }, { merge: true });
-          } catch {}
-        }
-      }
-
-      // If Firebase Auth succeeded, ensure userProfile exists and sync credentials to server
-      if (!userProfile && !isSupervisor) {
-        userProfile = {
-          id: fbUser.uid,
-          name: fbUser.displayName || 'طالب منصة المتفلسفة ',
-          email: fbUser.email || targetEmail,
-          phone: cleanInput.includes('@') ? '' : cleanInput,
-          parentPhone: '',
-          schoolYear: 'الصف الثالث الثانوي',
-          role: 'student',
-          status: 'active',
-          registeredAt: new Date().toISOString().split('T')[0],
-          enrolledCourseIds: [],
-          examResults: {},
-        };
-      }
-
-      // Sync verified password to server disk cache so future logins work instantaneously
-      if (userProfile && !isSupervisor) {
-        fetch('/api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...userProfile,
-            id: fbUser.uid || userProfile.id,
-            uid: fbUser.uid || userProfile.id,
-            password: cleanPass,
-            deviceId: deviceInfo.deviceId,
-            deviceName: deviceInfo.deviceName,
-            syncFromFirebaseAuth: true,
-          }),
-        }).catch(() => {});
-      }
-
-      let authenticatedUser: User;
-      if (userProfile) {
-        authenticatedUser = {
-          ...userProfile,
-          role: isSupervisor ? 'admin' : userProfile.role,
-          status: 'active',
-          emailVerified: fbUser.emailVerified,
-        };
-      } else {
-        authenticatedUser = {
-          id: fbUser.uid,
-          name: 'إدارة المنصة',
-          email: fbUser.email || targetEmail,
-          phone: cleanInput.includes('@') ? '' : cleanInput,
-          parentPhone: '',
-          schoolYear: 'المشرف العام ومؤسس المنصة',
-          role: 'admin',
-          status: 'active',
-          registeredAt: new Date().toISOString().split('T')[0],
-          emailVerified: fbUser.emailVerified,
-        };
-      }
-
-      // Enforce device binding and limit checking via register-session
-      const deviceSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
-      const regRes = await fetch('/api/auth/register-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: authenticatedUser.id,
-          phone: authenticatedUser.phone || '',
-          activeSessionId: deviceSessionId,
-          deviceId: deviceInfo.deviceId,
-          deviceName: deviceInfo.deviceName,
-        }),
-      });
-
-      if (!regRes.ok && regRes.status === 403) {
-        const regErr = await regRes.json().catch(() => ({}));
-        setError(regErr.error || 'عذراً، لقد استنفذت الحد المسموح به لتغيير الجهاز (مرتان شهرياً كحد أقصى لمنع مشاركة الحساب).');
-        setIsSubmitting(false);
-        return;
-      }
-
-      try {
-        localStorage.setItem('al_motafalsifa_device_session_id', deviceSessionId);
-        localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
       } catch {}
 
       try {
-        await setDoc(doc(db, 'users', authenticatedUser.id), {
-          activeSessionId: deviceSessionId,
-          status: 'active',
-          currentDeviceId: deviceInfo.deviceId,
-          currentDeviceName: deviceInfo.deviceName,
-          lastLoginAt: new Date().toISOString(),
-        }, { merge: true });
-      } catch (e) {
-        console.warn('Could not save activeSessionId to Firestore:', e);
-      }
+        localStorage.setItem("al_motafalsifa_device_session_id", deviceSessionId);
+        localStorage.setItem("al_motafalsifa_session_login_ts", String(Date.now()));
+      } catch {}
+
+      try {
+        await setDoc(
+          doc(db, "users", authenticatedUser.id),
+          {
+            activeSessionId: deviceSessionId,
+            currentDeviceId: deviceInfo.deviceId || null,
+            currentDeviceName: deviceInfo.deviceName || null,
+            lastLoginAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch {}
 
       authenticatedUser.activeSessionId = deviceSessionId;
       authenticatedUser.currentDeviceId = deviceInfo.deviceId;
       authenticatedUser.currentDeviceName = deviceInfo.deviceName;
-      authenticatedUser.status = 'active';
-
-      // 5. Authenticate and proceed directly
       onAuthSuccess(authenticatedUser);
       onClose();
     } catch (err: any) {
-      console.warn('Login process warning:', err?.message || err);
-      setError(getFriendlyAuthErrorMessage(err?.code || ''));
+      setError(getFriendlyAuthErrorMessage(err?.code || ""));
     } finally {
       setIsSubmitting(false);
     }
@@ -963,7 +786,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         name: `ولي أمر الطالب (${stNames || mainStudent?.name || 'طالب المتفلسفة '})`,
         phone: cleanPhone,
         parentPhone: cleanPhone,
-        schoolYear: mainStudent?.schoolYear || 'الصف الثالث الثانوي',
+        schoolYear: mainStudent?.schoolYear || 'الصف الأول الثانوي',
         role: 'parent',
         status: 'active',
         guardianVerified: true,
@@ -1085,22 +908,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // 2. Query Firestore users for phone duplicate
-    setIsSubmitting(true);
-    try {
-      const qPhone = query(collection(db, 'users'), where('phone', '==', cleanPhone), limit(1));
-      const snapPhone = await getDocs(qPhone);
-      if (!snapPhone.empty) {
-        setError('رقم الهاتف مسجل بالفعل في المنصة بحساب آخر. لا يمكن تكرار أرقام الهواتف، يرجى تسجيل الدخول مباشرة.');
-        setIsSubmitting(false);
-        return;
-      }
-    } catch (err) {
-      console.warn('Firestore phone duplicate check warning:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
-
     setSignupStep(2);
   };
 
@@ -1140,74 +947,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setSignupStep(3);
   };
 
-  // Final Submit on Step 3 (الخطوة الأخيرة 90%) using Firebase Authentication & Firestore (بالاعتماد على رقم الهاتف)
+  // Final Submit on Step 3 using Firebase Authentication & Firestore
   const handleFinalSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    const cleanPhone = phone.trim().replace(/\s+/g, '');
-    const cleanDigits = cleanPhone.replace(/\D/g, '');
-    const generatedEmail = `${cleanDigits}@qalb-alam.edu`;
+    const cleanPhone = phone.trim().replace(/\s+/g, "");
+    const cleanDigits = cleanPhone.replace(/\D/g, "");
+    const generatedEmail = `${cleanDigits}@al-motafalsifa.edu`;
 
     if (!cleanPhone || !isValidPhone(cleanPhone)) {
-      setError('الرجاء التأكد من إدخال رقم هاتف صحيح للطالب.');
+      setError("الرجاء التأكد من إدخال رقم هاتف صحيح للطالب.");
       return;
     }
 
     const cleanPass = password.trim();
     if (cleanPass.length < 6) {
-      setError('كلمة السر يجب ألا تقل عن 6 خانات لأمان الحساب.');
+      setError("كلمة السر يجب ألا تقل عن 6 خانات لأمان الحساب.");
       return;
     }
-
     if (cleanPass !== confirmPassword.trim()) {
-      setError('كلمتا السر غير متطابقتين.');
+      setError("كلمتا السر غير متطابقتين.");
       return;
     }
-
     if (!termsAgreed) {
-      setError('الرجاء الموافقة على الشروط والأحكام واتفاقية شراء الكورس في منصة المتفلسفة .');
-      return;
-    }
-
-    // Check duplicate phone locally
-    const users = getSavedUsers();
-    if (users.some((u) => u.phone && u.phone.replace(/\D/g, '') === cleanDigits)) {
-      setError('رقم الهاتف هذا مسجل بالفعل في المنصة بحساب آخر. لا يمكن تكرار أرقام الهواتف أو إنشاء أكثر من حساب لنفس الرقم، يرجى تسجيل الدخول مباشرة.');
+      setError("الرجاء الموافقة على الشروط والأحكام واتفاقية الاشتراك في منصة المتفلسفة.");
       return;
     }
 
     setIsSubmitting(true);
 
-    // Check duplicate phone in Firestore
-    try {
-      const qPhone = query(collection(db, 'users'), where('phone', '==', cleanPhone), limit(1));
-      const snapPhone = await getDocs(qPhone);
-      if (!snapPhone.empty) {
-        setError('رقم الهاتف هذا مسجل بالفعل في المنصة بحساب آخر. لا يمكن تكرار أرقام الهواتف أو إنشاء أكثر من حساب لنفس الرقم، يرجى تسجيل الدخول مباشرة.');
-        setIsSubmitting(false);
-        return;
-      }
-    } catch (e) {
-      console.warn('Firestore phone duplicate check warning:', e);
-    }
-
     const fullName = `${firstName.trim()} ${secondName.trim()} ${thirdName.trim()} ${lastName.trim()}`;
     const primaryParentPhone = fatherPhone.trim() || motherPhone.trim();
+    const deviceSessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
+    const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: "", deviceName: "" }));
 
-    const isPrimaryOrPrep = schoolYear.includes('الابتدائي') || schoolYear.includes('الإعدادي');
-    const isSecondary = schoolYear.includes('الثانوي') || schoolYear.includes('بكالوريا');
-    const activeDivision = isPrimaryOrPrep ? '' : division;
-
-    // Composite school year label if secondary with division
-    const fullSchoolYearDisplay = isSecondary && activeDivision ? `${schoolYear} (${activeDivision})` : schoolYear;
-
-    // Generate unique active session token for single-device enforcement
-    const deviceSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
-    const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
     try {
-      localStorage.setItem('al_motafalsifa_device_session_id', deviceSessionId);
-      localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
+      localStorage.setItem("al_motafalsifa_device_session_id", deviceSessionId);
+      localStorage.setItem("al_motafalsifa_session_login_ts", String(Date.now()));
     } catch {}
 
     const profileData: Partial<User> = {
@@ -1216,124 +993,74 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       secondName: secondName.trim(),
       thirdName: thirdName.trim(),
       lastName: lastName.trim(),
-      governorate: governorate,
+      governorate,
       phone: cleanPhone,
       parentPhone: primaryParentPhone,
       fatherPhone: fatherPhone.trim(),
       motherPhone: motherPhone.trim(),
       schoolName: schoolName.trim(),
       parentJob: parentJob.trim(),
-      educationSystem: educationSystem,
-      division: isSecondary ? activeDivision : undefined,
-      religion: religion,
-      gender: gender,
+      educationSystem,
+      division: "عام",
+      religion,
+      gender,
       email: generatedEmail,
-      schoolYear: fullSchoolYearDisplay,
-      role: 'student',
-      status: 'active', // تفعيل الحساب فوراً ومباشرة دون انتظار مراجعة
+      schoolYear: "الصف الأول الثانوي",
+      role: "student",
+      status: "active",
       activeSessionId: deviceSessionId,
       currentDeviceId: deviceInfo.deviceId || undefined,
       currentDeviceName: deviceInfo.deviceName || undefined,
-      registeredAt: new Date().toISOString().split('T')[0],
+      registeredAt: new Date().toISOString().split("T")[0],
       enrolledCourseIds: [],
       examResults: {},
     };
 
     try {
       const { profile } = await signupWithEmail(generatedEmail, cleanPass, profileData);
-
-      // Save user session in Firestore
       try {
         await setDoc(
-          doc(db, 'users', profile.id),
+          doc(db, "users", profile.id),
           {
             activeSessionId: deviceSessionId,
-            status: 'active',
             currentDeviceId: deviceInfo.deviceId || null,
             currentDeviceName: deviceInfo.deviceName || null,
           },
           { merge: true }
         );
-      } catch (e) {}
+      } catch {}
 
-      // Cache in local users list for instant offline display
       const currentUsers = getSavedUsers();
       const finalProfile: User = {
         ...profile,
-        status: 'active',
+        status: "active",
+        schoolYear: "الصف الأول الثانوي",
         activeSessionId: deviceSessionId,
         currentDeviceId: deviceInfo.deviceId || profile.currentDeviceId,
         currentDeviceName: deviceInfo.deviceName || profile.currentDeviceName,
       };
-      const updatedUsers = [...currentUsers.filter((u) => u.phone?.replace(/\D/g, '') !== cleanDigits), finalProfile];
+      const updatedUsers = [...currentUsers.filter((u) => u.phone?.replace(/\D/g, "") !== cleanDigits), finalProfile];
       saveUsers(updatedUsers);
       saveCurrentUser(finalProfile);
 
-      setSuccessMsg('تم إنشاء وتفعيل حسابك بنجاح! جاري تسجيل الدخول مباشرة...');
+      setSuccessMsg("تم إنشاء وتفعيل حسابك بنجاح! جاري تسجيل الدخول مباشرة...");
       setTimeout(() => {
         setIsSubmitting(false);
         onAuthSuccess(finalProfile);
         onClose();
       }, 500);
     } catch (err: any) {
-      console.warn('Signup error, attempting direct school tablet server fallback:', err);
-      try {
-        const sRes = await fetch('/api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...profileData,
-            email: generatedEmail,
-            password: cleanPass,
-            deviceId: deviceInfo.deviceId,
-            deviceName: deviceInfo.deviceName,
-          }),
-        });
-        const sData = await sRes.json();
-        if (sRes.ok && sData.user) {
-          const finalProfile: User = { ...sData.user, status: 'active', activeSessionId: deviceSessionId };
-          const currentUsers = getSavedUsers();
-          saveUsers([...currentUsers.filter((u) => u.phone?.replace(/\D/g, '') !== cleanDigits), finalProfile]);
-          saveCurrentUser(finalProfile);
-          setSuccessMsg('تم إنشاء وتفعيل حسابك بنجاح! جاري فتح المنصة فوراً...');
-          setTimeout(() => {
-            setIsSubmitting(false);
-            onAuthSuccess(finalProfile);
-            onClose();
-          }, 500);
-          return;
-        }
-        if (sData.error) {
-          setError(sData.error);
-          setIsSubmitting(false);
-          return;
-        }
-      } catch {}
-
-      if (err?.code === 'auth/email-already-in-use') {
-        setError('رقم الهاتف هذا مسجل بالفعل في المنصة بحساب آخر. لا يمكن تكرار أرقام الهواتف، يرجى تسجيل الدخول مباشرة.');
+      if (err?.code === "auth/email-already-in-use") {
+        setError("رقم الهاتف هذا مسجل بالفعل في المنصة بحساب آخر. يرجى تسجيل الدخول مباشرة.");
       } else {
-        setError(getFriendlyAuthErrorMessage(err?.code || '') || err?.message || 'تعذر إنشاء الحساب حالياً.');
+        setError(err?.code ? getFriendlyAuthErrorMessage(err.code) : (err?.message || "تعذر إنشاء الحساب، يرجى المحاولة مجدداً."));
       }
       setIsSubmitting(false);
     }
   };
 
   // Grade choices specified by user (1st Primary to 3rd Secondary)
-  const gradesList = [
-    'الصف الأول الابتدائي',
-    'الصف الثاني الابتدائي',
-    'الصف الثالث الابتدائي',
-    'الصف الرابع الابتدائي',
-    'الصف الخامس الابتدائي',
-    'الصف السادس الابتدائي',
-    'الصف الأول الإعدادي',
-    'الصف الثاني الإعدادي',
-    'الصف الثالث الإعدادي',
-    'الصف الأول الثانوي',
-    'الصف الثاني الثانوي',
-    'الصف الثالث الثانوي'
-  ];
+  const gradesList = ['الصف الأول الثانوي'];
 
   // Education systems specified by user: عربي، لغات، بكالوريا
   const educationSystems = [
@@ -1407,7 +1134,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-full bg-white border border-indigo-200 flex items-center justify-center shadow-xs overflow-hidden shrink-0">
                     <img
-                      src={qalbAlElmLogo}
+                      src={motafalsifaLogo}
                       alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
@@ -1639,80 +1366,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </div>
                   </div>
 
-                  {/* School Grade / Year & Conditional Branching for Secondary Only (No division in Primary & Prep) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className={(schoolYear.includes('الابتدائي') || schoolYear.includes('الإعدادي')) ? 'sm:col-span-2' : ''}>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        الصف الدراسي
-                      </label>
-                      <select
-                        value={schoolYear}
-                        onChange={(e) => {
-                          const newGrade = e.target.value;
-                          setSchoolYear(newGrade);
-                          if (newGrade.includes('الابتدائي') || newGrade.includes('الإعدادي')) {
-                            setDivision('');
-                          } else if (newGrade === 'الصف الثالث الثانوي') {
-                            setDivision('علمي علوم');
-                          } else {
-                            setDivision('بكالوريا');
-                          }
-                        }}
-                        className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white font-medium text-slate-800"
-                      >
-                        
-                        
-                        <optgroup label="المرحلة الثانوية">
-                          <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                          <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                          <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                        </optgroup>
-                      </select>
+                  <div className="p-3.5 rounded-2xl bg-[#15112c]/5 dark:bg-[#15112c] border border-[#d4af37]/40 flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-[11px] font-bold text-[#b68b35] dark:text-[#d4af37] block">الصف الدراسي والمادة المقررة</span>
+                      <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">الصف الأول الثانوي — مادة الفلسفة</span>
                     </div>
-
-                    {/* Show Division / Branch selector ONLY for Secondary Stage */}
-                    {schoolYear === 'الصف الثالث الثانوي' ? (
-                      <div className="animate-fadeIn">
-                        <label className="block text-xs font-bold text-indigo-700 mb-1 flex items-center gap-1">
-                          <Compass className="w-3.5 h-3.5 text-indigo-600" />
-                          <span>الشعبة (الصف الثالث الثانوي)</span>
-                        </label>
-                        <select
-                          value={thirdSecondaryDivisions.includes(division) ? division : 'علمي علوم'}
-                          onChange={(e) => setDivision(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-2xl border border-indigo-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-indigo-50/50 font-bold text-indigo-900"
-                        >
-                          <optgroup label="شعب تالتة ثانوي التخصصية">
-                            <option value="علمي علوم">علمي علوم</option>
-                            <option value="علمي رياضة">علمي رياضة</option>
-                            <option value="شعبة أدبي">شعبة أدبي</option>
-                          </optgroup>
-                          <optgroup label="نظام المرحلة الثانوية">
-                            <option value="بكالوريا">بكالوريا</option>
-                            <option value="عام">عام</option>
-                            <option value="أزهر">أزهر</option>
-                          </optgroup>
-                        </select>
-                      </div>
-                    ) : (schoolYear === 'الصف الأول الثانوي' || schoolYear === 'الصف الثاني الثانوي') ? (
-                      <div className="animate-fadeIn">
-                        <label className="block text-xs font-bold text-indigo-700 mb-1 flex items-center gap-1">
-                          <Compass className="w-3.5 h-3.5 text-indigo-600" />
-                          <span>الشعبة (المرحلة الثانوية)</span>
-                        </label>
-                        <select
-                          value={secondaryDivisions.includes(division) ? division : 'بكالوريا'}
-                          onChange={(e) => setDivision(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-2xl border border-indigo-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-indigo-50/50 font-bold text-indigo-900"
-                        >
-                          {secondaryDivisions.map((div) => (
-                            <option key={div} value={div}>
-                              {div}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    ) : null}
+                    <span className="px-3 py-1 rounded-xl bg-[#d4af37]/20 border border-[#d4af37]/40 text-[#9c7316] dark:text-[#d4af37] text-[11px] font-black">
+                      أولى ثانوي
+                    </span>
                   </div>
 
                   {/* Next Step Button */}
@@ -2004,7 +1665,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <div className="flex justify-between pb-1 border-b border-slate-200/80">
                       <span className="text-slate-500">المرحلة والنظام:</span>
                       <span className="font-bold text-indigo-700">
-                        {schoolYear} {schoolYear === 'الصف الثالث الثانوي' ? `(${division})` : ''} • نظام {educationSystem}
+                        {schoolYear} {schoolYear === 'الصف الأول الثانوي' ? `(${division})` : ''} • نظام {educationSystem}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -2581,7 +2242,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </div>
                     {parentMatchedStudents[0] && (
                       <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400 border-t border-slate-200/60 dark:border-slate-700/60 pt-2">
-                        <span>المرحلة: {parentMatchedStudents[0].schoolYear || 'الصف الثالث الثانوي'}</span>
+                        <span>المرحلة: {parentMatchedStudents[0].schoolYear || 'الصف الأول الثانوي'}</span>
                         <span>المدرسة: {parentMatchedStudents[0].schoolName || 'ثانوي عام'}</span>
                       </div>
                     )}

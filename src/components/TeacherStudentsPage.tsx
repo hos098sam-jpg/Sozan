@@ -290,7 +290,7 @@ export const TeacherStudentsPage: React.FC<TeacherStudentsPageProps> = ({
                             {isFemale ? 'طالبة (بنات)' : 'طالب (بنين)'}
                           </span>
                           <span className="text-[10px] text-slate-400 font-bold">
-                            {student.schoolYear || 'الصف الثالث الثانوي'}
+                            {student.schoolYear || 'الصف الأول الثانوي'}
                           </span>
                         </div>
                       </div>

@@ -122,7 +122,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({ isOpen, onClose })
             <span>جروب طلاب المتفلسفة </span>
           </a>
           <a
-            href="https://www.tiktok.com/@qalbalelm"
+            href="https://www.tiktok.com/@almotafalsifa"
             target="_blank"
             rel="noopener noreferrer"
             className="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors text-center"

@@ -39,11 +39,11 @@ import {
 import { DEFAULT_COURSES } from './defaultCourses';
 
 export const INITIAL_PLATFORM_SETTINGS: PlatformSettings = {
-  platformName: 'المتفلسفة ',
-  heroTitle: 'منصة المتفلسفة  لدفعة 2027',
-  heroSubtitle: 'المنصة المتكاملة لتقديم الكورسات، الامتحانات الإلكترونية، والمسابقات الرسمية لدفعة 2027 تحت إشراف إدارة المنصة.',
+  platformName: 'المتفلسفة',
+  heroTitle: 'منصة المتفلسفة — الصف الأول الثانوي',
+  heroSubtitle: 'المنصة المتكاملة لشرح مادة الفلسفة للصف الأول الثانوي، الامتحانات الإلكترونية التتابعية، وبنك الأسئلة تحت إشراف أ/ سوزان كريم الخولى.',
   supervisorName: 'أ/ سوزان كريم الخولى',
-  supervisorTitle: 'معلمة الفلسفة والمنطق والمشرف العام',
+  supervisorTitle: 'معلمة مادة الفلسفة للصف الأول الثانوي والمشرف العام',
   heroBannerImage: '/logo.png',
   announcementText: '',
   contactPhone: '+201040672314',
@@ -67,9 +67,9 @@ export const INITIAL_STUDENTS: User[] = [
     parentPhone: '',
     status: 'active',
     registeredAt: '2026-09-20',
-    bio: 'خبيرة وموجهة الفلسفة والمنطق وعلم النفس والاجتماع للمرحلة الثانوية',
-    subject: 'الفلسفة والمنطق وعلم النفس والاجتماع',
-    schoolYear: 'جميع المراحل الدراسية',
+    bio: 'معلمة وموجهة مادة الفلسفة للصف الأول الثانوي',
+    subject: 'الفلسفة',
+    schoolYear: 'الصف الأول الثانوي',
     enrolledCourseIds: [],
   } as unknown as User,
 ];

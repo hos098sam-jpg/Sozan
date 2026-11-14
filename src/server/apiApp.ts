@@ -770,8 +770,8 @@ export function sanitizeTextInput(text: any, maxChars: number = 8000): string {
 export async function requireAdminOrSecret(req: AuthenticatedRequest, res: express.Response, next: express.NextFunction) {
   // Check 1: Admin setup secret in headers
   const adminSecret = req.headers["x-admin-secret-key"] as string | undefined;
-  const configuredSecret = process.env.ADMIN_SETUP_SECRET || "qalbalelm_supervisor_secret_2025";
-  if (adminSecret && adminSecret === configuredSecret) {
+  const configuredSecret = process.env.ADMIN_SETUP_SECRET || "";
+  if (configuredSecret && adminSecret && adminSecret === configuredSecret) {
     return next();
   }
 
@@ -2364,7 +2364,7 @@ app.get("/api/whatsapp/meta-config", requireAdminOrSecret, async (req, res) => {
     return res.json({
       success: true,
       config: {
-        hasToken: Boolean(config.token),
+        hasToken: Boolean(config.hasToken),
         phoneNumberId: config.phoneNumberId || "",
         wabaId: config.wabaId || "",
         templateName: config.templateName || "",
@@ -6708,7 +6708,7 @@ app.get("/api/video/yt-silent-stream/:videoId", async (req, res) => {
     });
 
     res.status(upstreamResp.status);
-    res.setHeader("Content-Type", upstreamResp.headers["content-type"] || "video/mp4");
+    res.setHeader("Content-Type", String(upstreamResp.headers["content-type"] || "video/mp4"));
     res.setHeader("Accept-Ranges", "bytes");
     if (upstreamResp.headers["content-range"]) {
       res.setHeader("Content-Range", String(upstreamResp.headers["content-range"]));
@@ -11412,7 +11412,7 @@ app.get("/api/onedrive/cloudshell-sync", async (_req, res) => {
   try {
     // Poll public relay channel used by Azure Cloud Shell (bypasses Cloud Run preview cookie 404)
     const relayRes = await axios.get(
-      "https://ntfy.sh/qalb_onedrive_sync_471331550/json?poll=1&since=1700000000",
+      "",
       { timeout: 5000, responseType: "text" }
     );
     if (relayRes.data && typeof relayRes.data === "string") {

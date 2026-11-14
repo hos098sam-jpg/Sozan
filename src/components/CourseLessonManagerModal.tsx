@@ -30,6 +30,8 @@ import {
 import { Course, CourseLesson, LessonVideo, LessonPdf, CourseExam, ExamQuestion } from '../types';
 import { saveExamToStore, deleteExamFromStore, saveCourses, getSavedCourses, addDeletedVideoId } from '../data/initialData';
 import { compressImageFile } from '../utils/imageUtils';
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 import { SecureVideoPlayer } from './SecureVideoPlayer';
 import {
   uploadVideoToVcdn,
@@ -168,69 +170,13 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
   };
 
   const getAutoSyncCurlCommand = () => {
-    return `curl -s -H "Metadata:true" -d "resource=https://graph.microsoft.com" http://localhost:50342/oauth2/token | grep -o '"access_token":"[^"]*' | cut -d'"' -f4 | curl -s -T - https://ntfy.sh/qalb_onedrive_sync_471331550 > /dev/null && echo "✅ DONE! Token sent to platform!"`;
+    return `# انسخ التوكن يدوياً من Microsoft Graph Explorer أو استخدم الرفع المباشر للمنصة`;
   };
 
   const handlePullCloudShellToken = async (silent = false) => {
     try {
-      // 1. Direct browser poll from public relay (instant & bypasses any proxy)
-      let pulledToken = '';
-      try {
-        const directRes = await fetch(
-          'https://ntfy.sh/qalb_onedrive_sync_471331550/json?poll=1&since=1700000000'
-        );
-        if (directRes.ok) {
-          const text = await directRes.text();
-          const lines = text.trim().split('\n').filter(Boolean);
-          for (let i = lines.length - 1; i >= 0; i--) {
-            try {
-              const item = JSON.parse(lines[i]);
-              let msg = String(item?.message || '').trim();
-              if (msg.includes('access_token')) {
-                const m = msg.match(/"access_token"\s*:\s*"([^"]+)"/);
-                if (m && m[1]) msg = m[1];
-              }
-              const clean = msg.replace(/^Bearer\s+/i, '').replace(/["'\s\r\n]+/g, '');
-              if (clean.startsWith('eyJ') && clean.length > 200) {
-                pulledToken = clean;
-                break;
-              }
-            } catch {}
-          }
-        }
-      } catch {}
-
-      if (pulledToken) {
-        if (pulledToken !== oneDriveToken) {
-          setOneDriveToken(pulledToken);
-          saveOneDriveToken(pulledToken);
-          setOneDriveError(null);
-          setOneDriveSuccessMsg('🎉 تم استلام التوكن كاملاً من الشاشة السوداء تلقائياً! جاري فحص الحساب...');
-          try {
-            const info = await verifyOneDriveAccount(pulledToken);
-            setOneDriveAccount(info);
-            setOneDriveSuccessMsg(
-              `🎉 تم الربط بنجاح بحساب (${info.ownerName}) — المساحة المتبقية: ${info.remainingGB} جيجابايت من أصل ${info.totalGB} جيجابايت ✅`
-            );
-          } catch (vErr: any) {
-            setOneDriveError(vErr?.message || null);
-          }
-        } else if (!silent) {
-          setOneDriveError(null);
-          try {
-            const info = await verifyOneDriveAccount(pulledToken);
-            setOneDriveAccount(info);
-            setOneDriveSuccessMsg(
-              `🎉 تم الربط بنجاح بحساب (${info.ownerName}) — المساحة المتبقية: ${info.remainingGB} جيجابايت ✅`
-            );
-          } catch (vErr: any) {
-            setOneDriveError(vErr?.message || null);
-          }
-        }
-        return;
-      }
-
-      // 2. Fallback server check
+      const pulledToken = '';
+      // Server check only (disabled public ntfy.sh broadcast for security)
       const res = await fetch('/api/onedrive/cloudshell-sync');
       const data = await res.json();
       if (data && data.hasToken && data.token) {
@@ -439,7 +385,7 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
               vcdnVideoId: vcdnRes.videoId,
               vcdnStatus: 'ready',
               vcdnHlsUrl: streamUrl,
-              vcdnEmbedUrl: vcdnRes.embedUrl || streamUrl,
+              vcdnEmbedUrl: (vcdnRes as any).embedUrl || (vcdnRes as any).hlsUrl || streamUrl,
               duration: finalDuration,
               description: videoDesc.trim(),
               order: nextOrder,
@@ -501,6 +447,9 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
   const [isUploadingGhHls, setIsUploadingGhHls] = useState<boolean>(false);
   const [ghHlsProgress, setGhHlsProgress] = useState<{
     percentage: number;
+    uploadedMB?: string;
+    totalMB?: string;
+    speedMBps?: string;
     statusText: string;
   } | null>(null);
   const [ghHlsSuccessMsg, setGhHlsSuccessMsg] = useState<string | null>(null);
@@ -674,7 +623,68 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
         statusText: `جاري قراءة وتجهيز الفيديو (${totalMB} MB)...`,
       });
 
-      // Direct Serverless Upload to GitHub Vault
+      const hasGithubToken = Boolean(import.meta.env?.VITE_GITHUB_TOKEN);
+      let playlistUrl = "";
+      if (hasGithubToken && file.size <= 95 * 1024 * 1024) {
+        try {
+          const vaultResult = await uploadVideoDirectlyToVault(
+            file,
+            manualTitle,
+            (prog) => {
+              setGhHlsProgress({
+                percentage: prog.percentage,
+                uploadedMB: prog.uploadedMB,
+                totalMB: prog.totalMB,
+                speedMBps: prog.speedMBps,
+                statusText: prog.statusText,
+              });
+            }
+          );
+          playlistUrl = vaultResult.videoUrl;
+        } catch (ghErr) {
+          console.warn("GitHub Vault fallback to Firebase Storage:", ghErr);
+        }
+      }
+
+      if (!playlistUrl) {
+        // Direct Serverless Upload to Firebase Storage (works natively on Cloudflare Pages / static hosting up to 500MB)
+        const safeExt = (file.name.split(".").pop() || "mp4").replace(/[^a-zA-Z0-9]/g, "") || "mp4";
+        const filePath = `courses/${course.id}/videos/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${safeExt}`;
+        const fileRef = storageRef(storage, filePath);
+        playlistUrl = await new Promise<string>((resolve, reject) => {
+          const uploadTask = uploadBytesResumable(fileRef, file, {
+            contentType: file.type || "video/mp4",
+          });
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const pct = snapshot.totalBytes > 0
+                ? Math.max(5, Math.min(98, Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)))
+                : 10;
+              const uploadedMB = (snapshot.bytesTransferred / (1024 * 1024)).toFixed(1);
+              setGhHlsProgress({
+                percentage: pct,
+                uploadedMB,
+                totalMB,
+                speedMBps: "0.0",
+                statusText: `جاري رفع الفيديو إلى مخزن المنصة السحابي (${uploadedMB} / ${totalMB} MB)...`,
+              });
+            },
+            (err) => reject(err),
+            async () => {
+              try {
+                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                resolve(url);
+              } catch (e) {
+                reject(e);
+              }
+            }
+          );
+        });
+      }
+
+      const _unusedVaultSkip = false;
+      if (_unusedVaultSkip) {
       const vaultResult = await uploadVideoDirectlyToVault(
         file,
         manualTitle,
@@ -689,10 +699,11 @@ export const CourseLessonManagerModal: React.FC<CourseLessonManagerModalProps> =
         }
       );
 
+      playlistUrl = vaultResult.videoUrl;
+      }
+
       setIsUploadingGhHls(false);
       setGhHlsProgress(null);
-
-      const playlistUrl = vaultResult.videoUrl;
       const estMinutes = Math.max(1, Math.round(file.size / (1024 * 1024 * 3)));
       const finalDuration = videoDuration.trim() || `${estMinutes} دقيقة`;
 

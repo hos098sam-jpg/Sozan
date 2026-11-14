@@ -45,11 +45,14 @@ import {
   Copy,
   Smartphone,
   Send,
+  Radio,
 } from 'lucide-react';
 import { Course, CourseExam, User, CourseAccessCode, CourseLesson, LessonVideo, LessonPdf, WalletOrder, WalletTransaction } from '../types';
 import { ExamTakeView } from './ExamTakeView';
 import { SecureVideoPlayer } from './SecureVideoPlayer';
 import { CertificateModal } from './CertificateModal';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 import { createGatewayVideoPayload } from '../utils/mediaUtils';
 import { getVideoProgress, clearVideoProgress, formatSecondsToTime } from '../utils/videoProgress';
 import {
@@ -224,7 +227,8 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({
         if (currentUser?.id) q.set('studentId', currentUser.id);
         if (currentUser?.phone) q.set('studentPhone', currentUser.phone);
         const res = await fetch(`/api/courses/${encodeURIComponent(course.id)}/enrollment-status?${q.toString()}`);
-        if (!res.ok || cancelled) return;
+        const ct = res.headers.get("content-type") || "";
+        if (!res.ok || !ct.includes("application/json") || cancelled) return;
         const data = await res.json();
         if (cancelled) return;
         if (typeof data.authoritativePrice === 'number' && data.authoritativePrice >= 0) {
@@ -603,25 +607,60 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({
     setWalletSuccess(null);
 
     try {
+      const orderPayload = {
+        studentId: currentUser.id,
+        studentName: currentUser.name,
+        studentPhone: currentUser.phone || "",
+        senderPhone: senderWalletPhone.trim(),
+        transactionId: transactionRefId.trim() || "",
+        courseId: course.id,
+        courseTitle: course.title,
+        coursePrice: courseBasePrice,
+        couponCode: appliedCoupon?.code || "",
+        paymentMethod: isInstaPay ? "instapay" : "vodafone_cash",
+        receiptImageUrl: receiptImageUrl || "",
+      };
       const res = await fetch('/api/gateway/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify(orderPayload),
+      }).catch(() => null);
+
+      const ct = res?.headers.get("content-type") || "";
+      let data: any = null;
+      if (res && ct.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const orderId = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+        const pendingOrder: WalletOrder = {
+          id: orderId,
           studentId: currentUser.id,
           studentName: currentUser.name,
-          studentPhone: currentUser.phone,
+          studentPhone: currentUser.phone || "",
           senderPhone: senderWalletPhone.trim(),
+          targetWallet: effectiveReceivingWallet,
           transactionId: transactionRefId.trim() || undefined,
           courseId: course.id,
           courseTitle: course.title,
-          coursePrice: courseBasePrice,
-          couponCode: appliedCoupon?.code,
-          paymentMethod: isInstaPay ? 'instapay' : 'vodafone_cash',
-          receiptImageUrl: receiptImageUrl || undefined,
-        }),
-      });
-
-      const data = await res.json();
+          originalPrice: courseBasePrice,
+          discountAmount: currentDiscountAmount,
+          finalAmount: finalPayableAmount,
+          paymentMethod: isInstaPay ? "instapay" : "vodafone_cash",
+          status: "Pending",
+          createdAt: new Date().toISOString(),
+        };
+        await setDoc(doc(db, "orders", orderId), {
+          ...pendingOrder,
+          updatedAt: serverTimestamp(),
+        });
+        setActivePendingOrder(pendingOrder);
+        setWalletSuccess(
+          isInstaPay
+            ? "تم تسجيل طلب التحويل عبر إنستا باي بنجاح! سيتم مراجعته وتفعيل الكورس فور التأكيد من الإدارة."
+            : "تم إرسال طلب التحويل بنجاح! سيتم مراجعة الإيصال وتفعيل الكورس في حسابك فور التأكيد."
+        );
+        return;
+      }
 
       if (!res.ok) {
         throw new Error(data.error || 'حدث خطأ أثناء إرسال طلب التحويل.');

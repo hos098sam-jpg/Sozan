@@ -26,7 +26,7 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div className={`flex items-center gap-3 select-none ${className}`}>
       <div
-        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-lg shadow-teal-900/20 border border-teal-700/30 overflow-hidden shrink-0 group`}
+        className={`${currentSize.box} relative bg-white text-white flex items-center justify-center shadow-md shadow-indigo-950/20 border-2 border-amber-400/50 p-0.5 overflow-hidden shrink-0 group`}
       >
         <img
           src="/logo.png"
@@ -37,7 +37,7 @@ export const Logo: React.FC<LogoProps> = ({
             e.currentTarget.style.display = 'none';
           }}
         />
-        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-gradient-to-br from-teal-700 via-teal-800 to-slate-900">
+        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-gradient-to-br from-[#281d5c] via-[#1a133c] to-[#0c091d]">
           <Heart className={`${currentSize.icon} text-rose-200 fill-rose-300/40`} />
           <Atom className="absolute w-3.5 h-3.5 text-amber-300 opacity-90" />
         </div>
@@ -49,7 +49,7 @@ export const Logo: React.FC<LogoProps> = ({
             <h1 className={`${currentSize.title} font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate`}>
               منصة المتفلسفة
             </h1>
-            <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-amber-500 to-teal-700 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
+            <span className="hidden xs:inline-block sm:inline-block bg-gradient-to-r from-[#281d5c] to-[#d4af37] text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs shrink-0">
               2027
             </span>
           </div>

@@ -368,7 +368,7 @@ export const TeacherStudentProgressPage: React.FC<TeacherStudentProgressPageProp
                         {rawParentPhone && rawParentPhone !== student.phone ? (
                           <> • هاتف ولي الأمر: <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">{rawParentPhone}</span></>
                         ) : null}{' '}
-                        • {student.schoolYear || 'الصف الثالث الثانوي'}
+                        • {student.schoolYear || 'الصف الأول الثانوي'}
                       </p>
                     </div>
                   </div>

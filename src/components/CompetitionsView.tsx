@@ -36,20 +36,7 @@ export const CompetitionsView: React.FC<CompetitionsViewProps> = ({
     if (compYear === studentYear) return true;
     if (compYear.includes('جميع') || studentYear.includes(compYear) || compYear.includes(studentYear)) return true;
 
-    if (studentYear.includes('الأول الابتدائي') && compYear.includes('الأول الابتدائي')) return true;
-    if (studentYear.includes('الثاني الابتدائي') && compYear.includes('الثاني الابتدائي')) return true;
-    if (studentYear.includes('الثالث الابتدائي') && compYear.includes('الثالث الابتدائي')) return true;
-    if (studentYear.includes('الرابع الابتدائي') && compYear.includes('الرابع الابتدائي')) return true;
-    if (studentYear.includes('الخامس الابتدائي') && compYear.includes('الخامس الابتدائي')) return true;
-    if (studentYear.includes('السادس الابتدائي') && compYear.includes('السادس الابتدائي')) return true;
-    
-    if (studentYear.includes('الأول الإعدادي') && compYear.includes('الأول الإعدادي')) return true;
-    if (studentYear.includes('الثاني الإعدادي') && compYear.includes('الثاني الإعدادي')) return true;
-    if (studentYear.includes('الثالث الإعدادي') && compYear.includes('الثالث الإعدادي')) return true;
-    
     if (studentYear.includes('الأول الثانوي') && compYear.includes('الأول الثانوي')) return true;
-    if (studentYear.includes('الثاني الثانوي') && compYear.includes('الثاني الثانوي')) return true;
-    if (studentYear.includes('الثالث الثانوي') && (compYear.includes('الثالث الثانوي') || compYear.includes('بكالوريا'))) return true;
 
     return false;
   };

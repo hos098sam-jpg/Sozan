@@ -3,17 +3,17 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <!-- الصفحة الرئيسية -->
   <url>
-    <loc>https://motafalsifa.vercel.app/</loc>
+    <loc>https://sozan.pages.dev/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://motafalsifa.vercel.app/logo.png</image:loc>
+      <image:loc>https://sozan.pages.dev/logo.png</image:loc>
       <image:title>شعار منصة المتفلسفة </image:title>
       <image:caption>منصة المتفلسفة  - المنصة التعليمية المتكاملة للكورسات والامتحانات والمسابقات الرسمية لدفعة 2027</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://motafalsifa.vercel.app/og-image.jpg</image:loc>
+      <image:loc>https://sozan.pages.dev/og-image.jpg</image:loc>
       <image:title>غلاف منصة المتفلسفة  الرسمي</image:title>
       <image:caption>منصة المتفلسفة  - المنصة التعليمية المتطورة لكافة المراحل التعليمية وثانوية عامة 2027 إشراف حسام أحمد مساعد</image:caption>
     </image:image>
@@ -21,30 +21,23 @@
 
   <!-- الكورسات والامتحانات -->
   <url>
-    <loc>https://motafalsifa.vercel.app/?view=courses</loc>
+    <loc>https://sozan.pages.dev/?view=courses</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?q=80&amp;w=800&amp;auto=format&amp;fit=crop</image:loc>
-      <image:title>كورس الفيزياء الكهربائية المتقدمة - بكالوريا 2027</image:title>
-      <image:caption>شرح تفصيلي لقوانين كيرشوف والمكثفات وحل مسائل امتحانية مع نماذج إجابات رسمية</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&amp;w=800&amp;auto=format&amp;fit=crop</image:loc>
-      <image:title>كورس التفاضل والتكامل والتحليل الرياضي - دفعة 2027</image:title>
-      <image:caption>المشتقات والتكاملات وتطبيقات النهايات لطلاب الثانوية والبكالوريا علمي رياضة</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1507413245164-6160d8298b31?q=80&amp;w=800&amp;auto=format&amp;fit=crop</image:loc>
-      <image:title>كورس الكيمياء التحليلية والعضوية - 2027</image:title>
-      <image:caption>تجارب كيميائية تفاعلية، الكيمياء العضوية والتفاعلات المتسلسلة</image:caption>
-    </image:image>
+      <image:title>  <!-- الكورسات والامتحانات -->
+  <url>
+    <loc>https://sozan.pages.dev/?view=courses</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <!-- المسابقات والجوائز -->
   <url>
-    <loc>https://motafalsifa.vercel.app/?view=competitions</loc>
+    <loc>https://sozan.pages.dev/?view=competitions</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -57,7 +50,7 @@
 
   <!-- سياسة الخصوصية -->
   <url>
-    <loc>https://motafalsifa.vercel.app/?view=privacy</loc>
+    <loc>https://sozan.pages.dev/?view=privacy</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -65,7 +58,7 @@
 
   <!-- الشروط والأحكام -->
   <url>
-    <loc>https://motafalsifa.vercel.app/?view=terms</loc>
+    <loc>https://sozan.pages.dev/?view=terms</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

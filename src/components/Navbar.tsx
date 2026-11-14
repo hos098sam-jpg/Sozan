@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { User, AppView, PlatformSettings } from '../types';
 import { Logo } from './Logo';
-const qalbAlElmLogo = '/logo.png';
+const platformLogo = '/logo.png';
 import { TikTokIcon } from './TikTokIcon';
 import { NotificationBell } from './NotificationBell';
 
@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = currentUser?.role === 'teacher' ? teacherNavLinks : currentUser ? loggedInNavLinks : loggedOutNavLinks;
 
   return (
-    <header className="sticky top-0 z-40 w-full max-w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs transition-colors duration-200">
+    <header className="sticky top-0 z-40 w-full max-w-full bg-white/95 dark:bg-[#0c091d]/95 backdrop-blur-md border-b border-slate-200 dark:border-[#2a234f] shadow-xs transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-2.5 sm:px-6 min-h-[68px] sm:min-h-[74px] py-2 flex items-center justify-between gap-1.5 sm:gap-4">
         {/* Brand & Logo */}
         <div
@@ -446,7 +446,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-full bg-white border border-indigo-400/40 flex items-center justify-center shadow-sm overflow-hidden shrink-0">
                     <img
-                      src={qalbAlElmLogo}
+                      src={platformLogo}
                       alt="شعار منصة المتفلسفة "
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
@@ -777,7 +777,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <div className="relative z-10 flex items-center gap-3 pb-3 border-b border-blue-500/20">
                       <div className="w-11 h-11 rounded-full bg-white border border-blue-400/50 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0 overflow-hidden">
                         <img
-                          src={qalbAlElmLogo}
+                          src={platformLogo}
                           alt="شعار منصة المتفلسفة "
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
@@ -956,7 +956,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* TikTok Link */}
                 <a
-                  href="https://www.tiktok.com/@qalbalelm"
+                  href="https://www.tiktok.com/@almotafalsifa"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-[11px] font-black flex items-center justify-center gap-1.5 shadow-xs transition-colors text-center"

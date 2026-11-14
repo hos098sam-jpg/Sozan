@@ -3,9 +3,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // =========================================================================
-    // 1. HELPER FUNCTIONS & ROLE VERIFICATION
+    // 1. HELPER FUNCTIONS & ROLE VERIFICATION (ZERO-TRUST)
     // =========================================================================
-    function isAuthenticated() {
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+
       return request.auth != null;
     }
 
@@ -13,12 +14,18 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Admin verification via Custom Claims, verified supervisor email, or Admin role document
+    function isEmailVerifiedAdmin() {
+      return isAuthenticated() &&
+        request.auth.token.email == 'hos098sam@gmail.com' &&
+        request.auth.token.email_verified == true;
+    }
+
     function isAdmin() {
       return isAuthenticated() && (
         request.auth.token.admin == true ||
         request.auth.token.role == 'admin' ||
-        request.auth.token.email == 'hos098sam@gmail.com' ||
+        isEmailVerifiedAdmin() ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
       );
@@ -34,7 +41,10 @@ service cloud.firestore {
     }
 
     function isParent() {
-      return isAuthenticated() && request.auth.token.role == 'parent';
+      return isAuthenticated() && (
+        request.auth.token.role == 'parent' ||
+        exists(/databases/$(database)/documents/parents/$(request.auth.uid))
+      );
     }
 
     function isParentOf(studentId) {
@@ -43,30 +53,81 @@ service cloud.firestore {
         studentId in get(/databases/$(database)/documents/parents/$(request.auth.uid)).data.linkedStudentIds;
     }
 
+    function isValidPublicStudentCreate(userId) {
+      return isValidId(userId) &&
+        isOwner(userId) &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() >= 1 &&
+        request.resource.data.name.size() <= 120 &&
+        !request.resource.data.keys().hasAny(['password', 'admin', 'isAdmin']) &&
+        request.resource.data.role == 'student' &&
+        request.resource.data.status == 'active' &&
+        request.resource.data.schoolYear == 'الصف الأول الثانوي' &&
+        (!request.resource.data.keys().hasAny(['enrolledCourseIds']) ||
+          (request.resource.data.enrolledCourseIds is list && request.resource.data.enrolledCourseIds.size() == 0)) &&
+        (!request.resource.data.keys().hasAny(['walletBalance']) ||
+          request.resource.data.walletBalance == 0);
+    }
+
+    function isValidPublicStudentSelfUpdate(userId) {
+      return isOwner(userId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'role',
+          'status',
+          'password',
+          'enrolledCourseIds',
+          'uid',
+          'id',
+          'email',
+          'walletBalance',
+          'admin',
+          'isAdmin'
+        ]);
+    }
+
+    function isValidTeacherStudentEnrollmentUpdate() {
+      return isTeacher() &&
+        resource.data.role == 'student' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'enrolledCourseIds',
+          'status',
+          'updatedAt'
+        ]);
+    }
+
     // =========================================================================
-    // 2. STUDENT & USER PROFILES (users/{userId})
-    // - Strict Owner-Only Lock: A student can ONLY read or write their own
-    //   document matching `request.auth.uid == userId`.
-    // - Prevents any student from reading other students' profiles or admin data.
-    // - Prevents privilege escalation (cannot modify role, admin, permissions).
+    // 2. ADMIN ALLOWLIST & CONNECTIVITY PROBE
+    // =========================================================================
+    match /admins/{uid} {
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow write: if false;
+    }
+
+    match /test/connection {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // =========================================================================
+    // 3. USER PROFILES (users/{userId}) - STRICT OWNER & ROLE ISOLATION
     // =========================================================================
     match /users/{userId} {
-      allow get, list: if true;
+      allow get: if isOwner(userId) || isAdmin() || isTeacher() || isParentOf(userId);
+      allow list: if isAdmin() || isTeacher();
 
-      allow create: if isAuthenticated() && !request.resource.data.keys().hasAny(['password']);
+      allow create: if (isAdmin() && !request.resource.data.keys().hasAny(['password'])) ||
+        isValidPublicStudentCreate(userId);
 
-      allow update: if isAdmin() || (
-        isOwner(userId) &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status', 'password'])
-      );
+      allow update: if isAdmin() ||
+        isValidPublicStudentSelfUpdate(userId) ||
+        isValidTeacherStudentEnrollmentUpdate();
 
       allow delete: if isAdmin();
     }
 
     // =========================================================================
-    // 3. EXAM BANKS, MODEL ANSWERS & MASTER QUESTIONS PROTECTION
-    // - Students are strictly forbidden from reading master question banks or
-    //   model answer documents directly. Only Admin/Teacher/Server can access.
+    // 4. EXAM BANKS, MODEL ANSWERS & MASTER QUESTIONS (TEACHER / ADMIN ONLY)
     // =========================================================================
     match /exams/{examId} {
       allow read, write: if isAdmin() || isTeacher();
@@ -85,8 +146,7 @@ service cloud.firestore {
     }
 
     // =========================================================================
-    // 4. ADMIN DASHBOARD & PRIVILEGED SYSTEM PATHS
-    // - Strictly locked to Admin only. Regular users are completely blocked.
+    // 5. ADMIN DASHBOARD, LOGS, CODES, INVOICES & ORDERS
     // =========================================================================
     match /admin/{document=**} {
       allow read, write: if isAdmin();
@@ -105,60 +165,92 @@ service cloud.firestore {
     }
 
     match /fawaterak_invoices/{invoiceId} {
-      allow read: if isAdmin() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
+      allow get: if isAdmin() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
+      allow list: if isAdmin();
       allow write: if isAdmin();
     }
 
     match /orders/{orderId} {
-      allow read: if isAdmin() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
-      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
-      allow update, delete: if isAdmin();
+      allow get: if isAdmin() || isTeacher() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isValidId(orderId) &&
+        isAuthenticated() &&
+        request.resource.data.studentId == request.auth.uid &&
+        request.resource.data.status == 'Pending' &&
+        request.resource.data.finalAmount is number &&
+        request.resource.data.finalAmount >= 0 &&
+        request.resource.data.studentName is string &&
+        request.resource.data.studentName.size() <= 120;
+      allow update, delete: if isAdmin() || isTeacher();
     }
 
     // =========================================================================
-    // 5. PLATFORM SYNCED DATA & SHARDED USER CHUNKS (al_motafalsifa_data/{docId})
-    // - Enables seamless Cloud Run server REST hydration & persistence across
-    //   deployments so zero courses, videos, exams, or users are lost on redeploy.
+    // 6. PLATFORM SYNCED DATA (al_motafalsifa_data/{docId})
+    // - Public read ONLY for non-sensitive catalog/settings docs
+    // - ZERO unauthenticated writes anywhere
+    // - Sensitive student/exam/code docs locked strictly to Admin/Teacher
     // =========================================================================
     match /al_motafalsifa_data/{docId} {
-      allow read: if true;
-      allow write: if isAdmin() || isTeacher() || (request.resource.data.keys().hasAll(['data', 'updatedAt']) && !request.resource.data.keys().hasAny(['password']));
+      allow get: if (
+        docId in ['courses', 'settings', 'competitions', 'notifications', 'bundles']
+      ) || (
+        (docId in ['users', 'accessCodes', 'submissions', 'exams', 'coupons', 'support_chats'] ||
+         docId.matches('users_chunk_.*')) &&
+        (isAdmin() || isTeacher())
+      );
+      allow list: if isAdmin() || isTeacher();
+      allow write: if (
+        docId in ['courses', 'settings', 'competitions', 'notifications', 'bundles',
+                  'users', 'accessCodes', 'submissions', 'exams', 'coupons', 'support_chats'] ||
+        docId.matches('users_chunk_.*')
+      ) && (isAdmin() || isTeacher()) && !request.resource.data.keys().hasAny(['password']);
     }
 
     // =========================================================================
-    // 6. PARENTS, COURSES, ENROLLMENTS & SUBMISSIONS
+    // 7. PARENTS, COURSES, ENROLLMENTS & SUBMISSIONS
     // =========================================================================
     match /parents/{parentUid} {
-      allow read: if isOwner(parentUid) || isAdmin();
+      allow get: if isOwner(parentUid) || isAdmin();
+      allow list: if isAdmin();
       allow write: if isAdmin();
     }
 
     match /courses/{courseId} {
-      allow read: if resource.data.isPublished == true || isTeacher() || isAdmin();
+      allow get, list: if resource.data.isPublished == true || isTeacher() || isAdmin();
       allow create: if isTeacher() || isAdmin();
       allow update, delete: if (isTeacher() && resource.data.teacherId == request.auth.uid) || isAdmin();
     }
 
     match /enrollments/{enrollmentId} {
-      allow read: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
-      allow write: if isAdmin() || isTeacher();
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAdmin() || isTeacher() || (
+        isAuthenticated() &&
+        request.resource.data.studentId == request.auth.uid &&
+        exists(/databases/$(database)/documents/courses/$(request.resource.data.courseId)) &&
+        get(/databases/$(database)/documents/courses/$(request.resource.data.courseId)).data.price == 0
+      );
+      allow update, delete: if isAdmin() || isTeacher();
     }
 
     match /submissions/{submissionId} {
-      allow read: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
       allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
       allow update: if isTeacher() || isAdmin();
       allow delete: if isAdmin();
     }
 
     match /exam_results/{resultId} {
-      allow read: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
       allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
       allow update, delete: if isAdmin() || isTeacher();
     }
 
     match /payments/{paymentId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isAdmin();
       allow write: if isAdmin();
     }
 
@@ -169,7 +261,7 @@ service cloud.firestore {
     }
 
     match /notifications/{notificationId} {
-      allow read: if isAuthenticated() && (resource.data.targetUserId == request.auth.uid || resource.data.targetUserId == 'all');
+      allow read: if isAuthenticated() && (resource.data.targetUserId == request.auth.uid || resource.data.targetUserId == 'all' || isTeacher() || isAdmin());
       allow write: if isAdmin() || isTeacher();
     }
 
@@ -179,7 +271,273 @@ service cloud.firestore {
     }
 
     // =========================================================================
-    // 7. STRICT DEFAULT FALLBACK: DENY ALL UNHANDLED PATHS
+    // 8. STRICT DEFAULT FALLBACK: DENY ALL UNHANDLED PATHS
+    // =========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+);
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isEmailVerifiedAdmin() {
+      return isAuthenticated() &&
+        request.auth.token.email == 'hos098sam@gmail.com' &&
+        request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin' ||
+        isEmailVerifiedAdmin() ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isTeacher() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'teacher' ||
+        isAdmin() ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher')
+      );
+    }
+
+    function isParent() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'parent' ||
+        exists(/databases/$(database)/documents/parents/$(request.auth.uid))
+      );
+    }
+
+    function isParentOf(studentId) {
+      return isParent() &&
+        exists(/databases/$(database)/documents/parents/$(request.auth.uid)) &&
+        studentId in get(/databases/$(database)/documents/parents/$(request.auth.uid)).data.linkedStudentIds;
+    }
+
+    function isValidPublicStudentCreate(userId) {
+      return isOwner(userId) &&
+        !request.resource.data.keys().hasAny(['password', 'admin', 'isAdmin']) &&
+        request.resource.data.role == 'student' &&
+        request.resource.data.status == 'active' &&
+        request.resource.data.schoolYear == 'الصف الأول الثانوي' &&
+        (!request.resource.data.keys().hasAny(['enrolledCourseIds']) ||
+          (request.resource.data.enrolledCourseIds is list && request.resource.data.enrolledCourseIds.size() == 0)) &&
+        (!request.resource.data.keys().hasAny(['walletBalance']) ||
+          request.resource.data.walletBalance == 0);
+    }
+
+    function isValidPublicStudentSelfUpdate(userId) {
+      return isOwner(userId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'role',
+          'status',
+          'password',
+          'enrolledCourseIds',
+          'uid',
+          'id',
+          'email',
+          'walletBalance',
+          'admin',
+          'isAdmin'
+        ]);
+    }
+
+    function isValidTeacherStudentEnrollmentUpdate() {
+      return isTeacher() &&
+        resource.data.role == 'student' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'enrolledCourseIds',
+          'status',
+          'updatedAt'
+        ]);
+    }
+
+    // =========================================================================
+    // 2. ADMIN ALLOWLIST & CONNECTIVITY PROBE
+    // =========================================================================
+    match /admins/{uid} {
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow write: if false;
+    }
+
+    match /test/connection {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // =========================================================================
+    // 3. USER PROFILES (users/{userId}) - STRICT OWNER & ROLE ISOLATION
+    // =========================================================================
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin() || isTeacher() || isParentOf(userId);
+      allow list: if isAdmin() || isTeacher();
+
+      allow create: if (isAdmin() && !request.resource.data.keys().hasAny(['password'])) ||
+        isValidPublicStudentCreate(userId);
+
+      allow update: if isAdmin() ||
+        isValidPublicStudentSelfUpdate(userId) ||
+        isValidTeacherStudentEnrollmentUpdate();
+
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 4. EXAM BANKS, MODEL ANSWERS & MASTER QUESTIONS (TEACHER / ADMIN ONLY)
+    // =========================================================================
+    match /exams/{examId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    match /question_banks/{bankId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    match /model_answers/{answerId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    match /exam_answers/{answerId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    // =========================================================================
+    // 5. ADMIN DASHBOARD, LOGS, CODES, INVOICES & ORDERS
+    // =========================================================================
+    match /admin/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    match /admin_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /coupons/{couponId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    match /access_codes/{codeId} {
+      allow read, write: if isAdmin() || isTeacher();
+    }
+
+    match /fawaterak_invoices/{invoiceId} {
+      allow get: if isAdmin() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow get: if isAdmin() || isTeacher() || (isAuthenticated() && resource.data.studentId == request.auth.uid);
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAuthenticated() &&
+        request.resource.data.studentId == request.auth.uid &&
+        request.resource.data.status == 'Pending';
+      allow update, delete: if isAdmin() || isTeacher();
+    }
+
+    // =========================================================================
+    // 6. PLATFORM SYNCED DATA (al_motafalsifa_data/{docId})
+    // - Public read ONLY for non-sensitive catalog/settings docs
+    // - ZERO unauthenticated writes anywhere
+    // - Sensitive student/exam/code docs locked strictly to Admin/Teacher
+    // =========================================================================
+    match /al_motafalsifa_data/{docId} {
+      allow get: if (
+        docId in ['courses', 'settings', 'competitions', 'notifications', 'bundles']
+      ) || (
+        (docId in ['users', 'accessCodes', 'submissions', 'exams', 'coupons', 'support_chats'] ||
+         docId.matches('users_chunk_.*')) &&
+        (isAdmin() || isTeacher())
+      );
+      allow list: if isAdmin() || isTeacher();
+      allow write: if (
+        docId in ['courses', 'settings', 'competitions', 'notifications', 'bundles',
+                  'users', 'accessCodes', 'submissions', 'exams', 'coupons', 'support_chats'] ||
+        docId.matches('users_chunk_.*')
+      ) && (isAdmin() || isTeacher()) && !request.resource.data.keys().hasAny(['password']);
+    }
+
+    // =========================================================================
+    // 7. PARENTS, COURSES, ENROLLMENTS & SUBMISSIONS
+    // =========================================================================
+    match /parents/{parentUid} {
+      allow get: if isOwner(parentUid) || isAdmin();
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /courses/{courseId} {
+      allow get, list: if resource.data.isPublished == true || isTeacher() || isAdmin();
+      allow create: if isTeacher() || isAdmin();
+      allow update, delete: if (isTeacher() && resource.data.teacherId == request.auth.uid) || isAdmin();
+    }
+
+    match /enrollments/{enrollmentId} {
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAdmin() || isTeacher() || (
+        isAuthenticated() &&
+        request.resource.data.studentId == request.auth.uid &&
+        exists(/databases/$(database)/documents/courses/$(request.resource.data.courseId)) &&
+        get(/databases/$(database)/documents/courses/$(request.resource.data.courseId)).data.price == 0
+      );
+      allow update, delete: if isAdmin() || isTeacher();
+    }
+
+    match /submissions/{submissionId} {
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
+      allow update: if isTeacher() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /exam_results/{resultId} {
+      allow get: if isAuthenticated() && (resource.data.studentId == request.auth.uid || isParentOf(resource.data.studentId) || isTeacher() || isAdmin());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
+      allow update, delete: if isAdmin() || isTeacher();
+    }
+
+    match /payments/{paymentId} {
+      allow get: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /forum_posts/{postId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && (resource.data.targetUserId == request.auth.uid || resource.data.targetUserId == 'all' || isTeacher() || isAdmin());
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    match /competitions/{compId} {
+      allow read: if true;
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    // =========================================================================
+    // 8. STRICT DEFAULT FALLBACK: DENY ALL UNHANDLED PATHS
     // =========================================================================
     match /{document=**} {
       allow read, write: if false;

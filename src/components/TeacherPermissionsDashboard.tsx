@@ -74,12 +74,12 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
   const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
-  const teacherSubject = currentTeacher.subject || 'مادة عامة';
+  const teacherSubject = 'الفلسفة';
   const teacherSpecialty = currentTeacher.specialty || 'عام لجميع الشعب';
 
   const [courseTitle, setCourseTitle] = useState('');
   const [courseType, setCourseType] = useState<CourseType>('integrated');
-  const [courseYear, setCourseYear] = useState<SchoolYearGrade>('الصف الثالث الثانوي');
+  const [courseYear, setCourseYear] = useState<SchoolYearGrade>('الصف الأول الثانوي');
   const [courseDivision, setCourseDivision] = useState<string>(teacherSpecialty);
   const [coursePrice, setCoursePrice] = useState<number>(0);
   const [courseDescription, setCourseDescription] = useState('');
@@ -100,7 +100,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
     setEditingCourse(null);
     setCourseTitle('');
     setCourseType('integrated');
-    setCourseYear('الصف الثالث الثانوي');
+    setCourseYear('الصف الأول الثانوي');
     setCourseDivision(teacherSpecialty);
     setCoursePrice(0);
     setCourseDescription('');
@@ -617,7 +617,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold">
-                          {st.schoolYear || 'الصف الثالث الثانوي'}
+                          {st.schoolYear || 'الصف الأول الثانوي'}
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
@@ -1176,7 +1176,7 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
                   required
                   value={courseTitle}
                   onChange={(e) => setCourseTitle(e.target.value)}
-                  placeholder="مثال: كورس الفيزياء الحديثة - الفصل الخامس"
+                  placeholder="مثال: كورس الفلسفة - الموضوع الأول (الصف الأول الثانوي)"
                   className="w-full p-3 rounded-2xl border border-slate-200 text-xs font-bold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600"
                 />
               </div>
@@ -1202,8 +1202,6 @@ export const TeacherPermissionsDashboard: React.FC<Props> = ({
                     className="w-full p-3 rounded-2xl border border-slate-200 text-xs bg-white font-bold"
                   >
                     <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                    <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                    <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
                   </select>
                 </div>
               </div>

@@ -112,7 +112,7 @@ import {
 } from './data/initialData';
 import { playNotificationSound } from './utils/notifications';
 import { DAILY_MOTIVATION, IDENTITY_NOTICE } from './data/bacData';
-import { subscribeToAuthChanges, fetchUserProfile, logoutUser, enrollStudentInCourseInFirestore, deleteUserFromFirestore, getPendingSignupProfile, db, auth } from './auth';
+import { subscribeToAuthChanges, fetchUserProfile, logoutUser, deleteUserFromFirestore, getPendingSignupProfile, db, auth } from './auth';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 
 /**
@@ -205,10 +205,10 @@ export const ensureUserPrivileges = (u: User): User => {
 
 const defaultSafePlatformSettings: PlatformSettings = {
   platformName: 'منصة المتفلسفة التعليمية',
-  heroTitle: 'منصة المتفلسفة التعليمية 2027',
+  heroTitle: 'منصة المتفلسفة التعليمية — الصف الأول الثانوي',
   heroSubtitle: 'تحت إشراف: أ/ سوزان كريم الخولى',
   supervisorName: 'أ/ سوزان كريم الخولى',
-  supervisorTitle: 'معلمة الفلسفة والمنطق والمشرف العام',
+  supervisorTitle: 'معلمة الفلسفة للصف الأول الثانوي',
   heroBannerImage: '/logo.png',
   announcementText: '',
   contactPhone: '01040672314',
@@ -267,22 +267,22 @@ export default function App() {
       const isFawaterakCheckout = urlParams.get('fawaterak_checkout');
 
       if (paymentStatus === 'success' || paymentStatus === 'paid') {
-        if (currentUser && paymentCourseId) {
-          const prev = currentUser.enrolledCourseIds || [];
-          if (!prev.includes(paymentCourseId)) {
-            const updated: User = {
-              ...currentUser,
-              enrolledCourseIds: Array.from(new Set([...prev, paymentCourseId])),
-            };
-            setCurrentUser(updated);
-            saveCurrentUser(updated);
-            saveStudentEnrolledCourse(currentUser.id, paymentCourseId);
-            enrollStudentInCourseInFirestore(currentUser.id, paymentCourseId).catch(() => {});
-          }
+        // Security: Never grant enrollment from URL query parameters alone!
+        // Verify authoritative enrollment state directly from Firestore / backend webhook.
+        if (currentUser?.id) {
+          fetchUserProfile(currentUser.id)
+            .then((freshProfile) => {
+              if (freshProfile) {
+                const verified = ensureUserPrivileges(freshProfile);
+                setCurrentUser(verified);
+                saveCurrentUser(verified);
+              }
+            })
+            .catch(() => {});
         }
         setPaymentToast({
           type: 'success',
-          message: '🎉 تم تأكيد الدفع بنجاح عبر بوابة فواتيرك! تم تفعيل واشتراك الكورس فوراً في حسابك.',
+          message: '⏳ تم استلام عودة بوابة الدفع! يتم الآن التحقق التلقائي من تأكيد الدفع الرسمي في قاعدة البيانات لتفعيل الكورس.',
         });
         if (paymentCourseId) {
           const matchedCourse = courses.find((c) => c.id === paymentCourseId);
@@ -334,8 +334,8 @@ export default function App() {
     const handleStatus = (e: any) => {
       if (e.detail) setCloudStatus(e.detail);
     };
-    window.addEventListener('qalb_alam_cloud_status', handleStatus);
-    return () => window.removeEventListener('qalb_alam_cloud_status', handleStatus);
+    window.addEventListener('al_motafalsifa_cloud_status', handleStatus);
+    return () => window.removeEventListener('al_motafalsifa_cloud_status', handleStatus);
   }, []);
 
   const isLoggingOutRef = useRef<boolean>(false);
@@ -380,11 +380,11 @@ export default function App() {
             null;
 
           if (profile) {
-            let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
+            let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
             if (!localSessionId && profile.activeSessionId) {
               localSessionId = profile.activeSessionId;
               try {
-                localStorage.setItem('qalb_alam_device_session_id', localSessionId);
+                localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
               } catch {}
             }
             const verifiedUser: User = ensureUserPrivileges({
@@ -442,19 +442,9 @@ export default function App() {
           console.error('Error synchronizing authenticated user profile:', err);
         }
       } else {
-        // Firebase Auth session is null: keep any saved persistent user session intact!
-        const saved = getCurrentUser();
-        if (saved && saved.id) {
-          const privileged = ensureUserPrivileges(saved);
-          setCurrentUser(privileged);
-          return;
-        }
-        setCurrentUser((prev) => {
-          if (prev && prev.id) {
-            return prev;
-          }
-          return null;
-        });
+        // Security: Require an active Firebase Authentication session; clear stale client cache.
+        setCurrentUser(null);
+        saveCurrentUser(null);
       }
     });
 
@@ -511,12 +501,12 @@ export default function App() {
           // Single-device session check for students
           if (freshData.activeSessionId) {
             try {
-              const localSessionId = localStorage.getItem('qalb_alam_device_session_id');
-              const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
+              const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
+              const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
               const isPastLoginGrace = Date.now() - loginTs > 10000;
 
               if (!localSessionId) {
-                localStorage.setItem('qalb_alam_device_session_id', freshData.activeSessionId);
+                localStorage.setItem('al_motafalsifa_device_session_id', freshData.activeSessionId);
               } else if (
                 localSessionId !== freshData.activeSessionId &&
                 isPastLoginGrace &&
@@ -887,28 +877,32 @@ export default function App() {
 
     // Ensure current device has a session ID registered if missing
     try {
-      let localSessionId = localStorage.getItem('qalb_alam_device_session_id');
+      let localSessionId = localStorage.getItem('al_motafalsifa_device_session_id');
       if (!localSessionId) {
         localSessionId = currentUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-        localStorage.setItem('qalb_alam_device_session_id', localSessionId);
-        localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+        localStorage.setItem('al_motafalsifa_device_session_id', localSessionId);
+        localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
       }
     } catch {}
 
+    let backendAvailableCache: boolean | null = null;
     const verifyActiveSession = async () => {
+      if (backendAvailableCache === false) return;
       if (isLoggingOutRef.current) return;
       const activeMe = currentUserRef.current;
       if (!activeMe?.id) return;
 
-      const localSessionId = localStorage.getItem('qalb_alam_device_session_id') || activeMe.activeSessionId || '';
-      const loginTs = Number(localStorage.getItem('qalb_alam_session_login_ts') || '0');
+      const localSessionId = localStorage.getItem('al_motafalsifa_device_session_id') || activeMe.activeSessionId || '';
+      const loginTs = Number(localStorage.getItem('al_motafalsifa_session_login_ts') || '0');
       if (Date.now() - loginTs <= 3000) return;
 
       try {
         const res = await fetch(
           `/api/auth/check-session/${encodeURIComponent(activeMe.id)}?phone=${encodeURIComponent(activeMe.phone || '')}&sessionId=${encodeURIComponent(localSessionId)}&role=${encodeURIComponent(activeMe.role || '')}`
         );
-        if (!res.ok) return;
+        const cType = res.headers.get('content-type') || '';
+        if (!res.ok || !cType.includes('application/json')) { backendAvailableCache = false; return; }
+        backendAvailableCache = true;
         const data = await res.json();
         if (data && data.success) {
           // Immediate security ejection if client role was tampered with in DevTools/storage
@@ -981,8 +975,8 @@ export default function App() {
     const newSessionId = rawUser.activeSessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
     const nowIso = new Date().toISOString();
     try {
-      localStorage.setItem('qalb_alam_device_session_id', newSessionId);
-      localStorage.setItem('qalb_alam_session_login_ts', String(Date.now()));
+      localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
+      localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
     } catch {}
 
     const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
@@ -1078,7 +1072,7 @@ export default function App() {
     isLoggingOutRef.current = true;
     currentUserRef.current = null;
     try {
-      localStorage.removeItem('qalb_alam_device_session_id');
+      localStorage.removeItem('al_motafalsifa_device_session_id');
       localStorage.removeItem('qalb_alam_current_user');
     } catch {}
     setCurrentUser(null);
@@ -1744,7 +1738,7 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <a href="https://www.facebook.com/profile.php?id=61594492453139" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-colors shadow-xs" title="صفحة فيسبوك المتفلسفة"><Facebook className="w-3.5 h-3.5 fill-current" /><span>فيسبوك: المتفلسفة</span></a>
             <a href="https://www.facebook.com/share/g/1KcP6KBSRC/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition-colors shadow-xs" title="جروب طلاب المتفلسفة"><Facebook className="w-3.5 h-3.5 fill-current" /><span>جروب طلاب المتفلسفة</span></a>
-            <a href="https://www.tiktok.com/@qalbalelm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك المتفلسفة"><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: المتفلسفة</span></a>
+            <a href="https://www.tiktok.com/@almotafalsifa" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white font-black text-xs transition-colors shadow-xs" title="تيك توك المتفلسفة"><TikTokIcon className="w-3.5 h-3.5" /><span>تيك توك: المتفلسفة</span></a>
             <a href="https://wa.me/201040672314" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-colors shadow-xs" title="الدعم الفني للمنصة"><MessageCircle className="w-3.5 h-3.5" /><span>الدعم الفني للمنصة</span></a>
             <button onClick={() => { if (currentUser?.role === 'admin') setCurrentView('admin'); else handleOpenAuth('login'); }} className="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors" title="دخول المشرف / لوحة الكنترول"><ShieldCheck className="w-4 h-4" /></button>
           </div>

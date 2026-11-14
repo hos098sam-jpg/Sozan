@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   color-scheme: light;
-  --motafalsifa-accent: #147d78;
-  --motafalsifa-accent-dark: #0e625e;
-  --motafalsifa-accent-soft: #e8f4f1;
-  --motafalsifa-gold: #b68b35;
-  --motafalsifa-paper: #f7f5ef;
-  --motafalsifa-ink: #203331;
+  --motafalsifa-accent: #281d5c;
+  --motafalsifa-accent-dark: #1a133c;
+  --motafalsifa-accent-soft: #eeeaf8;
+  --motafalsifa-gold: #d4af37;
+  --motafalsifa-paper: #f8f6f0;
+  --motafalsifa-ink: #141124;
 }
 
 @layer base {
@@ -18,113 +18,112 @@
     overflow-x: hidden;
     max-width: 100vw;
   }
+
   #root {
     overflow-x: hidden;
     max-width: 100vw;
   }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Tajawal', 'Cairo', sans-serif;
   }
 }
 
-/* Dark mode basic background transition and scrollbar */
+/* Unified Philosophy Dark Theme (Obsidian Indigo #0c091d + Elevated #15112c + Antique Gold #d4af37) */
 html.dark {
   color-scheme: dark;
 }
 
 html.dark body {
-  background-color: #102324;
-  color: #f1f5f2;
+  background-color: #0c091d;
+  color: #f8f6f0;
 }
 
-/* Automatic smooth palette adaptations in dark mode */
 .dark .bg-white {
-  background-color: #163031;
+  background-color: #15112c;
 }
+
 .dark .bg-slate-50 {
-  background-color: #102324;
+  background-color: #0c091d;
 }
+
 .dark .bg-slate-100 {
-  background-color: #1d3b3b;
+  background-color: #1e183d;
 }
+
 .dark .border-slate-200,
 .dark .border-slate-100 {
-  border-color: #294545;
+  border-color: #2a234f;
 }
+
 .dark .text-slate-900 {
-  color: #f5f5ee;
+  color: #f8f6f0;
 }
+
 .dark .text-slate-800 {
-  color: #e8eeea;
+  color: #ebe6da;
 }
+
 .dark .text-slate-700 {
-  color: #d0ddda;
+  color: #d6cfe2;
 }
+
 .dark .text-slate-600 {
-  color: #a9bfba;
+  color: #b4acc8;
 }
+
 .dark .text-slate-500 {
-  color: #9ab0ab;
+  color: #9e96b5;
 }
+
 .dark input,
 .dark select,
 .dark textarea {
-  background-color: #173233;
-  color: #f5f5ee;
-  border-color: #34504e;
-}
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: #819994;
+  background-color: #1a1536;
+  color: #f8f6f0;
+  border-color: #342c61;
 }
 
-/* Brand palette: philosophical teal, warm parchment, and antique gold. */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #847ca1;
+}
+
+/* Unified Light Canvas: Warm Marble Parchment + Royal Indigo */
 html:not(.dark) body {
   background-color: var(--motafalsifa-paper);
   color: var(--motafalsifa-ink);
 }
 
-.bg-slate-50 { background-color: #f7f5ef; }
-.text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 { color: var(--motafalsifa-accent-dark); }
-.bg-indigo-50, .bg-indigo-100 { background-color: var(--motafalsifa-accent-soft); }
-.bg-indigo-600 { background-color: var(--motafalsifa-accent); }
-.bg-indigo-700 { background-color: var(--motafalsifa-accent-dark); }
-.border-indigo-100, .border-indigo-200 { border-color: #c8dfd9; }
-.border-indigo-400, .border-indigo-500 { border-color: #68a9a0; }
-.from-indigo-600 { --tw-gradient-from: var(--motafalsifa-accent) var(--tw-gradient-from-position); --tw-gradient-to: rgb(20 125 120 / 0%) var(--tw-gradient-to-position); }
-.to-indigo-600, .to-indigo-700 { --tw-gradient-to: var(--motafalsifa-accent-dark) var(--tw-gradient-to-position); }
-.hover\\:bg-indigo-700:hover { background-color: var(--motafalsifa-accent-dark); }
-.hover\\:bg-indigo-100:hover { background-color: #dcece7; }
-
-/* Deep indigo surfaces become calm teal in dark mode; gold remains the highlight. */
-.dark .bg-indigo-950\/40,
-.dark .bg-indigo-950\/60,
-.dark .bg-indigo-950\/80 { background-color: #193a39; }
-.dark .text-indigo-200,
-.dark .text-indigo-300,
-.dark .text-indigo-400 { color: #9ac9bd; }
-.dark .border-indigo-800 { border-color: #315a54; }
+html:not(.dark) .bg-slate-50 {
+  background-color: #f8f6f0;
+}
 
 /* Custom smooth scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 239, 0.8);
+  background: rgba(248, 246, 240, 0.85);
 }
+
 .dark ::-webkit-scrollbar-track {
-  background: rgba(16, 35, 36, 0.8);
+  background: rgba(12, 9, 29, 0.9);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(190, 202, 195, 0.9);
+  background: rgba(40, 29, 92, 0.35);
   border-radius: 9999px;
 }
+
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(63, 94, 88, 0.9);
+  background: rgba(212, 175, 55, 0.35);
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 125, 120, 0.8);
+  background: rgba(212, 175, 55, 0.75);
 }
 
 /* Smooth progressive scroll reveal animations for LandingHome */
@@ -155,33 +154,6 @@ html:not(.dark) body {
 .reveal-delay-4 { transition-delay: 470ms; }
 .reveal-delay-5 { transition-delay: 590ms; }
 .reveal-delay-6 { transition-delay: 710ms; }
-
-/* Video.js Modern Player Styling */
-.video-container {
-  width: 100%;
-  max-width: 100%;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-.vjs-tech {
-  pointer-events: none !important;
-}
-.video-js .vjs-big-play-button {
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  border-radius: 9999px !important;
-  width: 70px !important;
-  height: 70px !important;
-  line-height: 70px !important;
-  border: 2px solid rgba(255, 255, 255, 0.25) !important;
-  background-color: rgba(20, 125, 120, 0.9) !important;
-  backdrop-filter: blur(8px) !important;
-}
-.video-js:hover .vjs-big-play-button {
-  background-color: rgb(14, 98, 94) !important;
-  transform: translate(-50%, -50%) scale(1.05) !important;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

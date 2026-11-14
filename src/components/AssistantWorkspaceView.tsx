@@ -51,7 +51,7 @@ export const AssistantWorkspaceView: React.FC<Props> = ({
       name: assistant.assistantForTeacherName || assistant.name,
       phone: assistant.phone,
       parentPhone: '',
-      schoolYear: assistant.schoolYear || 'الصف الثالث الثانوي',
+      schoolYear: assistant.schoolYear || 'الصف الأول الثانوي',
       subject: assistant.subject || 'مادة عامة',
       specialty: assistant.specialty || 'عام لجميع الشعب',
       role: 'teacher',

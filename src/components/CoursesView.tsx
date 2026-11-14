@@ -56,24 +56,8 @@ export const CoursesView: React.FC<CoursesViewProps> = ({
   const matchesStudentGrade = (courseYear: string, studentYear: string) => {
     if (!studentYear) return true;
     if (courseYear === studentYear) return true;
-    if (studentYear.includes(courseYear) || courseYear.includes(studentYear)) return true;
-
-    if (studentYear.includes('الأول الابتدائي') && courseYear.includes('الأول الابتدائي')) return true;
-    if (studentYear.includes('الثاني الابتدائي') && courseYear.includes('الثاني الابتدائي')) return true;
-    if (studentYear.includes('الثالث الابتدائي') && courseYear.includes('الثالث الابتدائي')) return true;
-    if (studentYear.includes('الرابع الابتدائي') && courseYear.includes('الرابع الابتدائي')) return true;
-    if (studentYear.includes('الخامس الابتدائي') && courseYear.includes('الخامس الابتدائي')) return true;
-    if (studentYear.includes('السادس الابتدائي') && courseYear.includes('السادس الابتدائي')) return true;
-    
-    if (studentYear.includes('الأول الإعدادي') && courseYear.includes('الأول الإعدادي')) return true;
-    if (studentYear.includes('الثاني الإعدادي') && courseYear.includes('الثاني الإعدادي')) return true;
-    if (studentYear.includes('الثالث الإعدادي') && courseYear.includes('الثالث الإعدادي')) return true;
-    
     if (studentYear.includes('الأول الثانوي') && courseYear.includes('الأول الثانوي')) return true;
-    if (studentYear.includes('الثاني الثانوي') && courseYear.includes('الثاني الثانوي')) return true;
-    if (studentYear.includes('الثالث الثانوي') && (courseYear.includes('الثالث الثانوي') || courseYear.includes('بكالوريا'))) return true;
-
-    return false;
+    return true;
   };
 
   // Published courses: show all published courses (isPublished !== false)
@@ -184,15 +168,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({
               onChange={(e) => setSelectedYear(e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white dark:bg-slate-800 font-bold text-slate-800 dark:text-slate-200"
             >
-              <option value="all">جميع الصفوف والمراحل (1 ابتدائي - 3 ثانوي)</option>
-              {isApprovedStudent && <option value="my_grade">🎯 صفي الدراسي ({currentUser?.schoolYear})</option>}
-              
-              
-              <optgroup label="المرحلة الثانوية">
-                <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-              </optgroup>
+              <option value="all">الصف الأول الثانوي — مادة الفلسفة</option>
+              {isApprovedStudent && <option value="my_grade">🎯 صفي الدراسي ({currentUser?.schoolYear || 'الصف الأول الثانوي'})</option>}
+              <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
             </select>
           </div>
 

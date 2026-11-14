@@ -38,7 +38,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   onNavigate,
   onLogout,
 }) => {
-  const teacherSubject = currentTeacher.subject || 'مادة عامة';
+  const teacherSubject = 'الفلسفة';
   const teacherSpecialty = currentTeacher.specialty || 'عام لجميع الشعب';
 
   // Teacher's courses (filtered to only those created by or assigned to this teacher)
@@ -56,7 +56,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   // Form states for adding/editing course
   const [courseTitle, setCourseTitle] = useState('');
   const [courseType, setCourseType] = useState<CourseType>('integrated');
-  const [courseYear, setCourseYear] = useState<SchoolYearGrade>('الصف الثالث الثانوي');
+  const [courseYear, setCourseYear] = useState<SchoolYearGrade>('الصف الأول الثانوي');
   const [courseDivision, setCourseDivision] = useState<string>(teacherSpecialty);
   const [coursePrice, setCoursePrice] = useState<number>(0);
   const [courseDescription, setCourseDescription] = useState('');
@@ -202,7 +202,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     setEditingCourse(null);
     setCourseTitle('');
     setCourseType('integrated');
-    setCourseYear('الصف الثالث الثانوي');
+    setCourseYear('الصف الأول الثانوي');
     setCourseDivision(teacherSpecialty);
     setCoursePrice(0);
     setCourseDescription('');
@@ -922,24 +922,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     }}
                     className="w-full p-3 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   >
-                    <optgroup label="المرحلة الابتدائية (بدون شعبة)">
-                      <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                      <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                      <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                      <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                      <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                      <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الإعدادية (بدون شعبة)">
-                      <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
-                      <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
-                      <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الثانوية">
-                      <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                      <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                      <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                    </optgroup>
+                    <option value="الصف الأول الثانوي">الصف الأول الثانوي — مادة الفلسفة</option>
                   </select>
                 </div>
 

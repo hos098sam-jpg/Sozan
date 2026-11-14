@@ -1,0 +1,82 @@
+{
+  "projectId": "alesraa-academy",
+  "appName": "منصة المتفلسفة التعليمية",
+  "targetGrade": "الصف الأول الثانوي",
+  "targetSubject": "الفلسفة",
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Authenticated student, teacher, parent, or admin profile without plaintext passwords.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "parentPhone": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher", "assistant", "parent", "admin"] },
+        "status": { "type": "string", "enum": ["active", "pending", "rejected"] },
+        "schoolYear": { "type": "string", "enum": ["الصف الأول الثانوي"] },
+        "enrolledCourseIds": { "type": "array", "items": { "type": "string" } },
+        "activeSessionId": { "type": "string" },
+        "walletBalance": { "type": "number" }
+      },
+      "required": ["id", "name", "role", "status", "schoolYear"]
+    },
+    "Course": {
+      "title": "Philosophy Course",
+      "description": "1st Secondary Philosophy course with lessons, videos, PDFs, and sequential exams.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "schoolYear": { "type": "string", "enum": ["الصف الأول الثانوي"] },
+        "subject": { "type": "string", "enum": ["الفلسفة"] },
+        "price": { "type": "number" },
+        "teacherId": { "type": "string" },
+        "isPublished": { "type": "boolean" }
+      },
+      "required": ["id", "title", "schoolYear", "subject", "price", "isPublished"]
+    },
+    "Order": {
+      "title": "Enrollment Payment Order",
+      "description": "Student-initiated pending order verified by Admin/Teacher before course access is granted.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Rejected"] }
+      },
+      "required": ["id", "studentId", "courseId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Private user profiles. Readable only by owner, parent of student, teacher, or admin. No public list."
+    },
+    "/admins/{uid}": {
+      "schema": { "type": "object" },
+      "description": "Server-managed admin allowlist."
+    },
+    "/al_motafalsifa_data/{docId}": {
+      "schema": { "type": "object" },
+      "description": "Split public catalog docs (courses, settings, competitions, notifications, bundles) and privileged admin/teacher docs (users, users_chunk_*, accessCodes, submissions, exams)."
+    },
+    "/courses/{courseId}": {
+      "schema": { "$ref": "#/entities/Course" },
+      "description": "Published Philosophy courses."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Pending student transfer orders."
+    },
+    "/enrollments/{enrollmentId}": {
+      "schema": { "type": "object" },
+      "description": "Verified student course enrollments."
+    }
+  }
+}

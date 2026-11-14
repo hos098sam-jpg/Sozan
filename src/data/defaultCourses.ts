@@ -4,9 +4,9 @@ export const DEFAULT_COURSES: Course[] = [
   {
     "id": "course-2140713070631",
     "title": "فلسفة",
-    "schoolYear": "الصف الثاني الثانوي",
-    "division": "بكالوريا",
-    "subject": "الفلسفة والمنطق",
+    "schoolYear": "الصف الأول الثانوي",
+    "division": "عام",
+    "subject": "الفلسفة",
     "branch": "scientific",
     "coverImage": "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?q=80&w=800&auto=format&fit=crop",
     "price": 180,

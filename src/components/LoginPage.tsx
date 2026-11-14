@@ -27,12 +27,15 @@ import {
   verifyWhatsAppForgotPasswordOtp,
   resetPasswordWithWhatsAppOtp,
   requestWhatsAppParentOtp,
-  verifyWhatsAppParentOtp
+  verifyWhatsAppParentOtp,
+  fetchUserProfile,
+  updateUserSessionInFirestore,
+  getFriendlyAuthErrorMessage
 } from '../auth';
 import { getSavedUsers, saveCurrentUser } from '../data/initialData';
 import { getDeviceInfoPayload } from '../utils/deviceFingerprint';
 import loginIllustration from '../assets/images/login_page_illustration_1790724497630.jpg';
-const qalbAlElmLogo = '/logo.png';
+const motafalsifaLogo = '/logo.png';
 
 interface LoginPageProps {
   onNavigate: (view: AppView) => void;
@@ -108,223 +111,93 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
       // 1. Fetch hardware device identity
       const deviceInfo = await getDeviceInfoPayload().catch(() => ({ deviceId: '', deviceName: '' }));
 
-      // 2. Direct Admin / Supervisor verification via Firebase Auth
-      if (isSupervisor) {
+      // 2. Determine authoritative Firebase Auth email (Supervisor email, explicit email, or phone synthetic email)
+      const targetEmail = isSupervisor
+        ? "hos098sam@gmail.com"
+        : isEmail
+        ? cleanIdentifier.toLowerCase()
+        : cleanDigits.length >= 10
+        ? `${cleanDigits}@al-motafalsifa.edu`
+        : "";
+
+      // 3. Optional backend check (only when Express API is actually available and returns JSON)
+      if (!isSupervisor) {
         try {
-          const fbRes = await loginWithEmail('hos098sam@gmail.com', cleanPass);
-          const adminUser: User = {
-            id: fbRes.uid || 'admin-hosam-supervisor',
-            name: 'إدارة المنصة',
-            email: 'hos098sam@gmail.com',
-            phone: '01040672314',
-            parentPhone: '',
-            role: 'admin',
-            status: 'active',
-            schoolYear: 'المشرف العام ومؤسس المنصة',
-            registeredAt: '2026-09-25',
-            emailVerified: true,
-          };
-          const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-          try {
-            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
-            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-          } catch {}
-          // Register session asynchronously without blocking login
-          fetch('/api/auth/register-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const sRes = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              userId: adminUser.id,
-              phone: adminUser.phone,
-              activeSessionId: newSessionId,
+              identifier: cleanIdentifier,
+              password: cleanPass,
               deviceId: deviceInfo.deviceId,
               deviceName: deviceInfo.deviceName,
             }),
-          }).catch(() => {});
-          if (cleanPass !== 'Hossam2027') {
-            setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
-            setLoading(false);
-            return;
-          }
-          saveCurrentUser(adminUser);
-          onAuthSuccess(adminUser);
-          return;
-        } catch (adminErr: any) {
-          console.warn('Supervisor Firebase Auth login notice:', adminErr?.message || adminErr);
-          const adminUser: User = {
-            id: 'admin-hosam-supervisor',
-            name: 'إدارة المنصة',
-            email: 'hos098sam@gmail.com',
-            phone: '01040672314',
-            parentPhone: '',
-            role: 'admin',
-            status: 'active',
-            schoolYear: 'المشرف العام ومؤسس المنصة',
-            registeredAt: '2026-09-25',
-            emailVerified: true,
-          };
-          const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-          try {
-            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
-            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-          } catch {}
-          if (cleanPass !== 'Hossam2027') {
-            setError('كلمة المرور غير صحيحة لحساب إدارة المنصة.');
-            setLoading(false);
-            return;
-          }
-          saveCurrentUser(adminUser);
-          onAuthSuccess(adminUser);
-          return;
-        }
-      }
-
-      // 3. Query central server login to verify credentials, evaluate device binding limits, and kill old sessions
-      try {
-        const sRes = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            identifier: cleanIdentifier,
-            password: cleanPass,
-            deviceId: deviceInfo.deviceId,
-            deviceName: deviceInfo.deviceName,
-          }),
-        }).catch(() => null);
-
-        if (sRes && sRes.ok) {
-          const sData = await sRes.json().catch(() => ({}));
-          if (sData && sData.user) {
-            if (sData.sessionId) {
-              try {
-                localStorage.setItem('al_motafalsifa_device_session_id', sData.sessionId);
-                localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-              } catch {}
+          }).catch(() => null);
+          const sContentType = sRes?.headers?.get("content-type") || "";
+          if (sRes && sContentType.includes("application/json")) {
+            if (sRes.ok) {
+              const sData = await sRes.json().catch(() => ({}));
+              if (sData?.user) {
+                if (sData.sessionId) {
+                  try {
+                    localStorage.setItem("al_motafalsifa_device_session_id", sData.sessionId);
+                    localStorage.setItem("al_motafalsifa_session_login_ts", String(Date.now()));
+                  } catch {}
+                }
+                if (targetEmail) {
+                  await loginWithEmail(targetEmail, cleanPass).catch(() => {});
+                }
+                saveCurrentUser(sData.user);
+                onAuthSuccess(sData.user);
+                return;
+              }
+            } else if (sRes.status === 403 || sRes.status === 401) {
+              const errData = await sRes.json().catch(() => ({}));
+              setError(errData?.error || "بيانات الدخول غير صحيحة.");
+              return;
             }
-            saveCurrentUser(sData.user);
-            onAuthSuccess(sData.user);
-            return;
           }
-        } else if (sRes && sRes.status === 403) {
-          // Device change limit exceeded: Strictly block and show explanation!
-          const errData = await sRes.json().catch(() => ({}));
-          setError(errData?.error || 'عذراً، لقد استنفذت الحد المسموح به لتغيير الجهاز (مرتان شهرياً كحد أقصى لمنع مشاركة الحساب).');
-          return;
-        } else if (sRes && sRes.status === 401) {
-          // Invalid password
-          const errData = await sRes.json().catch(() => ({}));
-          setError(errData?.error || 'كلمة المرور غير صحيحة. يرجى التأكد من كلمة المرور أو استعادتها.');
-          return;
-        }
-      } catch (netErr) {
-        console.warn('Direct server login network notice:', netErr);
-      }
-
-      // 4. Fallback for accounts registered exclusively via Firebase Auth
-      const targetFbEmail = isEmail ? cleanIdentifier.toLowerCase() : (cleanDigits.length >= 10 ? `${cleanDigits}@qalb-alam.edu` : '');
-      if (targetFbEmail) {
-        try {
-          const fbRes = await loginWithEmail(targetFbEmail, cleanPass);
-          const matchedProfile =
-            fbRes.serverUser ||
-            localUsers.find((u) => u.email?.toLowerCase() === targetFbEmail.toLowerCase()) || {
-              id: fbRes.uid,
-              name: targetFbEmail === 'hos098sam@gmail.com' ? 'إدارة المنصة' : (fbRes.displayName || 'طالب منصة المتفلسفة '),
-              email: targetFbEmail,
-              phone: cleanDigits || '',
-              parentPhone: '',
-              schoolYear: targetFbEmail === 'hos098sam@gmail.com' ? 'المشرف العام ومؤسس المنصة' : 'الصف الثالث الثانوي',
-              role: targetFbEmail === 'hos098sam@gmail.com' ? 'admin' : 'student',
-              status: 'active',
-              emailVerified: true,
-            };
-
-          // Enforce device binding on server asynchronously
-          const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-          fetch('/api/auth/register-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userId: matchedProfile.id,
-              phone: matchedProfile.phone || '',
-              activeSessionId: newSessionId,
-              deviceId: deviceInfo.deviceId,
-              deviceName: deviceInfo.deviceName,
-            }),
-          }).catch(() => {});
-
-          try {
-            localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
-            localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
-          } catch {}
-
-          saveCurrentUser(matchedProfile as User);
-          onAuthSuccess(matchedProfile as User);
-          return;
-        } catch (err: any) {
-          console.warn('Fallback Firebase login attempt error:', err?.message || err);
-        }
-      }
-
-      // 4. Match registered account by student phone or teacher accountNumber
-      const matched = localUsers.find((u) => {
-        if (u.accountNumber && u.accountNumber.trim().toLowerCase() === cleanIdentifier.toLowerCase()) {
-          return true;
-        }
-        if (u.phone && u.phone.trim().toLowerCase() === cleanIdentifier.toLowerCase()) {
-          return true;
-        }
-        const uNormalizedPhone = normalizePhoneDigits(u.phone || '');
-        if (normalizedInputPhone.length >= 10 && uNormalizedPhone && uNormalizedPhone === normalizedInputPhone) {
-          return true;
-        }
-        return false;
-      });
-
-      // If user has an explicit verified password in local record
-      if (matched && matched.password && matched.password === cleanPass) {
-        // Enforce device binding on server before allowing access
-        const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-        const regRes = await fetch('/api/auth/register-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: matched.id,
-            phone: matched.phone || '',
-            activeSessionId: newSessionId,
-            deviceId: deviceInfo.deviceId,
-            deviceName: deviceInfo.deviceName,
-          }),
-        });
-
-        if (!regRes.ok && regRes.status === 403) {
-          const regErr = await regRes.json().catch(() => ({}));
-          setError(regErr.error || 'عذراً، لقد استنفذت الحد المسموح به لتغيير الجهاز (مرتان شهرياً كحد أقصى).');
-          return;
-        }
-
-        try {
-          localStorage.setItem('al_motafalsifa_device_session_id', newSessionId);
-          localStorage.setItem('al_motafalsifa_session_login_ts', String(Date.now()));
         } catch {}
+      }
 
-        saveCurrentUser(matched);
-        onAuthSuccess(matched);
+      if (!targetEmail) {
+        setError("يرجى إدخال رقم هاتف صحيح أو بريد إلكتروني مسجل.");
         return;
       }
 
-      if (matched && matched.password && matched.password !== cleanPass) {
-        setError('كلمة المرور غير صحيحة. يرجى التأكد من كلمة المرور أو استعادتها عبر واتساب.');
-        return;
-      }
+      // 4. Authoritative Firebase Authentication (Zero hardcoded passwords, zero local plaintext fallback)
+      const fbUser = await loginWithEmail(targetEmail, cleanPass);
+      const profile = await fetchUserProfile(fbUser.uid);
 
-      if (matched) {
-        setError('كلمة المرور غير صحيحة. يرجى التأكد من كلمة المرور أو الضغط على "نسيت كلمة المرور؟" لاستعادتها عبر واتساب.');
-      } else {
-        setError('رقم الهاتف هذا غير مسجل في المنصة لأي طالب. يرجى التأكد من الرقم أو إنشاء حساب جديد أولاً.');
-      }
+      const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+      try {
+        localStorage.setItem("al_motafalsifa_device_session_id", newSessionId);
+        localStorage.setItem("al_motafalsifa_session_login_ts", String(Date.now()));
+      } catch {}
+
+      await updateUserSessionInFirestore(fbUser.uid, newSessionId).catch(() => {});
+
+      const verifiedUser: User = profile
+        ? { ...profile, activeSessionId: newSessionId, emailVerified: fbUser.emailVerified }
+        : {
+            id: fbUser.uid,
+            name: isSupervisor ? "إدارة المنصة" : fbUser.displayName || "طالب منصة المتفلسفة",
+            email: fbUser.email || targetEmail,
+            phone: cleanDigits || (isSupervisor ? "01040672314" : ""),
+            parentPhone: "",
+            schoolYear: isSupervisor ? "المشرف العام ومؤسس المنصة" : "الصف الأول الثانوي",
+            role: isSupervisor ? "admin" : "student",
+            status: "active",
+            registeredAt: new Date().toISOString().split("T")[0],
+            activeSessionId: newSessionId,
+            emailVerified: fbUser.emailVerified,
+          };
+
+      saveCurrentUser(verifiedUser);
+      onAuthSuccess(verifiedUser);
     } catch (err: any) {
-      setError(err.message || 'بيانات الدخول غير صحيحة، يرجى التأكد من الرقم وكلمة المرور.');
+      const code = err?.code || "";
+      setError(code ? getFriendlyAuthErrorMessage(code) : (err?.message || "بيانات الدخول غير صحيحة، يرجى التأكد من الرقم وكلمة المرور."));
     } finally {
       setLoading(false);
     }
@@ -506,7 +379,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                 {/* Glowing Blue Neon Heart Logo */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-2 border-blue-400/60 flex items-center justify-center shadow-xl shadow-blue-500/30 mb-2.5 overflow-hidden">
                   <img
-                    src={qalbAlElmLogo}
+                    src={motafalsifaLogo}
                     alt="شعار منصة المتفلسفة "
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
@@ -782,7 +655,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                         value={otpCode}
                         onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
                         placeholder="••••••"
-                        className="w-full text-center text-2xl tracking-[8px] py-3 bg-[#0d1b3e] border border-blue-500/40 rounded-2xl text-white font-mono focus:outline-none focus:border-blue-400"
+                        className="w-full text-center text-2xl tracking-[8px] py-3 bg-[#15112c] border border-blue-500/40 rounded-2xl text-white font-mono focus:outline-none focus:border-blue-400"
                       />
 
                       <button
@@ -804,7 +677,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/40 rounded-2xl text-white text-sm"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/40 rounded-2xl text-white text-sm"
                       />
                       <label className="text-xs font-bold text-slate-300 block">
                         تأكيد كلمة المرور
@@ -814,7 +687,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full p-3 bg-[#0d1b3e] border border-blue-500/40 rounded-2xl text-white text-sm"
+                        className="w-full p-3 bg-[#15112c] border border-blue-500/40 rounded-2xl text-white text-sm"
                       />
 
                       <button
@@ -859,7 +732,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       placeholder="01xxxxxxxxx"
-                      className="w-full p-3 bg-[#0d1b3e] border border-blue-500/40 rounded-2xl text-white text-sm font-mono text-left"
+                      className="w-full p-3 bg-[#15112c] border border-blue-500/40 rounded-2xl text-white text-sm font-mono text-left"
                       dir="ltr"
                     />
                   </div>
@@ -873,7 +746,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
                       value={recoveryEmail}
                       onChange={(e) => setRecoveryEmail(e.target.value)}
                       placeholder="example@gmail.com"
-                      className="w-full p-3 bg-[#0d1b3e] border border-blue-500/40 rounded-2xl text-white text-sm font-mono text-left"
+                      className="w-full p-3 bg-[#15112c] border border-blue-500/40 rounded-2xl text-white text-sm font-mono text-left"
                       dir="ltr"
                     />
                   </div>

@@ -49,7 +49,7 @@ export const CourseBundlesSection: React.FC<CourseBundlesSectionProps> = ({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [newGrade, setNewGrade] = useState('الصف الثالث الثانوي');
+  const [newGrade, setNewGrade] = useState('الصف الأول الثانوي');
   const [selectedCourseIds, setSelectedCourseIds] = useState<string[]>([]);
   const [newOriginalPrice, setNewOriginalPrice] = useState(600);
   const [newBundlePrice, setNewBundlePrice] = useState(390);
@@ -556,7 +556,7 @@ export const CourseBundlesSection: React.FC<CourseBundlesSectionProps> = ({
                   required
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="مثال: باقة الترم الأول الشاملة - الصف الثالث الثانوي"
+                  placeholder="مثال: باقة الترم الأول في الفلسفة — الصف الأول الثانوي"
                   className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white font-bold"
                 />
               </div>
